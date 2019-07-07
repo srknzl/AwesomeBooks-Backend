@@ -24,5 +24,8 @@
   "homepage": "https://github.com/srknzl/LearnNode#readme",
   "devDependencies": {
     "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }
