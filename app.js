@@ -1,8 +1,15 @@
 const http = require("http");
 
+const hostname = 'localhost';
+const port = 3000;
+
 const server = http.createServer((req, res)=>{
-  console.log(req);
+  res.statusCode = 200;
+  res.setHeader('Content-Type','text/html');
+  res.end('<h1>Hello World!</h1>');
 });
 
-server.listen(8080);
-console.log(`Listening incoming connections on port ${server.address().port}`);
+server.listen(port,hostname,() => {
+console.log(`Listening incoming connections on port http://${hostname}:${port}`);
+  
+});
