@@ -1,0 +1,28 @@
+{
+  "name": "learnnode",
+  "version": "1.0.0",
+  "description": "Learning node.js ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srknzl/LearnNode.git"
+  },
+  "keywords": [
+    "node-js",
+    "backend",
+    "server"
+  ],
+  "author": "Serkan Özel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/srknzl/LearnNode/issues"
+  },
+  "homepage": "https://github.com/srknzl/LearnNode#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
