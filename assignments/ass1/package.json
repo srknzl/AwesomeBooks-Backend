@@ -1,0 +1,17 @@
+{
+  "name": "ass1",
+  "version": "1.0.0",
+  "description": "Assignment 1",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "keywords": [
+    "nodejs",
+    "basics",
+    "vanilla"
+  ],
+  "author": "Serkan Özel",
+  "license": "ISC"
+}
