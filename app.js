@@ -1,14 +1,20 @@
-const http = require("http");
+const express = require("express");
 
-const requestHandler = require('./routes'); 
+const app = express();
 
-const hostname = "localhost";
-const port = 3000;
-
-const server = http.createServer(requestHandler);
-
-server.listen(port, hostname, () => {
-  console.log(
-    `Listening incoming connections on port http://${hostname}:${port}`
-  );
+app.use("/", (req, res, next) => {
+  console.log("This always runs");
+  next();
 });
+
+app.use("/add-product", (req, res, next) => {
+  console.log('In add product');
+  res.send("<h1>In add product page</h1>")
+});
+
+app.use("/", (req, res, next) => {
+  console.log('In main page');
+  res.send("<h1> In main page</h1>");
+});
+
+app.listen(3000, "localhost");
