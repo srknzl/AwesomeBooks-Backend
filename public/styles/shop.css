@@ -1,0 +1,19 @@
+.main-header__item-list{
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+  display: flex;
+}
+.main-header__item{
+  margin: 0px 1rem;
+  padding: 0px;
+}
+.main-header__item a{
+  text-decoration: none;
+  color: rgb(199, 21, 51);
+}
+.main-header__item a:hover,
+.main-header__item a:active,
+.main-header__item a.active{
+  color: rgb(220, 243, 8);
+}

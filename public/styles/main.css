@@ -1,0 +1,19 @@
+.main-header {
+  width: 100%;
+  height: 3.5rem;
+  background-color: rgb(1, 44, 78);
+  padding: 0 1.5rem;
+}
+body {
+  padding: 0px;
+  margin: 0px;
+  font-family: sans-serif;
+}
+.main-header__nav {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+main {
+  padding: 1rem;
+}
