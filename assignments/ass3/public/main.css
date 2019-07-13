@@ -1,0 +1,36 @@
+header{
+  display: grid;
+  text-align: center;
+}
+header nav{
+  display: flex;
+  justify-content: space-around;
+  background-color: burlywood;
+}
+
+header a{
+  margin: 1rem;
+  text-decoration: none;
+  color: darkblue;
+}
+header a:hover{
+  text-decoration: underline;
+  color: black;
+}
+header h1{
+  margin-left: 1rem;
+}
+main{
+  display: grid;
+  justify-content: center;
+  text-align: center;
+}
+button{
+  border-radius: 1rem;
+  border: 1px solid darkblue;
+  cursor: pointer;
+}
+button:hover{
+  color: white;
+  background-color: darkblue;
+}
