@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+
+* {
+  box-sizing: border-box;
+}
+.card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  width: 20%;
+}
+
+.card__header,
+.card__content {
+  padding: 1rem;
+}
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+}
+.card__header h1,
+.card__content h1,
+.card__content h2,
+.card__content p {
+  margin: 0;
+}
+
+.card__image {
+  width: 100%;
+}
+
+.card__image img {
+  width: 100%;
+}
+
+.card__actions {
+    padding: 1rem;
+    text-align: center;
+}
+
+.card__actions button,
+.card__actions a {
+    margin: 0 0.25rem;
+}
+
+.btn {
+  font: inherit;
+  border: 1px solid #00695c;
+  color: #00695c;
+  background: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: #00695c;
+  color: white;
+}
+.product-form {
+  width: 20rem;
+  max-width: 90%;
+  margin: auto;
+}
+
+.product-item {
+  width: 20rem;
+  max-width: 95%;
+}
+
+.product__title {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.product__price {
+  text-align: center;
+  color: #4d4d4d;
+  margin-bottom: 0.5rem;
+}
+
+.product__description {
+  text-align: center;
+}
