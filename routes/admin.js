@@ -9,7 +9,9 @@ const router = express.Router();
 router.get("/add-product", (req, res, next) => {
   res.render('add-product',{
     pageTitle: "Add Product",
-    active: "add-product"
+    styles: [
+      {url: "/styles/add-product.css"}
+    ]
   });
 });
 

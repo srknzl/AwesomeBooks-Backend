@@ -10,8 +10,10 @@ router.get("/", (req, res, next) => {
   res.render('shop',
   {
     pageTitle: "Shop",
-    active: "shop"
-  }); // __dirname is the current file's location
+    styles: [
+      {url: "/styles/shop.css"}
+    ]
+  });
 });
 
 module.exports = router;
