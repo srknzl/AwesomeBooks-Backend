@@ -7,6 +7,8 @@ const adminRouter = require("./routes/admin");
 const shopRouter = require("./routes/shop");
 
 const app = express();
+app.set('views','views');
+app.set('view engine','pug');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'))
