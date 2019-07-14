@@ -16,6 +16,11 @@ body {
 }
 main {
   padding: 1rem;
+  background-color: lightyellow;
+  height: 100%;
+}
+html,body{
+  height: 100%;
 }
 .main-header__item-list {
   padding: 0px;
