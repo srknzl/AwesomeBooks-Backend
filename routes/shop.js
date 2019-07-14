@@ -7,7 +7,11 @@ const rootDir = require('../util/path');
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
-  res.render('shop'); // __dirname is the current file's location
+  res.render('shop',
+  {
+    pageTitle: "Shop",
+    active: "shop"
+  }); // __dirname is the current file's location
 });
 
 module.exports = router;

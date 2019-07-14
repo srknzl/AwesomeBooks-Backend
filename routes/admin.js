@@ -8,7 +8,8 @@ const router = express.Router();
 
 router.get("/add-product", (req, res, next) => {
   res.render('add-product',{
-    pageTitle: "Add Product"
+    pageTitle: "Add Product",
+    active: "add-product"
   });
 });
 
