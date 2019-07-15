@@ -1,0 +1,6 @@
+{
+  "files.exclude": {
+    "**/*.html": { "when": "$(basename).pug"}, // hide html files when there is pug file
+    "**/*.hbs": { "when": "$(basename).pug"}, // hide hbs files when there is pug file
+  }
+}
