@@ -1,0 +1,8 @@
+extends ./layouts/main.pug
+block body
+  h1 Welcome to main page!
+  form(action="/users",method="POST")
+    label(for="name") Enter your name
+    br
+    input(type="text",id="name",name="name")
+    input(type="submit", value="Submit")
