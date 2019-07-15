@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
-const notFoundController = require('./controllers/notfound');
+const notFoundController = require('./controllers/errors');
 
 const app = express();
 
