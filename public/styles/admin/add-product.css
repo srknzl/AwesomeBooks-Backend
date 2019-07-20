@@ -1,12 +1,16 @@
-.form-control label,
-.form-control input {
+@import '../variables.css';
+.form-control label,input,textarea
+{
   display: block;
   width: 100%;
 }
-.form-control input {
+.form-control input,textarea {
   border: 1px solid rgb(1, 44, 78);
   font: inherit;
   border-radius: 8px;
+}
+.form-control textarea {
+  resize: none;
 }
 button {
   font: inherit;

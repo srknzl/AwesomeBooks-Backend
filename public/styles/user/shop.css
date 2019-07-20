@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 
+@import '../variables.css';
+
 * {
   box-sizing: border-box;
 }
-.text_center{
-  text-align: center;
-}
+
 .card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
@@ -54,8 +54,8 @@
 
 .btn {
   font: inherit;
-  border: 1px solid #00695c;
-  color: #00695c;
+  border: 1px solid var(--firstColor);
+  color: var(--firstColor);
   background: white;
   border-radius: 3px;
   cursor: pointer;
@@ -63,7 +63,7 @@
 
 .btn:hover,
 .btn:active {
-  background-color: #00695c;
+  background-color: var(--firstColor);
   color: white;
 }
 

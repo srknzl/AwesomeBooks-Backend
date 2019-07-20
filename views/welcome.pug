@@ -1,0 +1,11 @@
+extends ./layouts/welcome.pug
+
+
+block styles
+  link(rel="stylesheet",href="/styles/welcome.css")
+block content
+  h1.text_center Welcome to awesome bookstore!
+
+  .login__buttons
+    a(href="/admin/welcome").btn Admin login
+    a(href="/user/welcome").btn User login

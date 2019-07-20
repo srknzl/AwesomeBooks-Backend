@@ -1,0 +1,31 @@
+@import './variables.css';
+.login__buttons{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-content: center;
+  height: 2rem;
+}
+.btn {
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  text-decoration: none;
+  font: inherit;
+  border: 1px solid var(--firstColor);
+  color: var(--firstColor);
+  border-color: rgb(37, 37, 37);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: var(--firstColor);
+  color: white;
+}
+body {
+  font-family: 'Open Sans', sans-serif;
+  grid-template-rows: 3.5rem auto;
+  grid-template-areas: "header header"
+                       "content content";
+}

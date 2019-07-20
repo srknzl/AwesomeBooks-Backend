@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+html(lang="en"): head
+  meta(charset="UTF-8")
+  meta(name="viewport", content="width=device-width, initial-scale=1.0")
+  meta(http-equiv="X-UA-Compatible", content="ie=edge")
+  title #{pageTitle}
+  link(rel="stylesheet", href="/styles/main.css")
+  block styles
+body
+  .backdrop
+  header.main-header
+    button#side-menu-toggle Menu
+    nav.main-header__nav
+      ul.main-header__item-list
+        li.main-header__item
+          a(href="/admin/welcome" class = active==='welcome' ? 'active' : '' ) Dashboard 
+        li.main-header__item
+          a(href="/admin/products" class = active==='admin-products' ? 'active' : '' ) Browse Products 
+        li.main-header__item
+          a(href="/admin/add-product" class = active==='admin-add-product' ? 'active' : '' ) Add Product 
+        li.main-header__item
+          a(href="/") Logout
+
+  nav.mobile-nav
+    ul.mobile-nav__item-list
+      li.mobile-nav__item
+        a(href="/admin/welcome" class = active==='welcome' ? 'active' : '' ) Dashboard 
+      li.mobile-nav__item
+        a(href="/admin/products" class = active==='admin-products' ? 'active' : '' ) Browse Products 
+      li.mobile-nav__item
+        a(href="admin/add-product" class = active==='admin-add-product' ? 'active' : '' ) Add Product
+      li.mobile-nav__item
+        a(href="/") Logout  
+  main
+    block content
+    script(src="/js/main.js")
