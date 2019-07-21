@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { baseDirectory } from "../util/path";
 
-const fileLocation = path.join(baseDirectory, "data", "products.json");
+const fileLocation = path.join(baseDirectory, "..","data", "products.json");
 
 const getProductsFromFile = (cb: Function) => {
   fs.readFile(fileLocation,(err, data)=>{

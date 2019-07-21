@@ -10,7 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs = __importStar(require("fs"));
 var path = __importStar(require("path"));
 var path_1 = require("../util/path");
-var fileLocation = path.join(path_1.baseDirectory, "data", "products.json");
+var fileLocation = path.join(path_1.baseDirectory, "..", "data", "products.json");
 var getProductsFromFile = function (cb) {
     fs.readFile(fileLocation, function (err, data) {
         if (err) {
