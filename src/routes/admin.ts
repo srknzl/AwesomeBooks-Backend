@@ -1,7 +1,7 @@
-const express = require('express');
-const adminController = require('../controllers/admin/adminController');
+import * as express from "express";
+import * as adminController from "../controllers/admin/adminController";
 
-const router = express.Router();
+export const router = express.Router();
 
 router.get('/add-product', adminController.getAddProduct);
 router.post('/add-product', adminController.postAddProduct);
@@ -11,6 +11,3 @@ router.post('/edit-product/:id',adminController.postEditProduct);
 
 router.get('/products', adminController.getProducts);
 router.get('/welcome',adminController.getWelcome);
-
-
-module.exports = router;
