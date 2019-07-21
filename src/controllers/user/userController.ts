@@ -1,5 +1,6 @@
 import { Product } from "../../models/product";
 import { RequestHandler } from "express";
+import { Cart } from "../../models/cart";
 
 export const getProducts: RequestHandler = (req, res, next) => {
   Product.fetchAll((products: Product[]) => {
@@ -26,15 +27,28 @@ export const getWelcome: RequestHandler = (req, res, next) => {
   });
 };
 export const getCart: RequestHandler = (req, res, next) => {
-  res.render("user/cart", {
-    pageTitle: "Cart",
-    active: "cart"
+  Cart.getProductsInCartFromFile((products : Product[])=>{
+    res.render("user/cart", {
+      pageTitle: "Cart",
+      active: "cart",
+      prods: products
+    });
   });
+  
 };
 export const addToCart: RequestHandler = (req, res, next) => {
-  console.log("Adding a product to cart with id:", req.body.id);
-  res.render("user/cart", {
-    pageTitle: "Cart",
-    active: "cart"
+
+  Product.getProductById(req.body.id,(prod: Product)=>{
+    if(!prod)console.log('Product could not found when adding to cart');
+    else Cart.addToCart(prod);
+    res.redirect('/user/cart');
   });
+  
+  
+};
+export const removeFromCart: RequestHandler = (req, res, next) => {
+
+  Cart.removeFromCart(req.body.id);
+  
+  res.redirect("/user/cart");
 };

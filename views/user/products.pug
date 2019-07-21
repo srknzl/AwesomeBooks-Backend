@@ -17,6 +17,8 @@ block content
             h2.product__price= product.price
             p.product__description=  product.description
           .card__actions
-            button.btn Add to Cart
+            form(action="/user/add-cart", method="post")
+              input(type="hidden", name="id",value=product.id)
+              button(type="submit").btn Add to Cart
   else
     p.text_center: b No products exist yet

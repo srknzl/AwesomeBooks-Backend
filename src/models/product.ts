@@ -4,16 +4,6 @@ import { baseDirectory } from "../util/path";
 
 const fileLocation = path.join(baseDirectory, "..","data", "products.json");
 
-const getProductsFromFile = (cb: Function) => {
-  fs.readFile(fileLocation,(err, data)=>{
-    if(err){
-      cb([]);
-    }else{
-      cb(JSON.parse(data.toString()));
-    }
-  });
-};
-
 export class Product {
   
   id : string;
@@ -34,9 +24,29 @@ export class Product {
     this.description = description;
     this.imageUrl = imageUrl;
   }
+  static getProductById(id:string, callback : Function){
+    Product.getProductsFromFile((data : Product[])=> {
+      const productIndex = data.findIndex((prod : Product)=> prod.id === id);
+      if(productIndex === -1){
+        console.log('No such product');
+        callback(null);
+      }else{
+        callback(data[productIndex]);
+      }
+    });
+  };
 
+  static getProductsFromFile = (cb: Function) => {
+    fs.readFile(fileLocation,(err, data)=>{
+      if(err){
+        cb([]);
+      }else{
+        cb(JSON.parse(data.toString()));
+      }
+    });
+  };
   save() {
-    getProductsFromFile((products : Product[]) => {
+    Product.getProductsFromFile((products : Product[]) => {
       products.push(this);
       fs.writeFile(fileLocation,JSON.stringify(products),err => {
         console.log(err);
@@ -44,6 +54,6 @@ export class Product {
     });
   }
   static fetchAll(cb : Function) {
-    getProductsFromFile(cb);
+    Product.getProductsFromFile(cb);
   }
 };

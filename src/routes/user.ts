@@ -9,3 +9,4 @@ router.get('/products',userController.getProducts);
 
 router.get('/cart',userController.getCart);
 router.post('/add-cart',userController.addToCart);
+router.post('/remove-from-cart',userController.removeFromCart);

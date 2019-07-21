@@ -17,10 +17,9 @@ body {
 }
 main{
   margin: 1em;
-  height: 100%;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   grid-area: content;
-  width: auto;
 }
 .sidebar{
   display: none;

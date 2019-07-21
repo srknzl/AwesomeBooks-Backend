@@ -5,3 +5,20 @@ block styles
 
 block content
   h1 Cart
+  .products__list
+    if prods && prods.length > 0
+      each product in prods 
+        article(class="card product-item")
+          header.card__header
+            h1.product__title= product.title
+          .card__image
+            img( src= product.imageUrl , alt= product.title, srcset="")
+          .card__content
+            h2.product__price= product.price
+            p.product__description=  product.description
+          .card__actions
+            form(action="/user/remove-from-cart", method="post")
+              input(type="hidden", name="id",value=product.id)
+              button.btn(type="submit") Remove from cart
+    else
+      p.text_center: b No products exist yet
