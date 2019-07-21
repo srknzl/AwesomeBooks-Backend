@@ -42,3 +42,9 @@ export const getEditProduct : RequestHandler  = (req,res,next) => {
 export const postEditProduct : RequestHandler  = (req,res,next) => {
   next();
 }
+export const getNotFound: RequestHandler = (req, res, next) => {
+  res.render('errors/admin-not-found',{
+    pageTitle: 'Not found',
+    active: ''
+  });
+};

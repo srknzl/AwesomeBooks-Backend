@@ -11,3 +11,4 @@ router.post('/edit-product/:id',adminController.postEditProduct);
 
 router.get('/products', adminController.getProducts);
 router.get('/welcome',adminController.getWelcome);
+router.use('/',adminController.getNotFound);

@@ -52,3 +52,9 @@ export const removeFromCart: RequestHandler = (req, res, next) => {
   
   res.redirect("/user/cart");
 };
+export const getNotFound: RequestHandler = (req, res, next) => {
+  res.render('errors/user-not-found',{
+    pageTitle: 'Not found',
+    active: ''
+  });
+};
