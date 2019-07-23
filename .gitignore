@@ -61,7 +61,7 @@ typings/
 .next
 
 # exclude build folder
-build/*
+build/
 
-data/*
+data/
 
