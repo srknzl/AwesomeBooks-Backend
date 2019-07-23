@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import {database } from "./util/database";
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
@@ -14,6 +15,11 @@ app.set('view engine','pug');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'))
+database.execute("SELECT * FROM a").then(
+  (r)=>{
+    console.log(r);
+  }
+);
 
 
 app.use('/admin',adminRoutes.router);
