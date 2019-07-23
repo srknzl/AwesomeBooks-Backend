@@ -9,13 +9,13 @@ const fileLocation = path.join(baseDirectory, "..", "data", "products.json");
 export class Product {
   id: string;
   title: string;
-  price: number;
+  price: string;
   description: string;
   imageUrl: string;
 
   constructor(
     title: string,
-    price: number,
+    price: string,
     description: string,
     imageUrl: string
   ) {
@@ -47,8 +47,12 @@ export class Product {
       if(index === -1) return console.error("could not find that product to delete");
       products.splice(index,1);
       fs.writeFile(fileLocation,JSON.stringify(products),(err)=>{
-        console.error(err);
+        if(err)console.error(err);
+        else{
+          Cart.updateCartCount(id,0);
+        }
       });
+      
     });
   }
 

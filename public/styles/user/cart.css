@@ -28,7 +28,8 @@
 }
 
 .card__image img {
-  width: 100%;
+  max-width: 400px;
+  max-height: 200px;
 }
 
 .card__actions {
@@ -78,6 +79,10 @@
 .product__description {
   text-align: center;
   
+}
+.product__quantity{
+  text-align: center;
+  font-weight: bold;
 }
 .checkout__container{
   text-align: end;

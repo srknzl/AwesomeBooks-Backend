@@ -28,18 +28,16 @@ export const getWelcome: RequestHandler = (req, res, next) => {
   });
 };
 export const getCart: RequestHandler = (req, res, next) => {
-  
-  Cart.fetchAllProducts((products : Product[])=>{
+  Cart.fetchAllEntries((entries : CartEntry[])=>{
     Cart.getPrice((price: number)=>{
       res.render("user/cart", {
         pageTitle: "Cart",
         active: "cart",
-        prods: products,
+        entries: entries,
         price: price
       });
     });
   });
-  
 };
 export const addToCart: RequestHandler = (req, res, next) => {
 

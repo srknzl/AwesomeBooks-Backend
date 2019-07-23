@@ -63,3 +63,5 @@ typings/
 # exclude build folder
 build/*
 
+data/*
+

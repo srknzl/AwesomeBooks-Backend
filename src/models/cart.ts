@@ -15,7 +15,7 @@ export class Cart {
     let price = 0;
     Cart.fetchAllEntries((entries : CartEntry[])=>{
       entries.forEach((entry)=>{
-        price += entry.prod.price;
+        price += Number.parseInt(entry.prod.price) * entry.qty;
       });
       cb(price);    
     });
@@ -60,6 +60,19 @@ export class Cart {
       }
     });
   }
+  static removeAllFromCart(prodId : string){
+    Cart.fetchAllEntries((entries : CartEntry[])=>{
+      const entryIndex = entries.findIndex(entry => entry.prod.id === prodId);
+      if(entryIndex === -1){
+        console.error('Error, trying to remove a non existing cart');
+        return;
+      }
+      entries.splice(entryIndex,1);
+      fs.writeFile(fileLocation,JSON.stringify(entries),err=>{
+        if(err)console.error(err);
+      })
+    });
+  }
   static fetchAllEntries(cb : Function){
     fs.readFile(fileLocation,(err,data)=>{
       if(err){
@@ -93,7 +106,7 @@ export class Cart {
         if(count < -1){
           return console.error("Updating cart, count cannot be less than 0.");
         }else if(count === 0){
-          return Cart.removeFromCart(prodId);
+          return Cart.removeAllFromCart(prodId);
         }else {
           entries[index].qty = count;
           fs.writeFile(fileLocation,JSON.stringify(entries),(err)=>{
