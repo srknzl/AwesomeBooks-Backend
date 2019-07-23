@@ -4,7 +4,7 @@ block styles
   link(rel="stylesheet", href="/styles/user/products.css")
 
 block content
-  h1.text_center All products
+  h1 All products
   if prods.length > 0
     .grid
       each product in prods 
@@ -14,11 +14,11 @@ block content
           .card__image
             img( src= product.imageUrl , alt= product.title, srcset="")
           .card__content
-            h2.product__price= product.price
+            h2.product__price #{product.price}$
             p.product__description=  product.description
           .card__actions
             form(action="/user/add-cart", method="post")
               input(type="hidden", name="id",value=product.id)
               button(type="submit").btn Add to Cart
   else
-    p.text_center: b No products exist yet
+    p: b No products exist yet

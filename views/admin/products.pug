@@ -14,10 +14,10 @@ block content
           .card__image
             img( src= product.imageUrl , alt= product.title, srcset="")
           .card__content
-            h2.product__price= product.price
+            h2.product__price #{product.price}$
             p.product__description=  product.description
           .card__actions
-            button.btn Edit Product
+            a(href="/admin/edit-product/" + product.id).btn Edit Product
             button.btn Delete Product
   else
     p.text_center: b No products exist yet

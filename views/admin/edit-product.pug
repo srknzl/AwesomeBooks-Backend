@@ -4,4 +4,18 @@ block styles
   link(rel="stylesheet", href="/styles/admin/edit-product.css")
 
 block content
-  h1 Edit product
+  form.product-form(action="/admin/edit-product",method="POST")
+    .form-control
+      label(for="title") Title
+      input(type="text",name="title",value=product.title)#title
+    .form-control
+      label(for="price") Price
+      input(type="number",name="price",step="0.01",value=product.price)#price
+    .form-control  
+      label(for="imageurl") Image Url
+      input(type="text",name="imageUrl",value=product.imageUrl)#imageUrl
+    .form-control  
+      label(for="description") Description
+      textarea(name="description",rows="5")= product.description
+    input(type="hidden", name="id",value=product.id)
+    button.btn(type="submit") Update Product

@@ -79,3 +79,13 @@
   text-align: center;
   
 }
+.checkout__container{
+  text-align: end;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; 
+}
+.price{
+  font-size: 3rem;
+}
+.checkout__btn{
+  font-size: 2rem;
+}

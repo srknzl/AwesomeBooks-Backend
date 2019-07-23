@@ -1,6 +1,7 @@
 import { Product } from "../../models/product";
 import { RequestHandler } from "express";
 import { Cart } from "../../models/cart";
+import { CartEntry } from "../../interfaces/CartEntry";
 
 export const getProducts: RequestHandler = (req, res, next) => {
   Product.fetchAll((products: Product[]) => {
@@ -27,11 +28,15 @@ export const getWelcome: RequestHandler = (req, res, next) => {
   });
 };
 export const getCart: RequestHandler = (req, res, next) => {
-  Cart.getProductsInCartFromFile((products : Product[])=>{
-    res.render("user/cart", {
-      pageTitle: "Cart",
-      active: "cart",
-      prods: products
+  
+  Cart.fetchAllProducts((products : Product[])=>{
+    Cart.getPrice((price: number)=>{
+      res.render("user/cart", {
+        pageTitle: "Cart",
+        active: "cart",
+        prods: products,
+        price: price
+      });
     });
   });
   

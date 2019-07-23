@@ -21,4 +21,7 @@ block content
               input(type="hidden", name="id",value=product.id)
               button.btn(type="submit") Remove from cart
     else
-      p.text_center: b No products exist yet
+      p: b No products exist yet
+  .checkout__container
+    p.price Total price #{price}
+    a.checkout__btn.btn Checkout

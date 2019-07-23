@@ -4,7 +4,7 @@ block styles
   link(rel="stylesheet", href="/styles/user/shop.css")
 
 block content
-  h1.text_center My products:
+  h1 Welcome to the shop!
   if prods.length > 0
     .grid
       each product in prods 
@@ -21,4 +21,4 @@ block content
               input(type="hidden", name="id",value=product.id)
               button(type="submit").btn Add to Cart
   else
-    p.text_center: b No products exist yet
+    p: b No products exist yet
