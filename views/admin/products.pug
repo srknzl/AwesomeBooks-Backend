@@ -18,6 +18,8 @@ block content
             p.product__description=  product.description
           .card__actions
             a(href="/admin/edit-product/" + product.id).btn Edit Product
-            button.btn Delete Product
+            form(action="/admin/delete-product", method="POST")
+              input(type="hidden", name="id",value= product.id)
+              button(type="submit").btn Delete Product
   else
     p.text_center: b No products exist yet

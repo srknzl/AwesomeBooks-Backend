@@ -62,6 +62,12 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
     }
   );
 };
+export const postDeleteProduct:RequestHandler = (req, res,next)=>{
+  const id = req.body.id;
+  console.log(id);
+  Product.deleteProduct(id);
+  res.redirect('/admin/products');
+}
 export const getNotFound: RequestHandler = (req, res, next) => {
   res.render("errors/admin-not-found", {
     pageTitle: "Not found",
