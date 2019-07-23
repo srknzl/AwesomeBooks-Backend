@@ -19,7 +19,7 @@ block content
             p.product__quantity x#{entry.qty}
           .card__actions
             form(action="/user/add-cart", method="post")
-              input(type="hidden", name="id",value=entry.prod.id)
+              input(type="hidden", name="id",value=entry.prod.id,id="productId")
               button(type="submit").btn Add one more
             form(action="/user/remove-from-cart", method="post")
               input(type="hidden", name="id",value=entry.prod.id)
@@ -27,9 +27,10 @@ block content
             form(action="/user/remove-all-from-cart", method="post")
               input(type="hidden", name="id",value=entry.prod.id)
               button(type="submit").btn Remove all from cart
-            
     else
       p: b No products exist yet
   .checkout__container
     p.price Total price #{price}
     a.checkout__btn.btn Checkout
+block scripts
+  script(src="/js/user/cart.js")
