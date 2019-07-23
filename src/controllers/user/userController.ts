@@ -27,6 +27,16 @@ export const getWelcome: RequestHandler = (req, res, next) => {
     active: "welcome"
   });
 };
+export const getProductDetail: RequestHandler = (req, res, next) => {
+  const id = req.params.id;
+  Product.getProductById(id,(product : Product)=>{
+    res.render("user/view-product", {
+      pageTitle: "Product Detail",
+      active: "products",
+      product: product
+    });
+  });
+};
 export const getCart: RequestHandler = (req, res, next) => {
   Cart.fetchAllEntries((entries : CartEntry[])=>{
     Cart.getPrice((price: number)=>{

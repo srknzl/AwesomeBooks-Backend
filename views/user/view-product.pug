@@ -1,0 +1,20 @@
+extends ../layouts/user-main-layout.pug
+
+block styles
+  link(rel="stylesheet", href="/styles/user/view-product.css")
+
+block content
+  article(class="card product-item")
+    header.card__header
+      h1.product__title= product.title
+    .card__image
+      img( src= product.imageUrl , alt= product.title, srcset="")
+    .card__content
+      h2.product__price #{product.price}$
+      p.product__description=  product.description
+    .card__actions
+      form(action="/user/add-cart", method="post")
+        input(type="hidden", name="id",value=product.id)
+        button(type="submit").btn Add to Cart
+  
+  

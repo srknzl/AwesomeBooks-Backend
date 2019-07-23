@@ -8,7 +8,7 @@ block content
   if prods.length > 0
     .grid
       each product in prods 
-        article(class="card product-item")
+        article(class="card product-item") 
           header.card__header
             h1.product__title= product.title
           .card__image
@@ -18,8 +18,11 @@ block content
             p.product__description=  product.description
           .card__actions
             a(href="/admin/edit-product/" + product.id).btn Edit Product
+            a(href="/admin/view-product/" + product.id).btn View product
             form(action="/admin/delete-product", method="POST")
-              input(type="hidden", name="id",value= product.id)
+              input(type="hidden", name="id",value= product.id,id="productId")
               button(type="submit").btn Delete Product
   else
     p.text_center: b No products exist yet
+block scripts
+  script(src="/js/admin/products.js")

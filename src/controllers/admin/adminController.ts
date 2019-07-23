@@ -42,6 +42,15 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
     });
   });
 };
+export const getProductDetail: RequestHandler = (req, res, next) => {
+  const prodId = req.params.id;
+  Product.getProductById(prodId, (product: Product) => {
+    res.render("admin/view-product", {
+      active: "edit-product",
+      product: product
+    });
+  });
+};
 export const postEditProduct: RequestHandler = (req, res, next) => {
   const prodId = req.body.id;
   const title = req.body.title;

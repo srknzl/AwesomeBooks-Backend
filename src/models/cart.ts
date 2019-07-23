@@ -23,8 +23,8 @@ export class Cart {
   
   static addToCart(prod : Product){
     Cart.fetchAllEntries((entries : CartEntry[])=>{
-      const entryIndex = entries.findIndex((entry) => entry.prod.id = prod.id);
-      if(entryIndex == -1){ // product did not exist
+      const entryIndex = entries.findIndex((entry) => entry.prod.id === prod.id);
+      if(entryIndex === -1){ // product did not exist
         const cartEntry : CartEntry = {
           prod: prod,
           qty: 1

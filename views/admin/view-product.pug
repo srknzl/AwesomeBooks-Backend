@@ -1,0 +1,21 @@
+extends ../layouts/admin-main-layout.pug
+
+block styles
+  link(rel="stylesheet", href="/styles/admin/view-product.css")
+
+block content
+  article(class="card product-item")
+    header.card__header
+      h1.product__title= product.title
+    .card__image
+      img( src= product.imageUrl , alt= product.title, srcset="")
+    .card__content
+      h2.product__price #{product.price}$
+      p.product__description=  product.description
+    .card__actions
+      a(href="/admin/edit-product/" + product.id).btn Edit Product
+      form(action="/admin/delete-product", method="POST")
+        input(type="hidden", name="id",value= product.id)
+        button(type="submit").btn Delete Product
+  
+  
