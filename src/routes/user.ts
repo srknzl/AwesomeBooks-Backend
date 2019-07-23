@@ -11,4 +11,5 @@ router.get('/view-product/:id',userController.getProductDetail);
 router.get('/cart',userController.getCart);
 router.post('/add-cart',userController.addToCart);
 router.post('/remove-from-cart',userController.removeFromCart);
+router.post('/remove-all-from-cart',userController.removeAllFromCart);
 router.use('/',userController.getNotFound);

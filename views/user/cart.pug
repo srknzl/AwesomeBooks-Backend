@@ -24,6 +24,10 @@ block content
             form(action="/user/remove-from-cart", method="post")
               input(type="hidden", name="id",value=entry.prod.id)
               button.btn(type="submit") Remove one from cart
+            form(action="/user/remove-all-from-cart", method="post")
+              input(type="hidden", name="id",value=entry.prod.id)
+              button(type="submit").btn Remove all from cart
+            
     else
       p: b No products exist yet
   .checkout__container
