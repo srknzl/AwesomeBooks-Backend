@@ -4,7 +4,7 @@ import { Cart } from "../../models/cart";
 import { CartEntry } from "../../interfaces/CartEntry";
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  Product.fetchAll((products: Product[]) => {
+  Product.getAllProducts((products: Product[]) => {
     res.render("user/products", {
       pageTitle: "Products",
       prods: products,
@@ -13,7 +13,7 @@ export const getProducts: RequestHandler = (req, res, next) => {
   });
 };
 export const getShop: RequestHandler = (req, res, next) => {
-  Product.fetchAll((products: Product[]) => {
+  Product.getAllProducts((products: Product[]) => {
     res.render("user/shop", {
       pageTitle: "Shop",
       prods: products,

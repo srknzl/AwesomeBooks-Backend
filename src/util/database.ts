@@ -1,8 +1,6 @@
-import mysql2 from "mysql2/promise";
+import { Sequelize } from "sequelize";
 
-export const database = mysql2.createPool({
-  host: "localhost",
-  database: "shop_db",
-  user: "serkan",
-  password: "11037600"
+export const sequelize = new Sequelize("shop","root","11037600",{
+    host: "localhost",
+    dialect: "mysql"
 });

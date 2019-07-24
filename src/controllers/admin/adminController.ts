@@ -1,8 +1,9 @@
 import { Product } from "../../models/product";
 import { RequestHandler } from "express";
+import { pool } from "../../util/database";
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  Product.fetchAll((products: Product[]) => {
+  Product.getAllProducts((products: Product[]) => {
     res.render("admin/products", {
       pageTitle: "Products",
       active: "admin-products",
@@ -28,8 +29,7 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Product(title, price, description, imageUrl);
-  product.save();
+  pool.execute("INSERT INTO products (title,imageUrl,price,description) VALUES (?,?,?,?)",[title,imageUrl,price,description]);
   res.redirect("/admin/products");
 };
 
