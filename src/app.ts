@@ -6,6 +6,7 @@ import * as userRoutes from "./routes/user";
 
 import * as  notFoundController from './controllers/errors';
 import * as  welcomeController from './controllers/welcome';
+import { sequelize } from "./util/database";
 
 const app = express();
 
@@ -22,4 +23,13 @@ app.get('/',welcomeController.getWelcomePage);
 
 app.use(notFoundController.getWelcomeNotFound);
 
+sequelize.sync()
+.then((res : any)=>{
+    //console.log(res);
+})
+.catch(
+    (err : any)=>{
+        console.log(err);
+    }
+);
 app.listen(3001, 'localhost');
