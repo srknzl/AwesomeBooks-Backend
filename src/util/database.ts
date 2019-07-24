@@ -1,10 +1,8 @@
-import mysql2 from "mysql2";
+import mysql2 from "mysql2/promise";
 
-const pool = mysql2.createPool({
+export const database = mysql2.createPool({
   host: "localhost",
   database: "shop_db",
   user: "serkan",
   password: "11037600"
 });
-
-export const database = pool.promise();

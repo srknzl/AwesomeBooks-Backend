@@ -4,9 +4,7 @@ import { baseDirectory } from "../util/path";
 import { Product } from "./product";
 import { CartEntry } from "../interfaces/CartEntry";
 import { ProductData } from "../interfaces/ProductData";
-import {database } from "../util/database";
 
-console.log(database.execute("SELECT * FROM a"));
 
 const fileLocation = path.join(baseDirectory, "..", "data", "cart.json");
 
