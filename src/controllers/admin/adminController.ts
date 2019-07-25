@@ -1,15 +1,18 @@
-import { Product } from "../../models/product";
+import { ProductModel, Product } from "../../models/product";
 import { RequestHandler } from "express";
-import { pool } from "../../util/database";
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  Product.getAllProducts((products: Product[]) => {
-    res.render("admin/products", {
-      pageTitle: "Products",
-      active: "admin-products",
-      prods: products
+  ProductModel.findAll()
+    .then((products) => {
+      res.render("admin/products", {
+        pageTitle: "Products",
+        active: "admin-products",
+        prods: products
+      });
+    })
+    .catch(err => {
+      console.error(err);
     });
-  });
 };
 
 export const getAddProduct: RequestHandler = (req, res, next) => {
@@ -29,27 +32,55 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  pool.execute("INSERT INTO products (title,imageUrl,price,description) VALUES (?,?,?,?)",[title,imageUrl,price,description]);
-  res.redirect("/admin/products");
-};
 
+  ProductModel.create({
+    title: title,
+    imageUrl: imageUrl,
+    price: price,
+    description: description
+  })
+    .then(() => {
+      res.redirect("/admin/products");
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
 export const getEditProduct: RequestHandler = (req, res, next) => {
   const prodId = req.params.id;
-  Product.getProductById(prodId, (product: Product) => {
-    res.render("admin/edit-product", {
-      active: "edit-product",
-      product: product
+  ProductModel.findByPk(prodId)
+    .then((product) => {
+      if (product) {
+        res.render("admin/edit-product", {
+          active: "edit-product",
+          product: product
+        });
+      } else {
+        console.error("No product found with this id: ", prodId);
+        res.redirect("/user/notfound");
+      }
+    })
+    .catch(err => {
+      console.error(err);
     });
-  });
 };
 export const getProductDetail: RequestHandler = (req, res, next) => {
   const prodId = req.params.id;
-  Product.getProductById(prodId, (product: Product) => {
-    res.render("admin/view-product", {
-      active: "edit-product",
-      product: product
+  ProductModel.findByPk(prodId)
+    .then((product) => {
+      if (product) {
+        res.render("admin/view-product", {
+          active: "edit-product",
+          product: product
+        });
+      } else {
+        console.error("No product found with this id: ", prodId);
+        res.redirect("/admin/notfound");
+      }
+    })
+    .catch(err => {
+      console.error(err);
     });
-  });
 };
 export const postEditProduct: RequestHandler = (req, res, next) => {
   const prodId = req.body.id;
@@ -58,25 +89,50 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  Product.updateProduct(
-    prodId,
-    {
-      description,
-      imageUrl,
-      price,
-      title
-    },
-    () => {
-      res.redirect('/admin/products');
-    }
-  );
+  ProductModel.findByPk(prodId)
+    .then((product) => {
+      if (product) {
+        return product;
+      } else {
+        console.error("No product found with this id: ", prodId);
+        res.redirect("/admin/notfound");
+      }
+    })
+    .then((product) => {
+      if (product) {
+        product.imageUrl = imageUrl;
+        product.description = description;
+        product.price = price;
+        product.title = title;
+        product.save();
+        res.redirect("/admin/products");
+      } else {
+        console.error("Product undefined when trying to save!");
+        res.redirect("/admin/notfound");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+    });
 };
-export const postDeleteProduct:RequestHandler = (req, res,next)=>{
+export const postDeleteProduct: RequestHandler = (req, res, next) => {
   const id = req.body.id;
-  console.log(id);
-  Product.deleteProduct(id);
-  res.redirect('/admin/products');
-}
+  ProductModel.findByPk(id)
+  .then(
+    (product)=>{
+      if(product){
+        return product.destroy();
+      }
+    }
+  )
+  .then(()=>{
+    res.redirect("/admin/products");
+  }).catch(
+    err => {
+      console.error(err);
+    }
+  )
+};
 export const getNotFound: RequestHandler = (req, res, next) => {
   res.render("errors/admin-not-found", {
     pageTitle: "Not found",

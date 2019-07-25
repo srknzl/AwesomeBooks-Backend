@@ -1,24 +1,30 @@
-import { Product } from "../../models/product";
 import { RequestHandler } from "express";
-import { Cart } from "../../models/cart";
-import { CartEntry } from "../../interfaces/CartEntry";
+import { ProductModel } from "../../models/product";
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  Product.getAllProducts((products: Product[]) => {
+  ProductModel.findAll()
+  .then((products)=>{
     res.render("user/products", {
       pageTitle: "Products",
       prods: products,
       active: "products"
     });
+  })
+  .catch((err)=>{
+    console.error(err);
   });
 };
 export const getShop: RequestHandler = (req, res, next) => {
-  Product.getAllProducts((products: Product[]) => {
+  ProductModel.findAll()
+  .then((products)=>{
     res.render("user/shop", {
       pageTitle: "Shop",
       prods: products,
       active: "shop"
     });
+  })
+  .catch((err)=>{
+    console.error(err);
   });
 };
 export const getWelcome: RequestHandler = (req, res, next) => {
@@ -29,50 +35,50 @@ export const getWelcome: RequestHandler = (req, res, next) => {
 };
 export const getProductDetail: RequestHandler = (req, res, next) => {
   const id = req.params.id;
-  Product.getProductById(id,(product : Product)=>{
-    res.render("user/view-product", {
-      pageTitle: "Product Detail",
-      active: "products",
-      product: product
-    });
+  ProductModel.findByPk(id)
+  .then(
+    (product)=>{
+      if(product){
+        res.render("user/view-product", {
+          pageTitle: "Product Detail",
+          active: "products",
+          product: product
+        });
+      }else{
+        res.redirect("/notfound");
+      }
+    }
+  )
+  .catch((err)=>{
+    console.error(err);
   });
+  
 };
 export const getCart: RequestHandler = (req, res, next) => {
-  Cart.fetchAllEntries((entries : CartEntry[])=>{
-    Cart.getPrice((price: number)=>{
-      res.render("user/cart", {
-        pageTitle: "Cart",
-        active: "cart",
-        entries: entries,
-        price: price
-      });
-    });
-  });
+  // res.render("user/cart", {
+  //   pageTitle: "Cart",
+  //   active: "cart",
+  //   entries: entries,
+  //   price: price
+  // });
 };
 export const addToCart: RequestHandler = (req, res, next) => {
-
-  Product.getProductById(req.body.id,(prod: Product)=>{
-    if(!prod)console.log('Product could not found when adding to cart');
-    else Cart.addToCart(prod);
-    res.redirect('/user/cart');
-  });
   
-  
+  res.redirect("/user/cart");
 };
 export const removeFromCart: RequestHandler = (req, res, next) => {
+  const id = req.body.id;
 
-  Cart.removeFromCart(req.body.id);
-  
   res.redirect("/user/cart");
 };
 export const removeAllFromCart: RequestHandler = (req, res, next) => {
+  const id = req.body.id;
 
-  Cart.removeAllFromCart(req.body.id);
   res.redirect("/user/cart");
 };
 export const getNotFound: RequestHandler = (req, res, next) => {
-  res.render('errors/user-not-found',{
-    pageTitle: 'Not found',
-    active: ''
+  res.render("errors/user-not-found", {
+    pageTitle: "Not found",
+    active: ""
   });
 };

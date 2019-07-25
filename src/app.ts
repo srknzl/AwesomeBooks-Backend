@@ -26,7 +26,7 @@ app.use(notFoundController.getWelcomeNotFound);
 
 sequelize.sync()
 .then((res : any)=>{
-    //console.log(res);
+    console.log(res);
 })
 .catch(
     (err : any)=>{

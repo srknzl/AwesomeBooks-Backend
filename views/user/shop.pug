@@ -14,7 +14,7 @@ block content
           .card__image
             img( src= product.imageUrl , alt= product.title, srcset="")
           .card__content
-            h2.product__price= product.price
+            h2.product__price #{product.price}$
             p.product__description=  product.description
           .card__actions
             a(href="/user/view-product/" + product.id).btn View product
