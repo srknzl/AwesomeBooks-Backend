@@ -1,9 +1,9 @@
 import {Table, Column, Model, HasMany, CreatedAt, UpdatedAt, HasOne} from 'sequelize-typescript';
-import { Product } from './product';
-import { Cart } from './cart';
+import Product from './product';
+import Cart from './cart';
 
 @Table
-export class User extends Model<User> {
+export default class User extends Model<User> {
 
   @Column
   name!: string;

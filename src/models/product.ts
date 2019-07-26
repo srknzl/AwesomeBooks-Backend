@@ -1,7 +1,8 @@
-import {Table, Column, Model, HasMany, CreatedAt, UpdatedAt, BelongsToMany} from 'sequelize-typescript';
+import {Table, Column, Model, CreatedAt, UpdatedAt, ForeignKey, BelongsTo} from 'sequelize-typescript';
+import User from "./user";
 
 @Table
-export class Product extends Model<Product> {
+export default class Product extends Model<Product> {
   @Column
   title!: string;
 
@@ -21,4 +22,11 @@ export class Product extends Model<Product> {
   @UpdatedAt
   @Column
   updatedAt!: Date;
+
+  @ForeignKey(() => User)
+  @Column
+  userId!: number;
+
+  @BelongsTo(() => User)
+  user!: User;
 }

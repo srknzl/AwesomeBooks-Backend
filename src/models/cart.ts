@@ -3,7 +3,7 @@ import { Product } from './product';
 import { User } from './user';
 
 @Table
-export class Cart extends Model<Cart> {
+export default class Cart extends Model<Cart> {
 
   @Column
   quantity!: number;
