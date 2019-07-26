@@ -1,8 +1,9 @@
 import { RequestHandler } from "express";
-import { ProductModel } from "../../models/product";
+import { Product } from "../../models/product";
+import { Cart } from "../../models/cart";
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  ProductModel.findAll()
+  Product.findAll()
   .then((products)=>{
     res.render("user/products", {
       pageTitle: "Products",
@@ -15,7 +16,7 @@ export const getProducts: RequestHandler = (req, res, next) => {
   });
 };
 export const getShop: RequestHandler = (req, res, next) => {
-  ProductModel.findAll()
+  Product.findAll()
   .then((products)=>{
     res.render("user/shop", {
       pageTitle: "Shop",
@@ -35,7 +36,7 @@ export const getWelcome: RequestHandler = (req, res, next) => {
 };
 export const getProductDetail: RequestHandler = (req, res, next) => {
   const id = req.params.id;
-  ProductModel.findByPk(id)
+  Product.findByPk(id)
   .then(
     (product)=>{
       if(product){
@@ -55,6 +56,7 @@ export const getProductDetail: RequestHandler = (req, res, next) => {
   
 };
 export const getCart: RequestHandler = (req, res, next) => {
+  
   // res.render("user/cart", {
   //   pageTitle: "Cart",
   //   active: "cart",

@@ -1,12 +1,15 @@
 import {Table, Column, Model, HasMany, CreatedAt, UpdatedAt, HasOne} from 'sequelize-typescript';
 import { Product } from './product';
-import { User } from './user';
+import { Cart } from './cart';
 
 @Table
-export class Cart extends Model<Cart> {
+export class User extends Model<User> {
 
   @Column
-  quantity!: number;
+  name!: string;
+  
+  @Column
+  email!: string;
 
   @CreatedAt
   @Column
@@ -19,6 +22,6 @@ export class Cart extends Model<Cart> {
   @HasMany(()=>Product)
   products?: Product[];
 
-  @HasOne(()=>User)
-  user!: User;
+  @HasOne(()=>Cart)
+  cart!: Cart;
 }
