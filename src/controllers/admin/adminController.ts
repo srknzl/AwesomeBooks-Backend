@@ -1,9 +1,10 @@
-import { ProductModel, Product } from "../../models/product";
+import { Product } from "../../models/product";
 import { RequestHandler } from "express";
+import { Cart } from "../../models/cart";
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  ProductModel.findAll()
-    .then((products) => {
+  Product.findAll()
+    .then(products => {
       res.render("admin/products", {
         pageTitle: "Products",
         active: "admin-products",
@@ -32,24 +33,25 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-
-  ProductModel.create({
+  
+  Product.create({
     title: title,
     imageUrl: imageUrl,
     price: price,
     description: description
   })
-    .then(() => {
-      res.redirect("/admin/products");
-    })
-    .catch(err => {
-      console.error(err);
-    });
+  .then(()=>{
+    res.redirect('/admin/products');
+  })
+  .catch(err => {
+    console.error(err);
+  });
+  
 };
 export const getEditProduct: RequestHandler = (req, res, next) => {
   const prodId = req.params.id;
-  ProductModel.findByPk(prodId)
-    .then((product) => {
+  Product.findByPk(prodId)
+    .then(product => {
       if (product) {
         res.render("admin/edit-product", {
           active: "edit-product",
@@ -66,8 +68,8 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
 };
 export const getProductDetail: RequestHandler = (req, res, next) => {
   const prodId = req.params.id;
-  ProductModel.findByPk(prodId)
-    .then((product) => {
+  Product.findByPk(prodId)
+    .then(product => {
       if (product) {
         res.render("admin/view-product", {
           active: "edit-product",
@@ -89,8 +91,8 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  ProductModel.findByPk(prodId)
-    .then((product) => {
+  Product.findByPk(prodId)
+    .then(product => {
       if (product) {
         return product;
       } else {
@@ -98,7 +100,7 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
         res.redirect("/admin/notfound");
       }
     })
-    .then((product) => {
+    .then(product => {
       if (product) {
         product.imageUrl = imageUrl;
         product.description = description;
@@ -117,21 +119,18 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
 };
 export const postDeleteProduct: RequestHandler = (req, res, next) => {
   const id = req.body.id;
-  ProductModel.findByPk(id)
-  .then(
-    (product)=>{
-      if(product){
+  Product.findByPk(id)
+    .then(product => {
+      if (product) {
         return product.destroy();
       }
-    }
-  )
-  .then(()=>{
-    res.redirect("/admin/products");
-  }).catch(
-    err => {
+    })
+    .then(() => {
+      res.redirect("/admin/products");
+    })
+    .catch(err => {
       console.error(err);
-    }
-  )
+    });
 };
 export const getNotFound: RequestHandler = (req, res, next) => {
   res.render("errors/admin-not-found", {

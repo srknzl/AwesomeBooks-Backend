@@ -1,24 +1,21 @@
-import {Table, Column, Model, HasMany, CreatedAt, UpdatedAt, HasOne} from 'sequelize-typescript';
-import { Product } from './product';
-import { User } from './user';
+import { Model, DataTypes } from "sequelize";
+import { BuildOptions } from "sequelize";
 
-@Table
-export default class Cart extends Model<Cart> {
+import { sequelize } from "../util/database";
 
-  @Column
-  quantity!: number;
-
-  @CreatedAt
-  @Column
-  createdAt!: Date;
-
-  @UpdatedAt
-  @Column
-  updatedAt!: Date;
-
-  @HasMany(()=>Product)
-  products?: Product[];
-
-  @HasOne(()=>User)
-  user!: User;
+interface CartInterface extends Model {
+  readonly id: number;
 }
+
+// Need to declare the static model so `findOne` etc. use correct types.
+type CartStatic  = typeof Model & {
+  new (values?: object, options?: BuildOptions): CartInterface;
+}
+export const Cart = <CartStatic>sequelize.define('cart', {
+  id: {
+    primaryKey: true,
+    type: DataTypes.INTEGER.UNSIGNED,
+    allowNull: false,
+    autoIncrement: true
+  }
+});

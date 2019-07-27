@@ -56,17 +56,54 @@ export const getProductDetail: RequestHandler = (req, res, next) => {
   
 };
 export const getCart: RequestHandler = (req, res, next) => {
+  let productsG;
+
+  req.user.getCarts()
+  .then(
+    carts => {
+      return carts[0].getProducts();
+    }
+  )
+  .then(
+    (products) => {
+      productsG = products;
+      let price = 0;
+      for (product in  productsG){
+        price += product.price;
+      }
+      return price;
+    }
+  )
+  .then(
+    (price)=>{
+      res.render("user/cart", {
+        pageTitle: "Cart",
+        active: "cart",
+        entries: productsG,
+        price: price
+      });
+    }
+  )  
+  .catch();
   
-  // res.render("user/cart", {
-  //   pageTitle: "Cart",
-  //   active: "cart",
-  //   entries: entries,
-  //   price: price
-  // });
 };
 export const addToCart: RequestHandler = (req, res, next) => {
-  
-  res.redirect("/user/cart");
+  req.user
+    .getCarts()
+    .then(carts => {
+      return carts[0].addProduct({
+        title: req.body.title,
+        imageUrl: req.body.imageUrl,
+        price: req.body.price,
+        description: req.body.description
+      });
+    })
+    .then(() => {
+      res.redirect("/user/cart");
+    })
+    .catch(err => {
+      console.error(err);
+    });
 };
 export const removeFromCart: RequestHandler = (req, res, next) => {
   const id = req.body.id;
