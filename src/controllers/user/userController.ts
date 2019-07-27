@@ -2,6 +2,8 @@ import { RequestHandler } from "express";
 import { Product, ProductInterface } from "../../models/product";
 import { CartItem, CartItemInterface } from "../../models/cartitem";
 import { CartInterface } from "../../models/cart";
+import { Order, OrderInterface } from "../../models/order";
+import { OrderItemInterface } from "../../models/orderitem";
 
 
 export const getProducts: RequestHandler = (req, res, next) => {
@@ -177,6 +179,51 @@ export const removeFromCart: RequestHandler = (req, res, next) => {
       console.log(err);
   });
 };
+export const addOrder: RequestHandler = (req, res, next) => {
+
+  let fetchedCart : CartInterface;
+  let createdOrder: OrderInterface;
+
+  Order.create({
+    address: "Konya",
+    userId: (req as any).user.id,
+  })
+  .then(
+    (order : OrderInterface)=>{
+      createdOrder = order;
+      return (req as any).user.getCart();
+    }
+  )
+  .then((cart : CartInterface)=>{
+    if(cart){
+      fetchedCart = cart;
+      return CartItem.findAll({
+        where: {
+          cartId: cart.id
+        }
+      });
+    }else{
+      throw new Error("No cart of the user!!")
+    }
+  })
+  
+  .then(((cartitems : CartItemInterface[]) =>{
+    return (createdOrder as any).setCartitems(cartitems);
+  }))
+  .then((orderitem : OrderItemInterface)=>{
+    return CartItem.destroy({
+      where: {
+        cartId: fetchedCart.id
+      }
+    });
+  })
+  .then((affectedRows : number)=>{
+    res.redirect("/user/cart");
+  })
+  .catch((err : Error)=>{
+    console.log(err);
+  });
+}
 export const removeAllFromCart: RequestHandler = (req, res, next) => {
   const id = req.body.id;
   (req as any).user.getCart()

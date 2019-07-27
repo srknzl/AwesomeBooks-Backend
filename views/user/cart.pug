@@ -31,6 +31,7 @@ block content
       p: b No products exist yet
   .checkout__container
     p.price Total price #{price}
-    a.checkout__btn.btn Checkout
+    form(action="/user/order", method="post")
+      button(type="submit").checkout__btn.btn Checkout
 block scripts
   script(src="/js/user/cart.js")
