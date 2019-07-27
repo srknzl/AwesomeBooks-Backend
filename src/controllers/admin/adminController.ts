@@ -35,7 +35,7 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   
-  req.user.createProduct({
+  (req as any).user.createProduct({
     title: title,
     imageUrl: imageUrl,
     price: price,
@@ -44,8 +44,8 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   .then(()=>{
     res.redirect('/admin/products');
   })
-  .catch(err => {
-    console.error(err);
+  .catch((error : Error) => {
+    console.error(error);
   });
   
 };

@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { Product, ProductInterface } from "../../models/product";
-import { CartItem } from "../../models/cartitem";
+import { CartItem, CartItemInterface } from "../../models/cartitem";
+import { CartInterface } from "../../models/cart";
 
 
 export const getProducts: RequestHandler = (req, res, next) => {
@@ -57,26 +58,26 @@ export const getProductDetail: RequestHandler = (req, res, next) => {
 
 };
 export const getCart: RequestHandler = (req, res, next) => {
-  let items;
+  let items: any;
 
-  req.user.getCart()
+  (req as any).user.getCart()
     .then(
-      cart => {
-        return cart.getProducts();
+      (cart: CartInterface) => {
+        return (cart as any).getProducts();
       }
     )
     .then(
       (products: Array<ProductInterface>) => {
         items = products;
         let price = 0;
-        items.forEach(prod => {
-          price += Number(prod.price) * Number(prod.cartitem.quantity);
+        items.forEach((prod: ProductInterface) => {
+          price += Number(prod.price) * Number((prod as any).cartitem.quantity);
         });
         return price;
       }
     )
     .then(
-      (price) => {
+      (price: number) => {
         res.render("user/cart", {
           pageTitle: "Cart",
           active: "cart",
@@ -88,88 +89,123 @@ export const getCart: RequestHandler = (req, res, next) => {
     .catch();
 
 };
-export const addToCart: RequestHandler = (req, res, next) => {
-  let fetchedProduct;
-  let fetchedCart;
 
+export const addToCart: RequestHandler = (req, res, next) => {
+
+  let fetchedProduct: ProductInterface;
+  let fetchedCart: CartInterface;
   Product.findByPk(req.body.id)
     .then(
       product => {
         if (product) {
           fetchedProduct = product;
+          return (req as any).user.getCart();
         } else {
-          console.log("No such product to add to cart:", req.body.id);
+          throw new Error("No such product in product table to be added to the cart:" + req.body.id);
         }
       }
-    ).catch(
-      err => {
-        console.error(err);
-      }
     )
-
-
-  req.user
-    .getCart()
     .then(cart => {
       fetchedCart = cart;
-      return cart.getProducts();
-
-    })
-    .then((products) => {
-      return products.filter(prod => prod.id === fetchedProduct.id);
+      return CartItem.findAll({
+        where: {
+          productId: fetchedProduct.id,
+          cartId: cart.id
+        }
+      });
     })
     .then(
-      prods => {
-        if (prods[0]) {
-          CartItem.findAll({
-            where: {
-              productId: fetchedProduct.id
-            }
-          }).then(
-            cartitems => {
-              if (cartitems[0]) {
-                cartitems[0].quantity++;
-                cartitems[0].save();
-                res.redirect("/user/cart");
-              } else {
-                console.error("No such product to add to cart");
-                res.redirect("/user/cart");
-              }
-            }
-          )
+      cartitems => {
+        if (cartitems.length > 0) {
+          cartitems[0].quantity++;
+          cartitems[0].save();
+          return cartitems[0];
         } else {
-          CartItem.create({
+          return CartItem.create({
             quantity: 1,
             productId: fetchedProduct.id,
             cartId: fetchedCart.id
-          }
-          )
-            .then(
-              cartitem => {
-                res.redirect("/user/cart");
-              }
-            )
-            .catch(
-              err => {
-                console.error(err);
-              }
-            );
+          });
         }
       }
     )
-    .catch(err => {
-      console.error(err);
-    });
+    .then(
+      cartitem =>{
+        res.redirect("/user/cart");
+      }
+    )
+    .catch(
+      err => {
+        console.error(err);
+      }
+    );
 };
 export const removeFromCart: RequestHandler = (req, res, next) => {
   const id = req.body.id;
-
-  res.redirect("/user/cart");
+  (req as any).user.getCart()
+  .then(
+    (cart : CartInterface) => {
+      return CartItem.findAll({
+        where: {
+          productId: id,
+          cartId: cart.id
+        }
+      });
+    }
+  )
+  .then(
+    (cartitems : CartItemInterface[]) => {
+      if(cartitems.length > 0){
+        if(cartitems[0].quantity > 1){
+          cartitems[0].quantity--;
+          return cartitems[0].save();
+        }else{
+          return cartitems[0].destroy();
+        }
+      }else {
+        throw new Error("No such product to delete from the cart");
+      }
+    }
+  )
+  .then(
+    ()=>{
+      res.redirect("/user/cart");
+    }
+  )
+  .catch(
+    (err : Error)=>{
+      console.log(err);
+  });
 };
 export const removeAllFromCart: RequestHandler = (req, res, next) => {
   const id = req.body.id;
-
-  res.redirect("/user/cart");
+  (req as any).user.getCart()
+  .then(
+    (cart : CartInterface) => {
+      return CartItem.findAll({
+        where: {
+          productId: id,
+          cartId: cart.id
+        }
+      });
+    }
+  )
+  .then(
+    (cartitems : CartItemInterface[]) => {
+      if(cartitems.length > 0){
+          return cartitems[0].destroy();
+      }else {
+        throw new Error("No such product to delete from the cart");
+      }
+    }
+  )
+  .then(()=>{
+    res.redirect("/user/cart");
+  })
+  .catch(
+    (err : Error)=>{
+      console.log(err);
+  });
 };
 export const getNotFound: RequestHandler = (req, res, next) => {
   res.render("errors/user-not-found", {

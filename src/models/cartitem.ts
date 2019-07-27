@@ -3,7 +3,7 @@ import { BuildOptions } from "sequelize";
 
 import { sequelize } from "../util/database";
 
-interface CartItemInterface extends Model {
+export interface CartItemInterface extends Model {
   readonly id: number;
   quantity: number;
 }

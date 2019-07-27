@@ -8,7 +8,7 @@ import * as userRoutes from "./routes/user";
 
 import * as  notFoundController from './controllers/errors';
 import * as  welcomeController from './controllers/welcome';
-import { Cart } from "./models/cart";
+import { Cart, CartInterface } from "./models/cart";
 import { User, UserInterface } from "./models/user";
 import { Product } from "./models/product";
 import { CartItem } from "./models/cartitem";
@@ -24,7 +24,7 @@ app.use(express.static("public"));
 app.use((req, res, next) => {
   User.findByPk(1)
     .then(user => {
-      req.user = user;
+      (req as any).user = user;
       next();
     })
     .catch(err => console.log(err));
@@ -75,10 +75,10 @@ sequelize
   }
 )
 .then((user: UserInterface) => {
-  user.getCart()
-  .then(cart=>{
+  (user as any).getCart()
+  .then((cart : CartInterface)=>{
     if(!cart){
-      return user.createCart();
+      return (user as any).createCart();
     }else{
       return cart;
     }
