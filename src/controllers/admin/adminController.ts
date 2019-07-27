@@ -3,6 +3,7 @@ import { RequestHandler } from "express";
 import { Cart } from "../../models/cart";
 
 export const getProducts: RequestHandler = (req, res, next) => {
+  
   Product.findAll()
     .then(products => {
       res.render("admin/products", {
@@ -34,7 +35,7 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   
-  Product.create({
+  req.user.createProduct({
     title: title,
     imageUrl: imageUrl,
     price: price,

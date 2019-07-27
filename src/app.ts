@@ -11,7 +11,7 @@ import * as  welcomeController from './controllers/welcome';
 import { Cart } from "./models/cart";
 import { User, UserInterface } from "./models/user";
 import { Product } from "./models/product";
-import { ProductCart } from "./models/cartproduct";
+import { CartItem } from "./models/cartitem";
 
 const app = express();
 
@@ -48,14 +48,14 @@ sequelize
   });
 
 
-User.hasOne(Cart);
-Cart.belongsTo(User);
+User.hasOne(Cart , {constraints : false});
+// Cart.hasOne(User, { constraints: true, onDelete: "CASCADE"});
 
 User.hasMany(Product);
 Product.belongsTo(User, {constraints: true, onDelete: "CASCADE"});
 
-Cart.belongsToMany(Product, { through: ProductCart});
-Product.belongsToMany(Cart,{through: ProductCart});
+Cart.belongsToMany(Product, { through: CartItem});
+Product.belongsToMany(Cart, {through: CartItem, constraints:true, onDelete: "CASCADE"});
 
 sequelize
 .sync()
@@ -75,8 +75,13 @@ sequelize
   }
 )
 .then((user: UserInterface) => {
-  return user.createCart({
-    quantity: 0
+  user.getCart()
+  .then(cart=>{
+    if(!cart){
+      return user.createCart();
+    }else{
+      return cart;
+    }
   });
 })
 .then(cart => {

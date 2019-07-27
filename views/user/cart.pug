@@ -10,22 +10,22 @@ block content
       each entry in entries 
         article(class="card product-item")
           header.card__header
-            h1.product__title= entry.prod.title
+            h1.product__title= entry.title
           .card__image
-            img( src= entry.prod.imageUrl , alt= entry.prod.title, srcset="")
+            img( src= entry.imageUrl , alt= entry.title, srcset="")
           .card__content
-            h2.product__price= entry.prod.price
-            p.product__description=  entry.prod.description
-            p.product__quantity x#{entry.qty}
+            h2.product__price= entry.price
+            p.product__description=  entry.description
+            p.product__quantity x#{entry.cartitem.quantity}
           .card__actions
             form(action="/user/add-cart", method="post")
-              input(type="hidden", name="id",value=entry.prod.id,id="productId")
+              input(type="hidden", name="id",value=entry.id,id="productId")
               button(type="submit").btn Add one more
             form(action="/user/remove-from-cart", method="post")
-              input(type="hidden", name="id",value=entry.prod.id)
+              input(type="hidden", name="id",value=entry.id)
               button.btn(type="submit") Remove one from cart
             form(action="/user/remove-all-from-cart", method="post")
-              input(type="hidden", name="id",value=entry.prod.id)
+              input(type="hidden", name="id",value=entry.id)
               button(type="submit").btn Remove all from cart
     else
       p: b No products exist yet

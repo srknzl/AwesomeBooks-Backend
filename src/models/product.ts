@@ -3,7 +3,7 @@ import { BuildOptions } from "sequelize";
 
 import { sequelize } from "../util/database";
 
-interface ProductInterface extends Model {
+export interface ProductInterface extends Model {
   readonly id: number;
   title: string;
   price: number;
