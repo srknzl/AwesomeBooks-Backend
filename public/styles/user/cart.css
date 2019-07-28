@@ -3,6 +3,11 @@
 .card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   cursor: pointer;
+  background-color: darksalmon;
+  padding: 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .card__header,
 .card__content {
@@ -11,7 +16,7 @@
 .products__list{
   display: flex;
   flex-direction: column;
-  align-content: center;
+  align-items: center;
   height: 100%;
 }
 
@@ -23,7 +28,7 @@
 }
 
 .card__image {
-  width: 100%;
+  width: fit-content;
   display: flex;
   justify-content: center;
 }
@@ -35,7 +40,7 @@
 
 .card__actions {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: flex-end;
     padding: 1rem;
     text-align: center;
@@ -60,6 +65,17 @@
   background-color: var(--firstColor);
   color: white;
 }
+.disabled__btn {
+  font: inherit;
+  border: 1px solid var(--firstColor);
+  color: var(--firstColor);
+  background: white;
+  border-radius: 3px;
+  cursor: not-allowed;
+}
+
+
+
 
 .product-item {
   height: auto;
@@ -73,7 +89,7 @@
 
 .product__price {
   text-align: center;
-  color: #4d4d4d;
+  color: black;
   margin-bottom: 0.5rem;
 }
 
@@ -86,8 +102,7 @@
   font-weight: bold;
 }
 .checkout__container{
-  text-align: end;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; 
+  text-align: center;
 }
 .price{
   font-size: 3rem;

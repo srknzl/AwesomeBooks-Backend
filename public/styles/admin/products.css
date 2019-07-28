@@ -8,6 +8,8 @@
 .card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   cursor: pointer;
+  background-color: darksalmon;
+  padding: 10px;
 }
 .card__header,
 .card__content {
@@ -20,9 +22,9 @@
 }
 @media (max-width: 600px){
   .grid {
-    display: grid;
-    grid-template-columns: auto auto;
-    justify-content: space-evenly;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
 .card__header h1,
@@ -82,7 +84,7 @@
 
 .product__price {
   text-align: center;
-  color: #4d4d4d;
+  color: black;
   margin-bottom: 0.5rem;
 }
 

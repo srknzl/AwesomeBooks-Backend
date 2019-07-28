@@ -32,49 +32,84 @@ export const getShop: RequestHandler = (req, res, next) => {
     });
 };
 export const getOrders: RequestHandler = (req, res, next) => {
-  let fetchedOrders: any;
-  const products = new Map();
+  interface orderDataInterface {
+    product: ProductInterface | undefined; // If product could not found.
+    address: string;
+    quantity: number;
+    date: string;
+    time: string;
+  }
+
+  const viewData: orderDataInterface[] = [];
+  const ordersArray: OrderInterface[] = [];
 
   Order.findAll({
     where: {
       userId: (req as any).user.id
     },
-    order : [ 
-      ['productId','ASC']
-    ]
+    order: [["createdAt", "ASC"]]
   })
-  .then(orders => {
-    fetchedOrders = orders;
-    let ids : any= [];
-    orders.forEach(
-      (order)=>{
+    .then(orders => {
+      let ids: any = [];
+      for (const order of orders) {
+        ordersArray.push(order);
         ids.push((order as any).productId);
       }
-    );
+      return Product.findAll({
+        where: {
+          id: {
+            [Op.or]: ids
+          }
+        },
+        order: [["id", "ASC"]]
+      });
+    })
+    .then(products => {
+      let counter = 0;
+      for (const order of ordersArray) {
+        const product = products.find(prod => prod.id === order.productId);
 
-    return Product.findAll({
-      where: {
-        id: {
-          [Op.or]: ids
+        const date = order.createdAt;
+
+        const zeroPadder = (n : number) : string | number => {
+          if(n < 10){
+            return '0' + n.toString();
+          }else {
+            return n;
+          }
         }
-      },
-      order : [ 
-        ['id','ASC']
-      ]
+
+        const day: number| string= zeroPadder(date.getDate());
+        const month: number| string= zeroPadder(date.getMonth());
+        const year : number| string= zeroPadder(date.getFullYear());
+
+        const hours: number| string= zeroPadder(date.getHours());
+        const minutes: number| string= zeroPadder(date.getMinutes());
+        const seconds: number| string= zeroPadder(date.getSeconds());
+
+        const formattedDate = `${day}/${month}/${year}` 
+        const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+        viewData.push({
+          product: product,
+          address: order.address,
+          quantity: order.quantity,
+          date: formattedDate,
+          time: formattedTime
+        });
+        counter++;
+      }
+    })
+    .then(() => {
+      res.render("user/orders", {
+        pageTitle: "Orders",
+        orders: viewData,
+        active: "orders"
+      });
+    })
+    .catch(err => {
+      throw err;
     });
-  })
-  .then((products : any) => {
-    console.log(products);
-    res.render("user/orders", {
-      pageTitle: "Orders",
-      orders: fetchedOrders,
-      products: products,
-      active: "orders"
-    });
-  })
-  .catch(err => {
-    throw err;
-  });
 };
 export const getWelcome: RequestHandler = (req, res, next) => {
   res.render("user/welcome", {

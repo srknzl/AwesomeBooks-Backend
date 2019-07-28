@@ -4,17 +4,24 @@ block styles
   link(rel="stylesheet", href="/styles/user/orders.css")
 
 block content
-  if orders.length > 0 && products.length > 0
-    for x in [...Array(orders.length).keys()]
-      .order__container
-        
-        p Title: #{products[x].title} 
-        p Price: #{products[x].price} 
-        img(src= products[x].imageUrl)   
-        p Description: #{products[x].description} 
-        p Address: #{orders[x].address}
-        p Quantity: #{orders[x].quantity}
+  .header
+    h1.text_center Your orders:
+  if orders.length > 0
+    .orders
+      each order in orders
+        .order__container
+          .product__container
+            p.title #{order.product.title} 
+            img(src= order.product.imageUrl)   
+            p.price #{order.product.price}$ 
+            input(type="hidden",id="productId",value= order.product.id)
+          .info__container
+            p.address Will be shipped to: #{order.address}
+            p.quantity Quantity: #{order.quantity}
+            p.date Order Date: #{order.date}
+            p.time Order Time: #{order.time}
   else
-    p No orders
+    h4.text_center No orders yet
 block scripts
+  script(src="/js/user/orders.js")
   

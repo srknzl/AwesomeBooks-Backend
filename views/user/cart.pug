@@ -4,7 +4,7 @@ block styles
   link(rel="stylesheet", href="/styles/user/cart.css")
 
 block content
-  h1 Cart
+  h1.text_center Cart
   .products__list
     if entries && entries.length > 0
       each entry in entries 
@@ -14,8 +14,7 @@ block content
           .card__image
             img( src= entry.imageUrl , alt= entry.title, srcset="")
           .card__content
-            h2.product__price= entry.price
-            p.product__description=  entry.description
+            h2.product__price #{entry.price}$
             p.product__quantity x#{entry.cartitem.quantity}
           .card__actions
             form(action="/user/add-cart", method="post")
@@ -28,10 +27,15 @@ block content
               input(type="hidden", name="id",value=entry.id)
               button(type="submit").btn Remove all from cart
     else
-      p: b No products exist yet
+      p.text_center: b No cart items yet
   .checkout__container
     p.price Total price #{price}
     form(action="/user/order", method="post")
-      button(type="submit").checkout__btn.btn Checkout
+      if entries.length > 0
+        button(type="submit").checkout__btn.btn Checkout
+      else
+        span(title="Add some products to your cart first")
+          button(type="submit",disabled).checkout__btn.disabled__btn Checkout
+
 block scripts
   script(src="/js/user/cart.js")

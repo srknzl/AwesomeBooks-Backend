@@ -11,6 +11,7 @@ body {
   grid-template-columns: auto var(--sidebarWidth); 
   grid-template-areas: "header header"
                        "content content";
+  background-color: honeydew;
 }
 .text_center{
   text-align: center;
@@ -20,6 +21,7 @@ main{
   display: flex;
   flex-direction: column;
   grid-area: content;
+  align-items: center;
 }
 .sidebar{
   display: none;

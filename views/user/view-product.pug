@@ -11,6 +11,7 @@ block content
       img( src= product.imageUrl , alt= product.title, srcset="")
     .card__content
       h2.product__price #{product.price}$
+      p: b Description
       p.product__description=  product.description
     .card__actions
       form(action="/user/add-cart", method="post")

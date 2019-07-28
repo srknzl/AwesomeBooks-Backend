@@ -7,6 +7,10 @@ export interface OrderInterface extends Model {
   readonly id: number;
   address: string;
   quantity: number;
+  readonly productId : number;
+  readonly userId : number;
+  readonly createdAt : Date;
+  readonly updatedAt : Date;
 }
 
 // Need to declare the static model so `findOne` etc. use correct types.

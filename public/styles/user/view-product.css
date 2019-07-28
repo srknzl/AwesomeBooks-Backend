@@ -4,6 +4,11 @@
 }
 
 .card{
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  cursor: pointer;
+  background-color: bisque;
+  padding: 5px;
+  width: 50%;
   text-align: center;
 }
 .card__header,
