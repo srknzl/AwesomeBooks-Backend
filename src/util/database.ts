@@ -1,6 +1,26 @@
-import { Sequelize } from "sequelize";
+import { MongoClient, Db } from "mongodb";
 
-export const sequelize = new Sequelize("shop_db", "serkan", "11037600", {
-  host: "localhost",
-  dialect: "mysql"
-});
+const uri = "mongodb+srv://srknzl:PaWS1EQ7E85MHMJP@srknzl-m0-development-cluster-hgcsl.mongodb.net/learnnode-shop?retryWrites=true&w=majority";
+
+const client = new MongoClient(uri, { useNewUrlParser: true });
+
+let _db : undefined | Db;
+
+export const mongoConnect = (callback : Function) => {
+  client.connect()
+  .then((client)=> {
+    _db = client.db();
+    callback();
+  })
+  .catch(
+    err => {
+      throw err;
+    }
+  );
+}
+export const getDb = () => {
+  if(_db){
+    return _db;
+  }
+  throw "No database found";
+}
