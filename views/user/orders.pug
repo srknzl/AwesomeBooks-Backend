@@ -1,0 +1,20 @@
+extends ../layouts/user-main-layout.pug
+
+block styles
+  link(rel="stylesheet", href="/styles/user/orders.css")
+
+block content
+  if orders.length > 0 && products.length > 0
+    for x in [...Array(orders.length).keys()]
+      .order__container
+        
+        p Title: #{products[x].title} 
+        p Price: #{products[x].price} 
+        img(src= products[x].imageUrl)   
+        p Description: #{products[x].description} 
+        p Address: #{orders[x].address}
+        p Quantity: #{orders[x].quantity}
+  else
+    p No orders
+block scripts
+  

@@ -1,0 +1,9 @@
+@import '../variables';
+
+.order__container{
+  box-shadow: 3px 3px 1px 1px black;
+}
+
+.order__container img{
+  max-width: 400px;
+}

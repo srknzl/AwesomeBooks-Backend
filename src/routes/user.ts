@@ -8,6 +8,7 @@ router.get('/shop',userController.getShop)
 router.get('/products',userController.getProducts);
 router.get('/view-product/:id',userController.getProductDetail);
 router.get('/cart',userController.getCart);
+router.get('/orders',userController.getOrders);
 
 router.post('/add-cart',userController.addToCart);
 router.post('/remove-from-cart',userController.removeFromCart);

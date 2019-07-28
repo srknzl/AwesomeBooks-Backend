@@ -6,6 +6,7 @@ import { sequelize } from "../util/database";
 export interface OrderInterface extends Model {
   readonly id: number;
   address: string;
+  quantity: number;
 }
 
 // Need to declare the static model so `findOne` etc. use correct types.
@@ -22,5 +23,12 @@ export const Order = <OrderStatic>sequelize.define('order', {
   address: {
     allowNull: false,
     type: DataTypes.TEXT
+  },
+  quantity: {
+    allowNull: false, 
+    type: DataTypes.INTEGER.UNSIGNED,
+    validate: {
+      min : 1
+    }
   }
 });

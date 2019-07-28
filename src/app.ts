@@ -13,7 +13,6 @@ import { User, UserInterface } from "./models/user";
 import { Product } from "./models/product";
 import { CartItem } from "./models/cartitem";
 import { Order } from "./models/order";
-import { OrderItem } from "./models/orderitem";
 
 const app = express();
 
@@ -53,15 +52,18 @@ sequelize
 User.hasOne(Cart , {constraints : false});
 // Cart.hasOne(User, { constraints: true, onDelete: "CASCADE"});
 
-User.hasMany(Product);
-Product.belongsTo(User, {constraints: true, onDelete: "CASCADE"});
+User.hasMany(Product, {constraints: true, onDelete: "CASCADE"});
+Product.belongsTo(User);
 
 Cart.belongsToMany(Product, {through: CartItem, constraints: true, onDelete: "CASCADE"});
 Product.belongsToMany(Cart, {through: CartItem, constraints:true, onDelete: "CASCADE"});
 
-Order.belongsTo(User, {constraints:true, onDelete: "CASCADE"});
-Order.belongsToMany(CartItem, {through: OrderItem});
-CartItem.belongsToMany(Order, {through: OrderItem});
+User.hasMany(Order,{constraints: true, onDelete: "CASCADE"});
+CartItem.belongsTo(Product);
+
+Order.belongsTo(User);
+Order.belongsTo(Product);
+
 
 sequelize
 .sync()
