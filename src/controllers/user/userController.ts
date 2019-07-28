@@ -203,12 +203,11 @@ export const addOrder: RequestHandler = (req, res, next) => {
         }
       });
     }else{
-      throw new Error("No cart of the user!!")
+      throw new Error("There is no cart of the current user!!")
     }
   })
-  
   .then(((cartitems : CartItemInterface[]) =>{
-    return (createdOrder as any).setCartitems(cartitems);
+    return (createdOrder as any).addCartitems(cartitems);
   }))
   .then((orderitem : OrderItemInterface)=>{
     return CartItem.destroy({
