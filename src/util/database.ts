@@ -1,6 +1,17 @@
-import { Sequelize } from "sequelize";
+import { MongoClient } from "mongodb";
 
-export const sequelize = new Sequelize("shop_db", "serkan", "11037600", {
-  host: "localhost",
-  dialect: "mysql"
-});
+const uri = "mongodb+srv://srknzl:PaWS1EQ7E85MHMJP@srknzl-m0-development-cluster-hgcsl.mongodb.net/test?retryWrites=true&w=majority";
+
+const client = new MongoClient(uri, { useNewUrlParser: true });
+
+export const mongoConnect = (callback : Function) => {
+  client.connect()
+  .then((client)=> {
+    callback(client);
+  })
+  .catch(
+    err => {
+      throw err;
+    }
+  );
+}
