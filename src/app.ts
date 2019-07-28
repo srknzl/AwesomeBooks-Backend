@@ -23,6 +23,6 @@ app.get("/", welcomeController.getWelcomePage);
 
 app.use(notFoundController.getWelcomeNotFound);
 
-mongoConnect((client : MongoClient)=> {
+mongoConnect(()=> {
   app.listen(3000, "localhost");
 });
