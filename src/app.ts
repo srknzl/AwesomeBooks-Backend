@@ -7,7 +7,8 @@ import * as userRoutes from "./routes/user";
 import * as notFoundController from "./controllers/errors";
 import * as welcomeController from "./controllers/welcome";
 import { mongoConnect } from "./util/database";
-import { User } from "./models/user";
+import { User, UserInterface } from "./models/user";
+import { ObjectId, ObjectID } from "bson";
 
 const app = express();
 
@@ -18,11 +19,37 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.use((req,res,next)=>{
-  User.findById("5d3e9f672684df244cbb45a1")
+  User.findById('5d3ece6644ba801c6862770c')
   .then(
-    user => {
-      (req as any).user = user;
-      next();
+    (user: UserInterface) => {
+      if(!user){
+        (req as any).user = new User('srknzl','serkan.ozel@boun.edu.tr',{items:[]},"5d3ece6644ba801c6862770c");
+        (req as any).user.save()
+        .then(
+          ()=>{
+            next();
+          }
+        )
+        .catch(
+          (err : Error) => {
+            throw err;
+          }
+        );
+      }else {
+        User.findById("5d3ece6644ba801c6862770c")
+        .then(
+          (user: UserInterface) => {
+            (req as any).user = new User(user.username,user.email,user.cart,(user._id as ObjectID).toHexString());
+            next();
+          }
+        )
+        .catch(
+          (err : Error)=>{
+            throw err;
+          }
+        );
+     
+      }
     }
   )
   .catch(err => {

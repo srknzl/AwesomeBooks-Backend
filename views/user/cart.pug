@@ -15,7 +15,7 @@ block content
             img( src= entry.imageUrl , alt= entry.title, srcset="")
           .card__content
             h2.product__price #{entry.price}$
-            p.product__quantity x#{entry.cartitem.quantity}
+            p.product__quantity x#{entry.quantity}
           .card__actions
             form(action="/user/add-cart", method="post")
               input(type="hidden", name="id",value=entry._id,id="productId")

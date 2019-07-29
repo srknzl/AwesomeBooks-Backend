@@ -1,6 +1,16 @@
 import { getDb } from "../util/database";
 import { ObjectId, DeleteWriteOpResultObject } from "mongodb";
 
+
+export interface ProductInterface {
+  title: string;
+  price: number;
+  description: string;
+  imageUrl: string;
+  _id: ObjectId;
+  userId: string;
+}
+
 export class Product {
   title: string;
   price: number;
@@ -15,10 +25,10 @@ export class Product {
     description: string,
     imageUrl: string,
     userId: string,
-    id?: ObjectId
+    id?: ObjectId,
   ) {
     this.title = title;
-    this.price = price;
+    this.price = Number(price);
     this.description = description;
     this.imageUrl = imageUrl;
     this._id = id ?  new ObjectId(id) : null;
@@ -42,12 +52,12 @@ export class Product {
 
     return dbOp;
   }
-  static fetchAll() : Promise<any[]> {
+  static fetchAll() : Promise<ProductInterface[]> {
     const db = getDb();
     const products = db.collection("products");
     return products.find().toArray();
   }
-  static findById(id: string) : Promise<any> {
+  static findById(id: string) : Promise<ProductInterface> {
     const db = getDb();
     const product = db.collection("products");
     return product

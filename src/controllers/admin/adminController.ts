@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { Product } from "../../models/product";
+import { Product, ProductInterface } from "../../models/product";
 import { User } from "../../models/user";
 
 export const getProducts: RequestHandler = (req, res, next) => {
@@ -77,7 +77,7 @@ export const getProductDetail: RequestHandler = (req, res, next) => {
 
   Product.findById(req.params.id)
   .then(
-    (prod : Product) => {
+    (prod : ProductInterface) => {
       fetchedProd = prod;
       return User.findById(prod.userId);
     }
