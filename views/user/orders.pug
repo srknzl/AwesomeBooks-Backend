@@ -14,7 +14,7 @@ block content
             p.title #{order.product.title} 
             img(src= order.product.imageUrl)   
             p.price #{order.product.price}$ 
-            input(type="hidden",id="productId",value= order.product.id)
+            input(type="hidden",id="productId",value= order.product._id)
           .info__container
             p.address Will be shipped to: #{order.address}
             p.quantity Quantity: #{order.quantity}

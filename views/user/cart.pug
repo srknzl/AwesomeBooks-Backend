@@ -18,13 +18,13 @@ block content
             p.product__quantity x#{entry.cartitem.quantity}
           .card__actions
             form(action="/user/add-cart", method="post")
-              input(type="hidden", name="id",value=entry.id,id="productId")
+              input(type="hidden", name="id",value=entry._id,id="productId")
               button(type="submit").btn Add one more
             form(action="/user/remove-from-cart", method="post")
-              input(type="hidden", name="id",value=entry.id)
+              input(type="hidden", name="id",value=entry._id)
               button.btn(type="submit") Remove one from cart
             form(action="/user/remove-all-from-cart", method="post")
-              input(type="hidden", name="id",value=entry.id)
+              input(type="hidden", name="id",value=entry._id)
               button(type="submit").btn Remove all from cart
     else
       p.text_center: b No cart items yet

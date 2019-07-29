@@ -40,30 +40,76 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
 
   const product = new Product(title,price,description,imageUrl);
 
+  //@ts-ignore
   product.save()
   .then(
-    result => {
+    (result:any) => {
       res.redirect('/admin/products');
     }
   )
-  .catch(err => {
+  .catch((err: Error) => {
     throw err;
   });
 
 };
 export const getEditProduct: RequestHandler = (req, res, next) => {
-  res.render("admin/edit-product", {
-    active: "edit-product",
-    product: null
-  });
+
+  Product.findById(req.params.id)
+  .then(
+    prod => {
+      res.render("admin/edit-product", {
+        active: "edit-product",
+        product: prod
+      });
+    }
+  )
+  .catch(
+    err => {
+      throw err;
+    }
+  );
+  
 };
 export const getProductDetail: RequestHandler = (req, res, next) => {
-  res.render("admin/view-product", {
-    active: "edit-product",
-    product: null
-  });
+
+  Product.findById(req.params.id)
+  .then(
+    prod => {
+      res.render("admin/view-product", {
+        active: "edit-product",
+        product: prod
+      });
+    }
+  )
+  .catch(
+    err => {
+      throw err;
+    }
+  );
+
 };
-export const postEditProduct: RequestHandler = (req, res, next) => {};
+export const postEditProduct: RequestHandler = (req, res, next) => {
+  const id = req.body.id;
+  const title = req.body.title;
+  const price = req.body.price;
+  const description = req.body.description;
+  const imageUrl = req.body.imageUrl;
+
+  const product = new Product(title,price,description,imageUrl,id);
+
+  //@ts-ignore
+  product.save()
+  .then(
+    (result : any) => {
+      res.redirect('/admin/products');
+    }
+  )
+  .catch(
+    (err : Error) => {
+      throw err;
+    }
+  );
+};
 export const postDeleteProduct: RequestHandler = (req, res, next) => {};
 export const getNotFound: RequestHandler = (req, res, next) => {
   res.render("errors/admin-not-found", {

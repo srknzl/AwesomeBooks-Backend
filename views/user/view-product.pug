@@ -15,7 +15,7 @@ block content
       p.product__description=  product.description
     .card__actions
       form(action="/user/add-cart", method="post")
-        input(type="hidden", name="id",value=product.id)
+        input(type="hidden", name="id",value=product._id)
         button(type="submit").btn Add to Cart
   
   

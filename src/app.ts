@@ -7,7 +7,6 @@ import * as userRoutes from "./routes/user";
 import * as notFoundController from "./controllers/errors";
 import * as welcomeController from "./controllers/welcome";
 import { mongoConnect } from "./util/database";
-import { MongoClient } from "mongodb";
 
 const app = express();
 
