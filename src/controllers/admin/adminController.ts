@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { Product } from "../../models/product";
+import { User } from "../../models/user";
 
 export const getProducts: RequestHandler = (req, res, next) => {
 
@@ -38,7 +39,7 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  const product = new Product(title,price,description,imageUrl);
+  const product = new Product(title,price,description,imageUrl,(req as any).user._id);
 
   //@ts-ignore
   product.save()
@@ -72,12 +73,21 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
 };
 export const getProductDetail: RequestHandler = (req, res, next) => {
 
+  let fetchedProd : any;
+
   Product.findById(req.params.id)
   .then(
-    prod => {
+    (prod : Product) => {
+      fetchedProd = prod;
+      return User.findById(prod.userId);
+    }
+  )
+  .then(
+    user => {
       res.render("admin/view-product", {
         active: "edit-product",
-        product: prod
+        product: fetchedProd,
+        creator: user
       });
     }
   )
@@ -97,7 +107,6 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
 
   const product = new Product(title,price,description,imageUrl,id);
 
-  //@ts-ignore
   product.save()
   .then(
     (result : any) => {
@@ -110,7 +119,20 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
     }
   );
 };
-export const postDeleteProduct: RequestHandler = (req, res, next) => {};
+export const postDeleteProduct: RequestHandler = (req, res, next) => {
+  const id = req.body.id;
+
+  Product.deleteOne(id)
+  .then(
+    ()=>{
+      res.redirect('/admin/products');
+    }
+  ).catch(
+    err => {
+      throw err;
+    }
+  )
+};
 export const getNotFound: RequestHandler = (req, res, next) => {
   res.render("errors/admin-not-found", {
     pageTitle: "Not found",

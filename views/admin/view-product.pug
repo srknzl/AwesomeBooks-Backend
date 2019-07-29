@@ -11,7 +11,11 @@ block content
       img( src= product.imageUrl , alt= product.title, srcset="")
     .card__content
       h2.product__price #{product.price}$
-      p.product__description=  product.description
+      p.product__description= "Description:  " + product.description
+    .card__creator
+      p Creator of this product: 
+      p: b #{creator.username}
+      a(href= "mailto:" + creator.email)=  creator.email 
     .card__actions
       a(href="/admin/edit-product/" + product._id).btn Edit Product
       form(action="/admin/delete-product", method="POST")

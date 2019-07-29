@@ -13,6 +13,10 @@ block content
       h2.product__price #{product.price}$
       p: b Description
       p.product__description=  product.description
+    .card__creator
+      p Creator of this product: 
+      p: b #{creator.username}
+      a(href= "mailto:" + creator.email)=  creator.email 
     .card__actions
       form(action="/user/add-cart", method="post")
         input(type="hidden", name="id",value=product._id)

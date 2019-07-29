@@ -1,28 +1,31 @@
 import { getDb } from "../util/database";
-import { ObjectId } from "mongodb";
+import { ObjectId, DeleteWriteOpResultObject } from "mongodb";
 
 export class Product {
   title: string;
   price: number;
   description: string;
   imageUrl: string;
-  _id?: ObjectId;
+  _id?: ObjectId | null;
+  userId: string;
 
   constructor(
     title: string,
     price: number,
     description: string,
     imageUrl: string,
+    userId: string,
     id?: ObjectId
   ) {
     this.title = title;
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id = new ObjectId(id);
+    this._id = id ?  new ObjectId(id) : null;
+    this.userId = userId;
   }
 
-  save() {
+  save() : Promise<any> {
     const db = getDb();
     let dbOp;
     const products = db.collection("products");
@@ -39,12 +42,12 @@ export class Product {
 
     return dbOp;
   }
-  static fetchAll() {
+  static fetchAll() : Promise<any[]> {
     const db = getDb();
     const products = db.collection("products");
     return products.find().toArray();
   }
-  static findById(id: string) {
+  static findById(id: string) : Promise<any> {
     const db = getDb();
     const product = db.collection("products");
     return product
@@ -53,11 +56,11 @@ export class Product {
       })
       .next();
   }
-  static deleteOne(id : string){
+  static deleteOne(id : string) :  Promise<DeleteWriteOpResultObject>{
     const db = getDb();
     const product = db.collection("products");
     return product.deleteOne({
       _id: new ObjectId(id)
-    })
+    });
   }
 }

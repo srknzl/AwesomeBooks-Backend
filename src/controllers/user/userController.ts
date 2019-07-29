@@ -1,18 +1,38 @@
 import { RequestHandler } from "express";
+import { Product } from "../../models/product";
+import { User } from "../../models/user";
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  res.render("user/products", {
-    pageTitle: "Products",
-    prods: null,
-    active: "products"
-  });
+  Product.fetchAll().then(
+    (prods) => {
+      res.render("user/products", {
+        pageTitle: "Products",
+        prods: prods,
+        active: "products"
+      });
+    }
+  ).catch(
+    err => {
+      throw err;
+    }
+  );
 };
 export const getShop: RequestHandler = (req, res, next) => {
-  res.render("user/shop", {
-    pageTitle: "Shop",
-    prods: null,
-    active: "shop"
-  });
+  Product.fetchAll().then(
+    (prods) => {
+      res.render("user/shop", {
+        pageTitle: "Shop",
+        prods: prods,
+        active: "shop"
+      });
+    }
+  ).catch(
+    err => {
+      throw err;
+    }
+  );
+
+
 };
 export const getOrders: RequestHandler = (req, res, next) => {
   res.render("user/orders", {
@@ -26,14 +46,31 @@ export const getWelcome: RequestHandler = (req, res, next) => {
     pageTitle: "Welcome",
     active: "welcome"
   });
- };
+};
 export const getProductDetail: RequestHandler = (req, res, next) => {
-  res.render("user/view-product", {
-    pageTitle: "Product Detail",
-    active: "products",
-    product: null
-  });
-  
+  let fetchedProduct: any;
+
+  Product.findById(req.params.id)
+    .then(
+      (prod: Product) => {
+        fetchedProduct = prod;
+        console.log(fetchedProduct);
+        return User.findById(prod.userId);
+      }
+    )
+    .then(
+      user => {
+        res.render("user/view-product", {
+          pageTitle: "Product Detail",
+          active: "products",
+          product: fetchedProduct,
+          creator: user
+        });
+      }
+    )
+    .catch(err => {
+      throw err;
+    })
 };
 export const getCart: RequestHandler = (req, res, next) => {
   res.render("user/cart", {
@@ -44,10 +81,10 @@ export const getCart: RequestHandler = (req, res, next) => {
   });
 };
 
-export const addToCart: RequestHandler = (req, res, next) => {};
-export const removeFromCart: RequestHandler = (req, res, next) => {};
-export const addOrder: RequestHandler = (req, res, next) => {};
-export const removeAllFromCart: RequestHandler = (req, res, next) => {};
+export const addToCart: RequestHandler = (req, res, next) => { };
+export const removeFromCart: RequestHandler = (req, res, next) => { };
+export const addOrder: RequestHandler = (req, res, next) => { };
+export const removeAllFromCart: RequestHandler = (req, res, next) => { };
 export const getNotFound: RequestHandler = (req, res, next) => {
   res.render("errors/user-not-found", {
     pageTitle: "Not found",
