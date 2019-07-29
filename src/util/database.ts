@@ -2,21 +2,18 @@ import { MongoClient, Db } from "mongodb";
 
 const uri = "mongodb+srv://srknzl:PaWS1EQ7E85MHMJP@srknzl-m0-development-cluster-hgcsl.mongodb.net/learnnode-shop?retryWrites=true&w=majority";
 
-const client = new MongoClient(uri, { useNewUrlParser: true });
+const mongoClient = new MongoClient(uri, { useNewUrlParser: true });
 
 let _db : undefined | Db;
 
-export const mongoConnect = (callback : Function) => {
-  client.connect()
-  .then((client)=> {
+export const mongoConnect = async (callback : Function) => {
+  try{
+    const client = await mongoClient.connect();
     _db = client.db();
     callback();
-  })
-  .catch(
-    err => {
-      throw err;
-    }
-  );
+  }catch(err){
+    throw err;
+  }
 }
 export const getDb = () => {
   if(_db){

@@ -39,7 +39,7 @@ export class Product {
     const db = getDb();
     let dbOp;
     const products = db.collection("products");
-
+    console.log(this._id);
     if(this._id){
       dbOp =  products.updateOne({
         _id: this._id
