@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
-import { Product, ProductInterface } from "../../models/product";
-import { User } from "../../models/user";
+ import Product, { IProduct } from "../../models/product";
+// import { User } from "../../models/user";
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
-    const products = await Product.fetchAll();
+    const products = await Product.find();
     res.render("admin/products", {
       pageTitle: "Products",
       active: "admin-products",
@@ -32,7 +32,15 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Product(title, price, description, imageUrl, (req as any).user._id);
+    
+  const product = new Product({
+      title: title,
+      price: price,
+      imageUrl: imageUrl,
+      description: description
+  });
+
+  
   try {
     await product.save();
     res.redirect('/admin/products');
@@ -53,13 +61,16 @@ export const getEditProduct: RequestHandler = async (req, res, next) => {
 };
 export const getProductDetail: RequestHandler = async (req, res, next) => {
   try {
-    const prod: ProductInterface = await Product.findById(req.params.id);
-    const user = await User.findById(prod.userId);
-    res.render("admin/view-product", {
-      active: "edit-product",
-      product: prod,
-      creator: user
-    });
+    const prod: IProduct | null = await Product.findById(req.params.id);
+    if(prod){
+        res.render("admin/view-product", {
+          active: "edit-product",
+          product: prod,
+          creator: {}
+        });
+    }else{
+        throw "Product not found";
+    }
   } catch (err) {
     throw err;
   }
@@ -70,23 +81,25 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   const imageUrl = req.body.imageUrl;
-  const product = new Product(title, price, description, imageUrl, (req as any).user._id, id);
+
   try {
-    await product.save();
+    await Product.findByIdAndUpdate(id,{
+        title: title, price: price,description :  description, imageUrl:  imageUrl
+      });
     res.redirect('/admin/products');
   } catch (err) {
     throw err;
   }
 };
-export const postDeleteProduct: RequestHandler = async (req, res, next) => {
-  const id = req.body.id;
-  try {
-    await Product.deleteOne(id);
-    res.redirect('/admin/products');
-  } catch (err) {
-    throw err;
-  }
-};
+// export const postDeleteProduct: RequestHandler = async (req, res, next) => {
+//   const id = req.body.id;
+//   try {
+//     await Product.deleteOne(id);
+//     res.redirect('/admin/products');
+//   } catch (err) {
+//     throw err;
+//   }
+// };
 export const getNotFound: RequestHandler = (req, res, next) => {
   res.render("errors/admin-not-found", {
     pageTitle: "Not found",
