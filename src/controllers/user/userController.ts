@@ -27,10 +27,11 @@ export const getShop: RequestHandler = async (req, res, next) => {
     throw err;
   }
 };
-export const getOrders: RequestHandler = (req, res, next) => {
+export const getOrders: RequestHandler =  async (req, res, next) => {
+  const orders = await (req as any).user.getOrders();
   res.render("user/orders", {
     pageTitle: "Orders",
-    orders: null,
+    orders: orders,
     active: "orders"
   });
 };
@@ -88,7 +89,10 @@ export const removeFromCart: RequestHandler = async (req, res, next) => {
     throw err;
   }
 };
-export const addOrder: RequestHandler = (req, res, next) => { };
+export const addOrder: RequestHandler = async (req, res, next) => { 
+  await (req as any).user.order();
+  res.redirect('/user/orders');
+};
 export const removeAllFromCart: RequestHandler = async (req, res, next) => {
   try {
     await (req as any).user.removeAllFromCart(req.body.id);

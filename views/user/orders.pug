@@ -8,18 +8,20 @@ block content
     h1.text_center Your orders:
   if orders.length > 0
     .orders
+    - let counter = 0;
       each order in orders
+        - counter++;
+        h2 Order: #{counter} 
         .order__container
-          .product__container
-            p.title #{order.product.title} 
-            img(src= order.product.imageUrl)   
-            p.price #{order.product.price}$ 
-            input(type="hidden",id="productId",value= order.product._id)
-          .info__container
-            p.address Will be shipped to: #{order.address}
-            p.quantity Quantity: #{order.quantity}
-            p.date Order Date: #{order.date}
-            p.time Order Time: #{order.time}
+          each item in order.items
+            .item__container
+              .product__container
+                p.title #{item.title} 
+                img(src= item.imageUrl)   
+                p.price #{item.price}$ 
+                input(type="hidden",id="productId",value= item._id)
+              .info__container
+                p.quantity Quantity: #{item.quantity}
   else
     h4.text_center No orders yet
 block scripts

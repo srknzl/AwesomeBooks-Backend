@@ -35,18 +35,18 @@ export class User {
         this.cart = cart;
     }
 
-    save(): Promise<any> {
+    async save(): Promise<any> {
         const db = getDb();
         const users = db.collection('users');
 
         if (this._id) {
-            return users.updateOne({
+            await users.updateOne({
                 _id: this._id
             }, {
                     $set: this
                 });
         } else {
-            return users.insertOne(this);
+            await users.insertOne(this);
         }
     }
     async addToCart(productId: ObjectId) {
@@ -70,7 +70,7 @@ export class User {
                 }
                 this.cart = user.cart;
 
-                return this.save();
+                await this.save();
             }else {
                 throw "No user of the cart";
             }
@@ -87,10 +87,16 @@ export class User {
                     $in: this.cart.items.map(i => i.productId)
                 }
             }).toArray();
-            return prods.map(p => {
-                //@ts-ignore to ignore possible null
-                return { ...p, quantity: this.cart.items.find(i => i.productId.toHexString() === p._id.toHexString()).quantity };
-            });
+
+            if(this.cart.items.length !== prods.length){
+                await this.emptyCart();
+                return [];
+            }else {
+                return prods.map(p => {
+                    //@ts-ignore to ignore possible null
+                    return { ...p, quantity: this.cart.items.find(i => i.productId.toHexString() === p._id.toHexString()).quantity };
+                });
+            }
         } catch (err) {
             throw err;
         }
@@ -109,7 +115,7 @@ export class User {
                 } else {
                     user.cart.items.splice(index, 1);
                     this.cart = user.cart;
-                    return this.save();
+                    await this.save();
                 }
             }else {
                 throw "No user of the cart";
@@ -139,13 +145,58 @@ export class User {
                         throw "Invalid cart item quantity";
                     }
                     this.cart = user.cart;
-                    return this.save();
+                    await this.save();
                 }
             }else{
                 throw "No user of the cart";
             }
         }catch(err){
             throw err;
+        }
+    }
+    async emptyCart(){
+        const db = getDb();
+        const users = db.collection('users');
+        try{
+            await users.updateOne({
+                _id: this._id
+            },{
+                $set: {
+                    cart: {items: []}
+                }
+            });
+            this.cart.items = [];
+        }catch(err){
+            throw err;
+        }
+        
+
+    }
+    async order(){
+        const db = getDb();
+        const ordersCol = db.collection('orders');
+        try{
+            const cart = await this.getCart();
+            const order = {
+                items: cart,
+                userId: this._id
+            };
+            await ordersCol.insertOne(order);
+            await this.emptyCart();
+        }catch(err){
+            console.log(err);
+        }
+    }
+    async getOrders(){
+        const db = getDb();
+        const ordersCol = db.collection('orders');
+        try{
+            const orders = await ordersCol.find({
+                userId: this._id
+            }).toArray();
+            return orders;
+        }catch(err){
+            console.log(err);
         }
     }
     static findById(id: string): Promise<any> {
