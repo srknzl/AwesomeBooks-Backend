@@ -1,38 +1,43 @@
 @import "../variables.css";
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
-.card__creator{
-  border: 1px solid black;
-  padding: 20px;
+
+.card__creator {
+    border: 1px solid black;
+    padding: 20px;
 }
-.card{
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  cursor: pointer;
-  background-color: bisque;
-  width: 50%;
-  text-align: center;
+
+.card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    cursor: pointer;
+    background-color: bisque;
+    width: 50%;
+    text-align: center;
 }
+
 .card__header,
 .card__content {
-  padding: 1rem;
+    padding: 1rem;
 }
+
 .card__header h1,
 .card__content h1,
 .card__content h2,
 .card__content p {
-  margin: 0;
+    margin: 0;
 }
 
 .card__image {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
 }
 
 .card__image img {
-  max-width: 500px;
-  width: 100%;
+    max-width: 500px;
+    width: 100%;
 }
 
 .card__actions {
@@ -47,16 +52,22 @@
 }
 
 .btn {
-  font: inherit;
-  border: 1px solid var(--firstColor);
-  color: var(--firstColor);
-  background: white;
-  border-radius: 3px;
-  cursor: pointer;
+    font: inherit;
+    border: 1px solid var(--firstColor);
+    color: var(--firstColor);
+    background: white;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: var(--firstColor);
-  color: white;
+    background-color: var(--firstColor);
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .card {
+        width: 100%;
+    }
 }

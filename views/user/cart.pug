@@ -8,14 +8,15 @@ block content
   .products__list
     if entries && entries.length > 0
       each entry in entries 
-        article(class="card product-item")
-          header.card__header
-            h1.product__title= entry.product.title
-          .card__image
-            img( src= entry.product.imageUrl , alt= entry.product.title, srcset="")
+        article(class="card")
           .card__content
-            h2.product__price #{entry.product.price}$
-            p.product__quantity x#{entry.quantity}
+            header.card__header
+              h1.product__title= entry.product.title
+            .card__image
+              img( src= entry.product.imageUrl , alt= entry.product.title, srcset="")
+            .card__content
+              h2.product__price #{entry.product.price}$
+              p.product__quantity x#{entry.quantity}
           .card__actions
             form(action="/user/add-cart", method="post")
               input(type="hidden", name="id",value=entry.product._id,id="productId")

@@ -1,112 +1,133 @@
 @import '../variables.css';
-
 .card {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  cursor: pointer;
-  background-color: darksalmon;
-  padding: 5px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    cursor: pointer;
+    background-color: darksalmon;
+    padding: 5px;
+    width: auto;
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-template-areas: "content buttons";
+    padding: 1rem;
+    margin-bottom: 1rem;
 }
+
 .card__header,
 .card__content {
-  padding: 1rem;
+    padding: 1rem;
 }
-.products__list{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
+
+.card__content {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.products__list {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    height: 100%;
+    width: 95%
 }
 
 .card__header h1,
 .card__content h1,
 .card__content h2,
 .card__content p {
-  margin: 0;
+    margin: 0;
 }
 
 .card__image {
-  width: fit-content;
-  display: flex;
-  justify-content: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .card__image img {
-  max-width: 400px;
-  max-height: 200px;
+    max-width: 400px;
+    max-height: 200px;
 }
 
 .card__actions {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: 1rem;
     text-align: center;
+    justify-content: center;
+    grid-area: buttons;
+    width: 100%;
 }
 
 .card__actions button,
 .card__actions a {
-    margin: 0 0.25rem;
+    margin: 0px 5px 10px 5px;
+}
+
+.card__actions form .btn {
+    width: 100%;
 }
 
 .btn {
-  font: inherit;
-  border: 1px solid var(--firstColor);
-  color: var(--firstColor);
-  background: white;
-  border-radius: 3px;
-  cursor: pointer;
+    font: inherit;
+    border: 1px solid var(--firstColor);
+    color: var(--firstColor);
+    background: white;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: var(--firstColor);
-  color: white;
+    background-color: var(--firstColor);
+    color: white;
 }
+
 .disabled__btn {
-  font: inherit;
-  border: 1px solid var(--firstColor);
-  color: var(--firstColor);
-  background: white;
-  border-radius: 3px;
-  cursor: not-allowed;
-}
-
-
-
-
-.product-item {
-  height: auto;
-  margin: 1em 0em;
+    font: inherit;
+    border: 1px solid var(--firstColor);
+    color: var(--firstColor);
+    background: white;
+    border-radius: 3px;
+    cursor: not-allowed;
 }
 
 .product__title {
-  font-size: 1.2rem;
-  text-align: center;
+    font-size: 1.2rem;
+    text-align: center;
 }
 
 .product__price {
-  text-align: center;
-  color: black;
-  margin-bottom: 0.5rem;
+    text-align: center;
+    color: black;
+    margin-bottom: 0.5rem;
 }
 
 .product__description {
-  text-align: center;
-  
+    text-align: center;
 }
-.product__quantity{
-  text-align: center;
-  font-weight: bold;
+
+.product__quantity {
+    text-align: center;
+    font-weight: bold;
 }
-.checkout__container{
-  text-align: center;
+
+.checkout__container {
+    text-align: center;
 }
-.price{
-  font-size: 3rem;
+
+.price {
+    font-size: 3rem;
 }
-.checkout__btn{
-  font-size: 2rem;
+
+.checkout__btn {
+    font-size: 2rem;
+}
+
+@media (max-width: 600px) {
+    .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }
