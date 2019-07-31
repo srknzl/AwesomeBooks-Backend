@@ -5,6 +5,7 @@ export interface IProduct extends Document{
   price: number;
   description: string;
   imageUrl: string;
+  user: Schema.Types.ObjectId;
 }
 
 const productSchema = new Schema({
@@ -22,6 +23,11 @@ const productSchema = new Schema({
   },
   imageUrl: {
     type: String,
+    required: true
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   }
 });

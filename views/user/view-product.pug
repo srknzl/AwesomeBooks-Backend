@@ -15,7 +15,7 @@ block content
       p.product__description=  product.description
     .card__creator
       p Creator of this product: 
-      p: b #{creator.username}
+      p: b #{creator.name}
       a(href= "mailto:" + creator.email)=  creator.email 
     .card__actions
       form(action="/user/add-cart", method="post")

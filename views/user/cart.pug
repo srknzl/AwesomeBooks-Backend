@@ -10,21 +10,21 @@ block content
       each entry in entries 
         article(class="card product-item")
           header.card__header
-            h1.product__title= entry.title
+            h1.product__title= entry.product.title
           .card__image
-            img( src= entry.imageUrl , alt= entry.title, srcset="")
+            img( src= entry.product.imageUrl , alt= entry.product.title, srcset="")
           .card__content
-            h2.product__price #{entry.price}$
+            h2.product__price #{entry.product.price}$
             p.product__quantity x#{entry.quantity}
           .card__actions
             form(action="/user/add-cart", method="post")
-              input(type="hidden", name="id",value=entry._id,id="productId")
+              input(type="hidden", name="id",value=entry.product._id,id="productId")
               button(type="submit").btn Add one more
             form(action="/user/remove-from-cart", method="post")
-              input(type="hidden", name="id",value=entry._id)
+              input(type="hidden", name="id",value=entry.product._id)
               button.btn(type="submit") Remove one from cart
             form(action="/user/remove-all-from-cart", method="post")
-              input(type="hidden", name="id",value=entry._id)
+              input(type="hidden", name="id",value=entry.product._id)
               button(type="submit").btn Remove all from cart
     else
       p.text_center: b No cart items yet

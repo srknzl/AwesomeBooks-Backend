@@ -1,3 +1,119 @@
+import { Schema, model, Document } from "mongoose";
+import Product, { IProduct } from "./product";
+import { ObjectId } from "bson";
+import Order from "./order";
+
+export interface ICartItem {
+  product: Schema.Types.ObjectId | IProduct;
+  quantity: number;
+}
+
+export interface ICart {
+  items: ICartItem[];
+}
+
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  cart: ICart;
+  // product: Schema.Types.ObjectId | IProduct;
+}
+
+const userSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  cart: {
+    items: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: "Product"
+        },
+        quantity: {
+          type: Number,
+          required: true
+        }
+      }
+    ]
+  }
+});
+
+userSchema.methods.addToCart = async function(productId: string) {
+  const prod = await Product.findById(productId);
+  if (prod) {
+    const index = this.cart.items.findIndex(
+      (i: any) => i.product.toString() === productId
+    );
+    if (index === -1) {
+      this.cart.items.push({
+        quantity: 1,
+        product: prod._id
+      });
+    } else {
+      this.cart.items[index].quantity++;
+    }
+    this.markModified("cart");
+    await this.save();
+  } else {
+    throw "Product not found!";
+  }
+};
+
+userSchema.methods.removeOneFromCart = async function(productId: string){
+  const prod = await Product.findById(productId);
+  if (prod) {
+    const index = this.cart.items.findIndex(
+      (i: any) => i.product.toString() === productId);
+    if (index === -1) {
+      return;
+    } else {
+      if(this.cart.items[index].quantity > 1){
+        this.cart.items[index].quantity--;
+      }else{
+        this.cart.items.splice(index,1);
+      }
+    }
+    this.markModified("cart");
+    await this.save();
+  } else {
+    throw "Product not found!";
+  }
+}
+userSchema.methods.removeAllFromCart = async function(productId: string){
+  const prod = await Product.findById(productId);
+  if (prod) {
+    const index = this.cart.items.findIndex(
+      (i: any) => i.product.toString() === productId);
+    if (index === -1) {
+      return;
+    } else {
+      this.cart.items.splice(index,1);
+    }
+    this.markModified("cart");
+    await this.save();
+  } else {
+    throw "Product not found!";
+  }
+}
+userSchema.methods.order = async function(){
+  const items = this.cart.items;
+  const order = new Order({
+
+  });
+
+  order.save();
+}
+
+const User = model<IUser>("User", userSchema);
+export default User;
+
 // import { ObjectId } from "mongodb";
 
 // export interface UserInterface {
@@ -20,7 +136,6 @@
 //     email: string;
 //     _id: ObjectId | null;
 //     cart: CartInterface;
-
 
 //     constructor(username: string,
 //         email: string,
@@ -167,7 +282,6 @@
 //         }catch(err){
 //             throw err;
 //         }
-        
 
 //     }
 //     async order(){
@@ -206,4 +320,4 @@
 //         });
 //     }
 
-// } 
+// }
