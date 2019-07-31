@@ -10,18 +10,23 @@ block content
     .orders
     - let counter = 0;
       each order in orders
+        - let overallPrice = 0;
         - counter++;
-        h2 Order: #{counter} 
+        h2 Order No: #{counter} 
         .order__container
           each item in order.items
             .item__container
               .product__container
-                p.title #{item.title} 
-                img(src= item.imageUrl)   
-                p.price #{item.price}$ 
-                input(type="hidden",id="productId",value= item._id)
+                p.title #{item.product.title} 
+                img(src= item.product.imageUrl)
+                - overallPrice += item.product.price * item.quantity;   
+                p.price #{item.product.price}$ 
+                input(type="hidden",id="productId",value= item.product._id)
               .info__container
                 p.quantity Quantity: #{item.quantity}
+        h3 Total price for this order: #{overallPrice}
+        h3 Order Date: #{order.orderDate}
+        h3 Adress: #{order.address}
   else
     h4.text_center No orders yet
 block scripts

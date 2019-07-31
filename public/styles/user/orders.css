@@ -46,6 +46,8 @@
 }
 .item__container {
   margin: 10px;
+  display: flex;
+  flex-direction: column;
 }
 .info__container {
   display: flex;

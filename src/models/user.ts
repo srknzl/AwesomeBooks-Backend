@@ -1,13 +1,12 @@
 import { Schema, model, Document } from "mongoose";
 import Product, { IProduct } from "./product";
 import { ObjectId } from "bson";
-import Order from "./order";
+import Order, { IOrderItem } from "./order";
 
 export interface ICartItem {
   product: Schema.Types.ObjectId | IProduct;
   quantity: number;
 }
-
 export interface ICart {
   items: ICartItem[];
 }
@@ -45,7 +44,7 @@ const userSchema = new Schema({
   }
 });
 
-userSchema.methods.addToCart = async function(productId: string) {
+userSchema.methods.addToCart = async function (productId: string) {
   const prod = await Product.findById(productId);
   if (prod) {
     const index = this.cart.items.findIndex(
@@ -66,7 +65,7 @@ userSchema.methods.addToCart = async function(productId: string) {
   }
 };
 
-userSchema.methods.removeOneFromCart = async function(productId: string){
+userSchema.methods.removeOneFromCart = async function (productId: string) {
   const prod = await Product.findById(productId);
   if (prod) {
     const index = this.cart.items.findIndex(
@@ -74,10 +73,10 @@ userSchema.methods.removeOneFromCart = async function(productId: string){
     if (index === -1) {
       return;
     } else {
-      if(this.cart.items[index].quantity > 1){
+      if (this.cart.items[index].quantity > 1) {
         this.cart.items[index].quantity--;
-      }else{
-        this.cart.items.splice(index,1);
+      } else {
+        this.cart.items.splice(index, 1);
       }
     }
     this.markModified("cart");
@@ -86,7 +85,7 @@ userSchema.methods.removeOneFromCart = async function(productId: string){
     throw "Product not found!";
   }
 }
-userSchema.methods.removeAllFromCart = async function(productId: string){
+userSchema.methods.removeAllFromCart = async function (productId: string) {
   const prod = await Product.findById(productId);
   if (prod) {
     const index = this.cart.items.findIndex(
@@ -94,7 +93,7 @@ userSchema.methods.removeAllFromCart = async function(productId: string){
     if (index === -1) {
       return;
     } else {
-      this.cart.items.splice(index,1);
+      this.cart.items.splice(index, 1);
     }
     this.markModified("cart");
     await this.save();
@@ -102,13 +101,35 @@ userSchema.methods.removeAllFromCart = async function(productId: string){
     throw "Product not found!";
   }
 }
-userSchema.methods.order = async function(){
+userSchema.methods.emptyCart = async function () {
+  this.cart.items = [];
+  await this.save();
+}
+userSchema.methods.order = async function (address: string) {
   const items = this.cart.items;
-  const order = new Order({
+  const orderItems : IOrderItem[] = [];
+  
 
+  //temp
+  if(!address) address = "Konya";
+  
+  items.forEach((item: ICartItem) => {
+
+    orderItems.push({
+      quantity: item.quantity,
+      product: item.product
+    });
+    
   });
-
-  order.save();
+  const order = new Order({
+    items: orderItems,
+    user: this._id,
+    address: address,
+    orderDate: new Date()
+  });
+  
+  await order.save();
+  await this.emptyCart();
 }
 
 const User = model<IUser>("User", userSchema);

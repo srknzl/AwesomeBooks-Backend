@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import Product, { IProduct } from "../../models/product";
-import User from "../../models/user";
+import Order from "../../models/order";
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
@@ -27,7 +27,8 @@ export const getShop: RequestHandler = async (req, res, next) => {
   }
 };
 export const getOrders: RequestHandler =  async (req, res, next) => {
-  const orders = await (req as any).user.getOrders();
+  const orders = await Order.find().populate('items.product').exec();
+  
   res.render("user/orders", {
     pageTitle: "Orders",
     orders: orders,
@@ -41,12 +42,12 @@ export const getWelcome: RequestHandler = (req, res, next) => {
   });
 };
 export const getProductDetail: RequestHandler = async (req, res, next) => {
+  
   try {
     const prod: IProduct | null = await Product.findById(
       req.params.id
     ).populate("user");
     if (prod) {
-      console.log(prod);
       res.render("user/view-product", {
         pageTitle: "Product Detail",
         active: "products",

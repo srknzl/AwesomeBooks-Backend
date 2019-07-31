@@ -5,13 +5,13 @@ import { IProduct } from "./product";
 export interface IOrderItem {
   product: IProduct | Schema.Types.ObjectId;
   quantity: number;
-  address: string;
-  orderDate: Date;
 }
 
 export interface IOrder extends Document{
   items: IOrderItem[];
   user: IUser |  Schema.Types.ObjectId;
+  address: string;
+  orderDate: Date;
 }
 
 const orderSchema = new Schema({
@@ -25,17 +25,17 @@ const orderSchema = new Schema({
       quantity: {
         type: Number,
         required: true
-      },
-      address: {
-        type: String,
-        required: true
-      },
-      orderDate: {
-        type: Date,
-        required: true
       }
     }
   ],
+  address: {
+    type: String,
+    required: true
+  },
+  orderDate: {
+    type: Date,
+    required: true
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
