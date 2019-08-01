@@ -4,7 +4,7 @@
     cursor: pointer;
     background-color: darksalmon;
     padding: 5px;
-    width: auto;
+    width: 80%;
     display: grid;
     grid-template-columns: 70% 30%;
     grid-template-areas: "content buttons";
@@ -28,6 +28,7 @@
     display: flex;
     flex-direction: column;
     align-content: center;
+    align-items: center;
     height: 100%;
     width: 95%
 }

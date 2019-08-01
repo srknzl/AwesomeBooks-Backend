@@ -44,7 +44,8 @@ app.use(notFoundController.getWelcomeNotFound);
 
 connect(
   "mongodb+srv://srknzl:PaWS1EQ7E85MHMJP@srknzl-m0-development-cluster-hgcsl.mongodb.net/learnnode-shop?retryWrites=true&w=majority",
-  async () => {
+  async (err) => {
+    if(err) console.error(err);
     try {
       let user: IUser | null = await User.findById("5d40946927860429a7955209");
       if (!user) {
