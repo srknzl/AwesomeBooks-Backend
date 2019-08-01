@@ -1,12 +1,14 @@
 import express from "express";
 import bodyParser from "body-parser";
+import { connect } from "mongoose";
+import session, { MemoryStore } from "express-session";
+
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
 
 import * as notFoundController from "./controllers/errors";
 import * as welcomeController from "./controllers/welcome";
-import { connect } from "mongoose";
 import User, { IUser } from "./models/user";
 
 const app = express();
@@ -16,6 +18,11 @@ app.set("view engine", "pug");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(session({
+  secret: 'Some secret keyword.',
+  resave: false,
+  saveUninitialized: false
+}))
 
 app.use(async (req, res, next) => {
   try {
