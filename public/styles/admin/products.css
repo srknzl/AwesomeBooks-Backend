@@ -3,7 +3,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     cursor: pointer;
     background-color: darksalmon;
-    padding: 5px;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -92,5 +92,6 @@ form .btn {
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 90vw;
     }
 }

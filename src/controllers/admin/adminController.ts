@@ -105,7 +105,7 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
 export const postDeleteProduct: RequestHandler = async (req, res, next) => {
   const id = req.body.id;
   try {
-    await Product.deleteOne(id);
+    await Product.deleteOne({_id:id});
     res.redirect("/admin/products");
   } catch (err) {
     throw err;

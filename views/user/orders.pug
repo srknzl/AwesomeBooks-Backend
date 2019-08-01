@@ -7,8 +7,8 @@ block content
   .header
     h1.text_center Your orders:
   if orders.length > 0
-    .orders
     - let counter = 0;
+    .orders
       each order in orders
         - let overallPrice = 0;
         - counter++;

@@ -4,10 +4,10 @@
   flex-direction: row;
   justify-content: space-around;
   align-content: center;
-  height: 2rem;
+  height: auto;
 }
 .login__buttons a {
-  margin: 0px 50px;
+  margin: 1rem;
 }
 .btn {
   display: inline-block;
@@ -31,4 +31,12 @@ body {
   grid-template-rows: 3.5rem auto;
   grid-template-areas: "header header"
                        "content content";
+}
+@media (max-width: 600px) {
+  .login__buttons{
+    height: auto;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+  }
 }

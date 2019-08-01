@@ -17,18 +17,7 @@
     border: 3px solid blue;
 }
 
-@media (max-width: 600px) {
-    .orders {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .order__container {
-        margin: 10px 0px;
-        width: 100%;
-        flex-direction: column;
-    }
-}
+
 
 .order__container img {
     width: 100%;
@@ -65,4 +54,18 @@
 
 .title {
     font-size: 2rem;
+}
+
+@media (max-width: 600px) {
+    .orders {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90vw;
+    }
+    .order__container {
+        margin: 10px 0px;
+        width: 100%;
+        flex-direction: column;
+    }
 }
