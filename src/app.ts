@@ -1,8 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { connect } from "mongoose";
-import session, { MemoryStore } from "express-session";
-
+import session from "express-session";
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
@@ -19,7 +18,7 @@ app.set("view engine", "pug");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(session({
-  secret: 'Some secret keyword.',
+  secret: 'UlEuikYPJivAXVMR5KUX24bDU202JkQgv0QrctQRRFEIHrktim1yMgWTI3gwKhbXsnWiNfufv',
   resave: false,
   saveUninitialized: false
 }))

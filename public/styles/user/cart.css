@@ -1,20 +1,11 @@
-@import '../variables.css';
+@import '../layouts/variables.css';
+@import '../layouts/button.css';
+@import '../layouts/card.css';
 .card {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-    cursor: pointer;
-    background-color: darksalmon;
-    padding: 5px;
     width: 80%;
     display: grid;
     grid-template-columns: 70% 30%;
     grid-template-areas: "content buttons";
-    padding: 1rem;
-    margin-bottom: 1rem;
-}
-
-.card__header,
-.card__content {
-    padding: 1rem;
 }
 
 .card__content {
@@ -23,7 +14,6 @@
     flex-direction: column;
     align-content: center;
 }
-
 .products__list {
     display: flex;
     flex-direction: column;
@@ -31,13 +21,6 @@
     align-items: center;
     height: 100%;
     width: 95%
-}
-
-.card__header h1,
-.card__content h1,
-.card__content h2,
-.card__content p {
-    margin: 0;
 }
 
 .card__image {
@@ -52,12 +35,10 @@
 }
 
 .card__actions {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
     justify-content: center;
     grid-area: buttons;
     width: 100%;
+    padding: 0;
 }
 
 .card__actions button,
@@ -69,49 +50,6 @@
     width: 100%;
 }
 
-.btn {
-    font: inherit;
-    border: 1px solid var(--firstColor);
-    color: var(--firstColor);
-    background: white;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.btn:hover,
-.btn:active {
-    background-color: var(--firstColor);
-    color: white;
-}
-
-.disabled__btn {
-    font: inherit;
-    border: 1px solid var(--firstColor);
-    color: var(--firstColor);
-    background: white;
-    border-radius: 3px;
-    cursor: not-allowed;
-}
-
-.product__title {
-    font-size: 1.2rem;
-    text-align: center;
-}
-
-.product__price {
-    text-align: center;
-    color: black;
-    margin-bottom: 0.5rem;
-}
-
-.product__description {
-    text-align: center;
-}
-
-.product__quantity {
-    text-align: center;
-    font-weight: bold;
-}
 
 .checkout__container {
     text-align: center;
@@ -124,7 +62,9 @@
 .checkout__btn {
     font-size: 2rem;
 }
-
+.product__quantity{
+    text-align: center;
+}
 @media (max-width: 600px) {
     .card {
         display: flex;

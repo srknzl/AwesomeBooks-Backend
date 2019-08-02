@@ -1,6 +1,5 @@
-@import '../variables.css';
+@import '../layouts/variables.css';
 @import '../layouts/forms.css';
-
 
 .product-form {
   width: 20rem;
