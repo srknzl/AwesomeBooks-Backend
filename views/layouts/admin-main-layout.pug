@@ -6,6 +6,8 @@ html(lang="en"): head
   title #{pageTitle}
   block styles
   link(rel="stylesheet", href="/styles/layouts/main.css")
+  link(rel="stylesheet", href="/styles/layouts/button.css")
+
 body(class= enableSidebar ? 'sidebarEnabled' : '')
   block header
   .sidebar

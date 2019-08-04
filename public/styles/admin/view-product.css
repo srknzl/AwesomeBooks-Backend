@@ -1,6 +1,5 @@
 @import "../layouts/variables.css";
 @import '../layouts/card.css';
-@import '../layouts/button.css';
 * {
   box-sizing: border-box;
 }
