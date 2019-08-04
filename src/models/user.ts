@@ -48,7 +48,7 @@ const userSchema = new Schema({
   }
 });
 
-userSchema.methods.addToCart = async function (productId: string) {
+userSchema.methods.addToCart = async function(productId: string) {
   const prod = await Product.findById(productId);
   if (prod) {
     const index = this.cart.items.findIndex(
@@ -69,11 +69,12 @@ userSchema.methods.addToCart = async function (productId: string) {
   }
 };
 
-userSchema.methods.removeOneFromCart = async function (productId: string) {
+userSchema.methods.removeOneFromCart = async function(productId: string) {
   const prod = await Product.findById(productId);
   if (prod) {
     const index = this.cart.items.findIndex(
-      (i: any) => i.product.toString() === productId);
+      (i: any) => i.product.toString() === productId
+    );
     if (index === -1) {
       return;
     } else {
@@ -88,12 +89,13 @@ userSchema.methods.removeOneFromCart = async function (productId: string) {
   } else {
     throw "Product not found!";
   }
-}
-userSchema.methods.removeAllFromCart = async function (productId: string) {
+};
+userSchema.methods.removeAllFromCart = async function(productId: string) {
   const prod = await Product.findById(productId);
   if (prod) {
     const index = this.cart.items.findIndex(
-      (i: any) => i.product.toString() === productId);
+      (i: any) => i.product.toString() === productId
+    );
     if (index === -1) {
       return;
     } else {
@@ -104,26 +106,23 @@ userSchema.methods.removeAllFromCart = async function (productId: string) {
   } else {
     throw "Product not found!";
   }
-}
-userSchema.methods.emptyCart = async function () {
+};
+userSchema.methods.emptyCart = async function() {
   this.cart.items = [];
   await this.save();
-}
-userSchema.methods.order = async function (address: string) {
+};
+userSchema.methods.order = async function(address: string) {
   const items = this.cart.items;
-  const orderItems : IOrderItem[] = [];
-  
+  const orderItems: IOrderItem[] = [];
 
   //temp
-  if(!address) address = "Konya";
-  
-  items.forEach((item: ICartItem) => {
+  if (!address) address = "Konya";
 
+  items.forEach((item: ICartItem) => {
     orderItems.push({
       quantity: item.quantity,
       product: item.product
     });
-    
   });
   const order = new Order({
     items: orderItems,
@@ -131,10 +130,10 @@ userSchema.methods.order = async function (address: string) {
     address: address,
     orderDate: new Date()
   });
-  
+
   await order.save();
   await this.emptyCart();
-}
+};
 
 const User = model<IUser>("User", userSchema);
 export default User;

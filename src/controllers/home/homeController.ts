@@ -3,7 +3,7 @@ import { RequestHandler } from "express";
 export const getWelcome: RequestHandler = (req, res, next) => {
   res.render("welcome", {
     pageTitle: "Awesome bookstore",
-    active: 'welcome'
+    active: "welcome"
   });
 };
 export const getWelcomeNotFound: RequestHandler = (req, res, next) => {

@@ -1,4 +1,4 @@
-import { Schema, model,Document } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 import { IUser } from "./user";
 import { IProduct } from "./product";
 
@@ -7,9 +7,9 @@ export interface IOrderItem {
   quantity: number;
 }
 
-export interface IOrder extends Document{
+export interface IOrder extends Document {
   items: IOrderItem[];
-  user: IUser |  Schema.Types.ObjectId;
+  user: IUser | Schema.Types.ObjectId;
   address: string;
   orderDate: Date;
 }
@@ -19,7 +19,7 @@ const orderSchema = new Schema({
     {
       product: {
         type: Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: "Product",
         required: true
       },
       quantity: {
@@ -38,11 +38,10 @@ const orderSchema = new Schema({
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true
   }
 });
 
-const Order = model<IOrder>('Order',orderSchema);
+const Order = model<IOrder>("Order", orderSchema);
 export default Order;
-

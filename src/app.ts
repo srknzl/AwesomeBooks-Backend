@@ -13,17 +13,18 @@ import User from "./models/user";
 import Admin from "./models/admin";
 
 const app = express();
-const MONGODB_URI = "mongodb+srv://srknzl:PaWS1EQ7E85MHMJP@srknzl-m0-development-cluster-hgcsl.mongodb.net/learnnode-shop?retryWrites=true&w=majority";
+const MONGODB_URI =
+  "mongodb+srv://srknzl:PaWS1EQ7E85MHMJP@srknzl-m0-development-cluster-hgcsl.mongodb.net/learnnode-shop?retryWrites=true&w=majority";
 
 const MongoDBStore = connectMongoDb(session);
 const store = new MongoDBStore({
   uri: MONGODB_URI,
-  collection: 'sessions'
+  collection: "sessions"
 });
 
-store.on('error',(err)=> {
+store.on("error", err => {
   console.error(err);
-})
+});
 
 app.set("views", "views");
 app.set("view engine", "pug");
@@ -39,14 +40,14 @@ app.use(
     store: store
   })
 );
-app.use(async (req,res,next) => {
-  if(req.session && req.session.user){
+app.use(async (req, res, next) => {
+  if (req.session && req.session.user) {
     try {
       req.session.user = await User.findById(req.session.user._id);
     } catch (error) {
       console.error(error);
     }
-  }else if(req.session && req.session.admin){
+  } else if (req.session && req.session.admin) {
     try {
       req.session.admin = await Admin.findById(req.session.admin._id);
     } catch (error) {

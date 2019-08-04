@@ -33,7 +33,7 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  if(!req.session)throw "No session";
+  if (!req.session) throw "No session";
 
   const product = new Product({
     title: title,
@@ -70,7 +70,6 @@ export const getProductDetail: RequestHandler = async (req, res, next) => {
     const prod: IProduct | null = await Product.findById(
       req.params.id
     ).populate("user");
-    console.log(prod);
     if (prod) {
       res.render("admin/view-product", {
         active: "edit-product",
@@ -107,7 +106,7 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
 export const postDeleteProduct: RequestHandler = async (req, res, next) => {
   const id = req.body.id;
   try {
-    await Product.deleteOne({_id:id});
+    await Product.deleteOne({ _id: id });
     res.redirect("/admin/products");
   } catch (err) {
     throw err;
