@@ -8,7 +8,8 @@ export const getProducts: RequestHandler = async (req, res, next) => {
     res.render("user/products", {
       pageTitle: "Products",
       prods: prods,
-      active: "products"
+      active: "products",
+      userLoggedIn: req.session.userLoggedIn
     });
   } catch (err) {
     throw err;
@@ -20,7 +21,8 @@ export const getShop: RequestHandler = async (req, res, next) => {
     res.render("user/shop", {
       pageTitle: "Shop",
       prods: prods,
-      active: "shop"
+      active: "shop",
+      userLoggedIn: req.session.userLoggedIn
     });
   } catch (err) {
     throw err;
@@ -51,7 +53,8 @@ export const getProductDetail: RequestHandler = async (req, res, next) => {
         pageTitle: "Product Detail",
         active: "products",
         product: prod,
-        creator: prod.user
+        creator: prod.user,
+        userLoggedIn: req.session.userLoggedIn
       });
     } else {
       res.redirect("/user/not-found");
@@ -63,7 +66,7 @@ export const getProductDetail: RequestHandler = async (req, res, next) => {
 };
 export const getCart: RequestHandler = async (req, res, next) => {
   try {
-    const user = await (req as any).user.populate('cart.items.product').execPopulate();
+    const user = await req.session.user.populate('cart.items.product').execPopulate();
 
     if(user){
       let price = 0;
@@ -89,7 +92,7 @@ export const getCart: RequestHandler = async (req, res, next) => {
 
 export const addToCart: RequestHandler = async (req, res, next) => {
   try {
-    await (req as any).user.addToCart(req.body.id);
+    await req.session.user.addToCart(req.body.id);
     res.redirect("/user/cart");
   } catch (err) {
     throw err;
@@ -97,19 +100,19 @@ export const addToCart: RequestHandler = async (req, res, next) => {
 };
 export const removeFromCart: RequestHandler = async (req, res, next) => {
   try {
-    await (req as any).user.removeOneFromCart(req.body.id);
+    await req.session.user.removeOneFromCart(req.body.id);
     res.redirect('/user/cart');
   } catch (err) {
     throw err;
   }
 };
 export const addOrder: RequestHandler = async (req, res, next) => {
-  await (req as any).user.order();
+  await req.session.user.order();
   res.redirect('/user/orders');
 };
 export const removeAllFromCart: RequestHandler = async (req, res, next) => {
   try {
-    await (req as any).user.removeAllFromCart(req.body.id);
+    await req.session.user.removeAllFromCart(req.body.id);
     res.redirect('/user/cart');
   } catch (err) {
     throw err;
