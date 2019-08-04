@@ -15,9 +15,13 @@ Learning Node.js on Udemy with Maximillian Schwarzmüller
 
     
 # Images:
-![first](repoImages/1.png)
-![second](repoImages/2.png)
-![third](repoImages/3.png)
-![fourth](repoImages/4.png)
-![fifth](repoImages/5.png)
-![sixth](repoImages/6.png)
+![1](repoImages/1.png)
+![2](repoImages/2.png)
+![3](repoImages/3.png)
+![4](repoImages/4.png)
+![5](repoImages/5.png)
+![6](repoImages/6.png)
+![7](repoImages/7.png)
+![8](repoImages/8.png)
+![9](repoImages/9.png)
+![10](repoImages/10.png)
