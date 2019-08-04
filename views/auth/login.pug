@@ -13,6 +13,8 @@ block content
       p.errorMessage= error
     each success in successes
       p.successMessage= success
+    each valMsg in validationMessages
+      p.errorMessage= valMsg.msg  
   form.medium-form(action="/login",method="POST")
     .form-control
       label(for="email") Email

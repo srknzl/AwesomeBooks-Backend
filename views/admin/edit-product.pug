@@ -8,7 +8,13 @@ block header
 
 block content
   h2 Edit Product
-  
+  .messagesContainer
+    each error in errors
+      p.errorMessage= error
+    each success in successes
+      p.successMessage= success
+    each valMsg in validationMessages
+      p.errorMessage= valMsg.msg  
   form.product-form(action="/admin/edit-product",method="POST")
     .form-control
       label(for="title") Title

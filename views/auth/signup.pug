@@ -12,6 +12,10 @@ block content
   .messagesContainer
     each error in errors
       p.errorMessage= error
+    each success in successes
+      p.successMessage= success
+    each valMsg in validationMessages
+      p.errorMessage= valMsg.msg  
   form.medium-form(action="/signup",method="POST")
     .form-control
       label(for="email") Please enter your e-mail
