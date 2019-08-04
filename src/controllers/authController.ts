@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { hash,compare } from "bcrypt";
 import User from "../models/user";
+import Admin from "../models/admin";
 
 export const getLogin: RequestHandler = (req, res, next) => {
   const successes = req.flash('success');
@@ -69,7 +70,7 @@ export const postSignup: RequestHandler = async (req, res, next) => {
 
   if(password === confirmPass){
     
-    const foundUser = User.findOne({
+    const foundUser = await User.findOne({
       email: email
     });
 
@@ -97,9 +98,33 @@ export const postSignup: RequestHandler = async (req, res, next) => {
     req.flash('error','Your passwords did not match');
     return res.redirect('/signup');
   }
-  
-
 };
-export const postAdminLogin: RequestHandler = (req, res, next) => {
-  
+
+export const postAdminLogin: RequestHandler = async (req, res, next) => {
+  const password = req.body.password;
+  const email = req.body.email;
+
+  try {
+    const admin = await Admin.findOne({
+      email: email
+    });
+    if(admin){
+      const match = await compare(password, admin.password);
+      
+      if(match && req.session){
+        req.session.admin = admin;
+        req.session.adminLoggedIn = true;
+        return res.redirect('/admin/welcome');
+      }else{
+        req.flash('error', 'Email or password was wrong');
+        return res.redirect('/login');
+      }
+    }else{
+      req.flash('error','Email or password was wrong');
+      return res.redirect('/login');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  next();
 };
