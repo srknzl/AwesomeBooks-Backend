@@ -5,13 +5,13 @@ body {
     margin: 0px;
     font-family: 'Open Sans', sans-serif;
     display: grid;
-    grid-template-rows: 3.5rem auto;
-    grid-template-columns: auto;
-    grid-template-areas: "header" "content";
     background-color: honeydew;
     width: 100vw;
     height: 100vh;
     margin: 0rem;
+    grid-template-rows: 3.5rem auto;
+    grid-template-areas: "header" "content";
+    grid-template-columns: auto;
 }
 
 main {
@@ -27,13 +27,13 @@ main {
     display: none;
     grid-area: sidebar;
     background-color: var(--sidebarBackground);
+    padding: 1rem;
 }
 
 .main-header {
     width: 100vw;
     height: 3.5rem;
     background-color: var(--firstColor);
-    padding: 0 1.5rem;
     display: flex;
     align-items: center;
     grid-area: header;
@@ -185,7 +185,7 @@ body {
         flex-direction: row;
         justify-content: center;
     }
-    body {
+    body.sidebarEnabled {
         grid-template-areas: "header header" "content sidebar";
         grid-template-columns: auto var(--sidebarWidth);
     }

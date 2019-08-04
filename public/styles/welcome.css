@@ -1,16 +1,6 @@
 @import 'layouts/variables.css';
 @import 'layouts/button.css';
 
-.login__buttons{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-content: center;
-  height: auto;
-}
-.login__buttons a {
-  margin: 1rem;
-}
 .header{
   justify-content: space-between;
 }

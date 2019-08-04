@@ -1,0 +1,16 @@
+extends ../layouts/home.pug
+
+block styles
+  link(rel="stylesheet", href="/styles/auth/login.css")
+
+block content
+  h2 Login
+    form.product-form(action="/login",method="POST")
+      .form-control
+        label(for="email") Email
+        input(type="email",name="email")#email
+      .form-control
+        label(for="passwprd") Password
+        input(type="password",name="password")#password
+      button.btn(type="submit") Login 
+  

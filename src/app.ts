@@ -5,6 +5,7 @@ import session from "express-session";
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
+import * as authRoutes from "./routes/auth";
 
 import * as notFoundController from "./controllers/errors";
 import * as welcomeController from "./controllers/welcome";
@@ -17,11 +18,14 @@ app.set("view engine", "pug");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use(session({
-  secret: 'UlEuikYPJivAXVMR5KUX24bDU202JkQgv0QrctQRRFEIHrktim1yMgWTI3gwKhbXsnWiNfufv',
-  resave: false,
-  saveUninitialized: false
-}))
+app.use(
+  session({
+    secret:
+      "UlEuikYPJivAXVMR5KUX24bDU202JkQgv0QrctQRRFEIHrktim1yMgWTI3gwKhbXsnWiNfufv",
+    resave: false,
+    saveUninitialized: false
+  })
+);
 
 app.use(async (req, res, next) => {
   try {
@@ -37,14 +41,15 @@ app.use(async (req, res, next) => {
 
 app.use("/admin", adminRoutes.router);
 app.use("/user", userRoutes.router);
+app.use(authRoutes.router);
 app.get("/", welcomeController.getWelcomePage);
 
 app.use(notFoundController.getWelcomeNotFound);
 
 connect(
   "mongodb+srv://srknzl:PaWS1EQ7E85MHMJP@srknzl-m0-development-cluster-hgcsl.mongodb.net/learnnode-shop?retryWrites=true&w=majority",
-  async (err) => {
-    if(err) console.error(err);
+  async err => {
+    if (err) console.error(err);
     try {
       let user: IUser | null = await User.findById("5d40946927860429a7955209");
       if (!user) {

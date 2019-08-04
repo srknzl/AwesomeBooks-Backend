@@ -6,7 +6,8 @@ html(lang="en"): head
   title #{pageTitle}
   block styles
   link(rel="stylesheet", href="/styles/layouts/main.css")
-body
+
+body(class= enableSidebar ? 'sidebarEnabled' : '')
   header.main-header
     button#side-menu-toggle Menu
     nav.main-header__nav
@@ -27,7 +28,8 @@ body
           a(href="/login",class = active ==='login' ? 'active' :'') Login 
         li.mobile-nav__item
           a(href="/signup" class = active==='signup' ? 'active' : '' ) Signup
-    
+  .sidebar
+    block sidebar
   main
     block content
     block scripts

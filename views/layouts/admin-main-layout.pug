@@ -6,7 +6,7 @@ html(lang="en"): head
   title #{pageTitle}
   block styles
   link(rel="stylesheet", href="/styles/layouts/main.css")
-body
+body(class= enableSidebar ? 'sidebarEnabled' : '')
   .backdrop
   header.main-header
     button#side-menu-toggle Menu
@@ -32,7 +32,7 @@ body
       li.mobile-nav__item
         a(href="/") Logout  
   .sidebar
-    h3 Notifications
+    block sidebar
   main
     block content
     block scripts
