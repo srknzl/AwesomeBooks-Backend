@@ -18,7 +18,8 @@ export const getProducts: RequestHandler = async (req, res, next) => {
 export const getAddProduct: RequestHandler = (req, res, next) => {
   res.render("admin/add-product", {
     pageTitle: "Add Product",
-    active: "admin-add-product"
+    active: "admin-add-product",
+    validationMessages: []
   });
 };
 export const getWelcome: RequestHandler = (req, res, next) => {
@@ -56,7 +57,8 @@ export const getEditProduct: RequestHandler = async (req, res, next) => {
     if (prod) {
       res.render("admin/edit-product", {
         active: "edit-product",
-        product: prod
+        product: prod,
+        validationMessages: []
       });
     } else {
       throw "Product not found";

@@ -14,10 +14,10 @@ router.post("/logout", authController.postLogout);
 router.post(
   "/login",
   [
-    body("email").isEmail(),
+    body("email").isEmail().withMessage('Please enter a valid e-mail'),
     body("password").isLength({
       min: 6
-    })
+    }).withMessage('Your password should be at least 6 characters')
   ],
   authController.postLogin
 );
@@ -25,15 +25,15 @@ router.post(
 router.post(
   "/signup",
   [
-    body("email").isEmail(),
+    body("email").isEmail().withMessage('Please enter a valid e-mail'),
     body("name")
-      .isString()
+      .isString().withMessage('Your name should be text')
       .isLength({
         min: 3
-      }),
+      }).withMessage('Your name should have minimum of three characters'),
     body("password").isLength({
       min: 6
-    }),
+    }).withMessage('Your password must be at least 6 characters long'),
     body("confirmPassword").custom((value, { req }) => {
       if (req.body.password !== value) {
         throw new Error("Passwords did not match");
@@ -47,10 +47,10 @@ router.post(
 router.post(
   "/admin-login",
   [
-    body("email").isEmail(),
+    body("email").isEmail().withMessage('Please enter a valid e-mail'),
     body("password").isLength({
       min: 6
-    })
+    }).withMessage('Your password should be at least 6 characters')
   ],
   authController.postAdminLogin
 );
