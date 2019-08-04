@@ -38,11 +38,13 @@ main {
     display: flex;
     align-items: center;
     grid-area: header;
+    padding: 0rem 1rem;
+    box-sizing: border-box;
 }
 
 .main-header a {
     height: 100%;
-    width: 6em;
+    width: auto;
     display: flex;
     justify-content: center;
 }
@@ -90,7 +92,7 @@ body {
 .mobile-nav {
     width: 20rem;
     height: 100vh;
-    max-width: 90%;
+    max-width: 80%;
     position: fixed;
     left: 0;
     top: 0;
@@ -120,6 +122,7 @@ body {
 .mobile-nav__item {
     margin: 1rem;
     padding: 0;
+    border: 1px solid blue;
 }
 
 .mobile-nav__item p {
@@ -130,7 +133,10 @@ body {
     text-decoration: none;
     color: black;
     font-size: 1.5rem;
-    padding: 0.5rem 2rem;
+    width: 100%;
+    flex-grow: 1;
+    height: 100%;
+    text-align: center;
 }
 
 .mobile-nav__item a:active,
