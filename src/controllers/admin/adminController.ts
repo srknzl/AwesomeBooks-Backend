@@ -33,6 +33,8 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
+  if(!req.session)throw "No session";
+
   const product = new Product({
     title: title,
     price: price,

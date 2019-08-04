@@ -15,6 +15,8 @@ export const getLogin: RequestHandler = (req, res, next) => {
   });
 };
 export const postLogout: RequestHandler = (req, res, next) => {
+  if(!req.session)throw "No session";
+
   req.session.destroy((err)=> {
     if(err)console.log(err);
     res.redirect('/');

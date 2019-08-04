@@ -4,6 +4,8 @@ import Order from "../../models/order";
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
+    if(!req.session)throw "No session";
+
     const prods = await Product.find();
     res.render("user/products", {
       pageTitle: "Products",
@@ -17,6 +19,8 @@ export const getProducts: RequestHandler = async (req, res, next) => {
 };
 export const getShop: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.session) throw "No session";
+
     const prods = await Product.find();
     res.render("user/shop", {
       pageTitle: "Shop",
@@ -28,14 +32,21 @@ export const getShop: RequestHandler = async (req, res, next) => {
     throw err;
   }
 };
-export const getOrders: RequestHandler =  async (req, res, next) => {
-  const orders = await Order.find().populate('items.product').exec();
+export const getOrders: RequestHandler = async (req, res, next) => {
+  try {
+    const orders = await Order.find()
+    .populate("items.product")
+    .exec();
+
+    res.render("user/orders", {
+      pageTitle: "Orders",
+      orders: orders,
+      active: "orders"
+    });
+  } catch (error) {
+    throw error;
+  }
   
-  res.render("user/orders", {
-    pageTitle: "Orders",
-    orders: orders,
-    active: "orders"
-  });
 };
 export const getWelcome: RequestHandler = (req, res, next) => {
   res.render("user/welcome", {
@@ -43,11 +54,13 @@ export const getWelcome: RequestHandler = (req, res, next) => {
     active: "welcome"
   });
 };
-export const getProductDetail: RequestHandler = async (req, res, next) => { 
+export const getProductDetail: RequestHandler = async (req, res, next) => {
   try {
     const prod: IProduct | null = await Product.findById(
       req.params.id
     ).populate("user");
+    if (!req.session) throw "No session";
+
     if (prod) {
       res.render("user/view-product", {
         pageTitle: "Product Detail",
@@ -66,6 +79,8 @@ export const getProductDetail: RequestHandler = async (req, res, next) => {
 };
 export const getCart: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.session) throw "No session";
+
     const user = await req.session.user.populate('cart.items.product').execPopulate();
 
     if(user){
@@ -84,7 +99,6 @@ export const getCart: RequestHandler = async (req, res, next) => {
       res.redirect('/user/not-found');
       throw 'User not found';
     }
-    
   } catch (err) {
     throw err;
   }
@@ -92,6 +106,8 @@ export const getCart: RequestHandler = async (req, res, next) => {
 
 export const addToCart: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.session) throw "No session";
+    
     await req.session.user.addToCart(req.body.id);
     res.redirect("/user/cart");
   } catch (err) {
@@ -100,6 +116,8 @@ export const addToCart: RequestHandler = async (req, res, next) => {
 };
 export const removeFromCart: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.session) throw "No session";
+
     await req.session.user.removeOneFromCart(req.body.id);
     res.redirect('/user/cart');
   } catch (err) {
@@ -107,11 +125,19 @@ export const removeFromCart: RequestHandler = async (req, res, next) => {
   }
 };
 export const addOrder: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.session) throw "No session";
+
   await req.session.user.order();
   res.redirect('/user/orders');
+  }catch(err){
+    throw err;
+  }
 };
 export const removeAllFromCart: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.session) throw "No session";
+
     await req.session.user.removeAllFromCart(req.body.id);
     res.redirect('/user/cart');
   } catch (err) {
