@@ -18,18 +18,19 @@ Learning Node.js on Udemy with Maximillian Schwarzmüller
     * Bug: Does my commit fix a bug?
     * Feature: Does my commit add a new feature?
     * Typo: Does my commit correct a wrongly written text?
-    * Style: Does my commit is related to user interface(css & html together)?
+    * Style: Is my commit is related to user interface(css & html together)?
     * Controller: Does my commit change my controller logic?
     * Model: Does my commit change my model logic?
     * Package: Does my commit include only package-lock and package json files?
     * Config: Does my code change something config file?
     * Gitignore: Does my code change .gitignore?
     * Asset: Does my commit add some media file?
-    * Script: Does my code adds client side javascript?
+    * Script: Does my code add client side javascript?
     * Assignment: Does my code add an assignment?
     * Restructure: Does my code move files or folders?
-    * Readme: Does my code changes readme?
-    * Routes: Does my code changes routes?
+    * Readme: Does my code change readme?
+    * Routes: Does my code change routes?
+    * Format: Is my change a code formating or linting?
     
 # Images:
 ![1](repoImages/1.png)
