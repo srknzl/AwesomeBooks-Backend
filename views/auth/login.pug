@@ -8,6 +8,11 @@ block styles
 
 block content
   h2 Login
+  .messagesContainer
+    each error in errors
+      p.errorMessage= error
+    each success in successes
+      p.successMessage= success
   form.medium-form(action="/login",method="POST")
     .form-control
       label(for="email") Email

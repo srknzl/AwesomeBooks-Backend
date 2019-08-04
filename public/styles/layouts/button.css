@@ -1,3 +1,5 @@
+@import "../layouts/variables.css";
+
 .btn {
   display: inline-block;
   padding: 0.25rem 1rem;
@@ -23,4 +25,13 @@
   background: white;
   border-radius: 3px;
   cursor: not-allowed;
+}
+.hidden_btn{
+  background-color: transparent;
+  color: var(--headerLinkColor);
+  border: none;
+  padding: 0;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
 }

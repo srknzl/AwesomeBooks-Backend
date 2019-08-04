@@ -10,7 +10,8 @@ header.main-header
       li.main-header__item
         a(href="/admin/add-product" class = active==='admin-add-product' ? 'active' : '' ) Add Product 
       li.main-header__item
-        a(href="/") Logout
+        form(action='/logout',method='POST')
+          input(type="submit") Logout
 
 nav.mobile-nav
   ul.mobile-nav__item-list
@@ -21,4 +22,5 @@ nav.mobile-nav
     li.mobile-nav__item
       a(href="/admin/add-product" class = active==='admin-add-product' ? 'active' : '' ) Add Product
     li.mobile-nav__item
-      a(href="/") Logout  
+      form(action='/logout',method='POST')
+        input(type="submit") Logout

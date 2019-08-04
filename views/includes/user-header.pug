@@ -14,7 +14,8 @@ header.main-header
       li.main-header__item
         a(href="/user/orders" class = active==='orders' ? 'active' : '' ) Orders
       li.main-header__item
-        a(href="/") Logout
+        form(action='/logout',method='POST')
+          button(type="submit").hidden_btn Logout
     
 nav.mobile-nav
   ul.mobile-nav__item-list
@@ -29,4 +30,5 @@ nav.mobile-nav
     li.mobile-nav__item
       a(href="/user/orders" class = active==='orders' ? 'active' : '' ) Orders
     li.mobile-nav__item
-      a(href="/") Logout  
+      form(action='/logout',method='POST')
+        button(type="submit").hidden_btn Logout  

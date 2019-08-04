@@ -27,7 +27,7 @@ button:active {
   margin: 1rem 0;
 }
 .medium-form{
-  width: 40%;
+  width: 25rem;
 }
 @media(max-width:600px){
   .form-control label,input,textarea

@@ -9,15 +9,21 @@ block styles
 
 block content
   h2 Signup
+  .messagesContainer
+    each error in errors
+      p.errorMessage= error
   form.medium-form(action="/signup",method="POST")
     .form-control
       label(for="email") Please enter your e-mail
       input(type="email",name="email")#email
     .form-control
+      label(for="name") Please enter your full name
+      input(type="text",name="name")#name
+    .form-control
       label(for="password") Password
       input(type="password",name="password")#password
     .form-control
-      label(for="password") Enter the password again
-      input(type="password",name="password")#password        
+      label(for="confirmPassword") Enter the password again
+      input(type="password",name="confirmPassword")#confirmPassword        
     button.btn(type="submit") Signup
   
