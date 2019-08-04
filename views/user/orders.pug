@@ -3,6 +3,9 @@ extends ../layouts/user-main-layout.pug
 block styles
   link(rel="stylesheet", href="/styles/user/orders.css")
 
+block header 
+  include ../includes/user-header.pug
+
 block content
   .header
     h1.text_center Your orders:

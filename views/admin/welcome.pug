@@ -3,5 +3,8 @@ extends ../layouts/admin-main-layout.pug
 block styles
   link(rel="stylesheet", href="/styles/admin/welcome.css")
 
+block header
+  include ../includes/admin-header.pug
+
 block content
   h1 Welcome admin!

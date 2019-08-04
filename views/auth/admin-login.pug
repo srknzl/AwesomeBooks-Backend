@@ -4,11 +4,11 @@ block header
   include ../includes/home-header.pug
 
 block styles
-  link(rel="stylesheet", href="/styles/auth/login.css")
+  link(rel="stylesheet", href="/styles/auth/admin-login.css")
 
 block content
-  h2 Login
-  form.medium-form(action="/login",method="POST")
+  h2 Admin login
+  form.medium-form(action="/admin-login",method="POST")
     .form-control
       label(for="email") Email
       input(type="email",name="email")#email

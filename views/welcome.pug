@@ -2,6 +2,11 @@ extends ./layouts/home.pug
 
 
 block styles
-  link(rel="stylesheet",href="/styles/welcome.css")
+  link(rel="stylesheet",href="/styles/home/welcome.css")
+
+block header
+  include includes/home-header.pug
+
+
 block content
   h1.text_center Welcome to awesome bookstore!

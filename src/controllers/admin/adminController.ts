@@ -112,7 +112,7 @@ export const postDeleteProduct: RequestHandler = async (req, res, next) => {
   }
 };
 export const getNotFound: RequestHandler = (req, res, next) => {
-  res.render("errors/admin-not-found", {
+  res.status(404).render("errors/admin-not-found", {
     pageTitle: "Not found",
     active: ""
   });

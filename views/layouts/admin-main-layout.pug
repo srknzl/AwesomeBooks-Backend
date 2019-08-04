@@ -7,30 +7,7 @@ html(lang="en"): head
   block styles
   link(rel="stylesheet", href="/styles/layouts/main.css")
 body(class= enableSidebar ? 'sidebarEnabled' : '')
-  .backdrop
-  header.main-header
-    button#side-menu-toggle Menu
-    nav.main-header__nav
-      ul.main-header__item-list
-        li.main-header__item
-          a(href="/admin/welcome" class = active==='welcome' ? 'active' : '' ) Dashboard 
-        li.main-header__item
-          a(href="/admin/products" class = active==='admin-products' ? 'active' : '' ) Browse Products 
-        li.main-header__item
-          a(href="/admin/add-product" class = active==='admin-add-product' ? 'active' : '' ) Add Product 
-        li.main-header__item
-          a(href="/") Logout
-
-  nav.mobile-nav
-    ul.mobile-nav__item-list
-      li.mobile-nav__item
-        a(href="/admin/welcome" class = active==='welcome' ? 'active' : '' ) Dashboard 
-      li.mobile-nav__item
-        a(href="/admin/products" class = active==='admin-products' ? 'active' : '' ) Browse Products 
-      li.mobile-nav__item
-        a(href="/admin/add-product" class = active==='admin-add-product' ? 'active' : '' ) Add Product
-      li.mobile-nav__item
-        a(href="/") Logout  
+  block header
   .sidebar
     block sidebar
   main

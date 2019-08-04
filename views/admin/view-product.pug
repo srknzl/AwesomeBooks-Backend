@@ -3,6 +3,9 @@ extends ../layouts/admin-main-layout.pug
 block styles
   link(rel="stylesheet", href="/styles/admin/view-product.css")
 
+block header
+  include ../includes/admin-header.pug
+
 block content
   article.card
     header.card__header

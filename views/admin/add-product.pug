@@ -3,6 +3,9 @@ extends ../layouts/admin-main-layout.pug
 block styles
   link(rel="stylesheet", href="/styles/admin/add-product.css")
 
+block header
+  include ../includes/admin-header.pug
+
 block content
   h2 Add a product
   form.product-form(action="/admin/add-product",method="POST")

@@ -26,11 +26,16 @@ button:active {
 .form-control {
   margin: 1rem 0;
 }
-
+.medium-form{
+  width: 40%;
+}
 @media(max-width:600px){
   .form-control label,input,textarea
   {
     display: block;
     width: 90vw;
+  }
+  .medium-form{
+    width: initial;
   }
 }

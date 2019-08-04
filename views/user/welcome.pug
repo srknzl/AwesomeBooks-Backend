@@ -3,5 +3,9 @@ extends ../layouts/user-main-layout.pug
 block styles
   link(rel="stylesheet", href="/styles/user/welcome.css")
 
+
+block header 
+  include ../includes/user-header.pug
+
 block content
   h1.text_center Welcome dear user!

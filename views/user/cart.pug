@@ -3,6 +3,9 @@ extends ../layouts/user-main-layout.pug
 block styles
   link(rel="stylesheet", href="/styles/user/cart.css")
 
+block header 
+  include ../includes/user-header.pug
+
 block content
   h1.text_center Cart
   .products__list
@@ -40,3 +43,4 @@ block content
 
 block scripts
   script(src="/js/user/cart.js")
+

@@ -1,6 +1,5 @@
 import { Schema, model, Document } from "mongoose";
 import Product, { IProduct } from "./product";
-import { ObjectId } from "bson";
 import Order, { IOrderItem } from "./order";
 
 export interface ICartItem {
@@ -15,6 +14,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   cart: ICart;
+  password: string;
   // product: Schema.Types.ObjectId | IProduct;
 }
 
@@ -41,6 +41,10 @@ const userSchema = new Schema({
         }
       }
     ]
+  },
+  password: {
+    type: String,
+    required: true
   }
 });
 

@@ -7,39 +7,7 @@ html(lang="en"): head
   block styles
   link(rel="stylesheet", href="/styles/layouts/main.css")
 body(class= enableSidebar ? 'sidebarEnabled' : '')
-  .backdrop
-  header.main-header
-    button#side-menu-toggle Menu
-    nav.main-header__nav
-      ul.main-header__item-list
-        li.main-header__item
-          a(href="/user/welcome",class = active ==='welcome' ? 'active' :'') Dashboard
-        li.main-header__item
-          a(href="/user/shop",class = active==='shop' ? 'active' :'') Shop
-        li.main-header__item
-          a(href="/user/products" class = active==='products' ? 'active' : '' ) Products
-        li.main-header__item
-          a(href="/user/cart" class = active==='cart' ? 'active' : '' ) Cart
-        li.main-header__item
-          a(href="/user/orders" class = active==='orders' ? 'active' : '' ) Orders
-        li.main-header__item
-          a(href="/") Logout
-        
-      
-  nav.mobile-nav
-    ul.mobile-nav__item-list
-      li.mobile-nav__item
-        a(href="/user/welcome",class = active ==='welcome' ? 'active' :'') Dashboard
-      li.mobile-nav__item
-        a(href="/user/shop",class = active ==='shop' ? 'active' :'') Shop
-      li.mobile-nav__item
-        a(href="/user/products",class = active ==='products' ? 'active' :'') Products
-      li.mobile-nav__item
-        a(href="/user/cart",class = active ==='cart' ? 'active' :'') Cart
-      li.mobile-nav__item
-        a(href="/user/orders" class = active==='orders' ? 'active' : '' ) Orders
-      li.mobile-nav__item
-        a(href="/") Logout  
+  block header
   .sidebar
     block sidebar
   main 

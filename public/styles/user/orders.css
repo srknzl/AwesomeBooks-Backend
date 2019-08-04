@@ -1,4 +1,4 @@
-@import "../variables.css";
+@import "../layouts/variables.css";
 .orders {
     display: flex;
     flex-direction: column;

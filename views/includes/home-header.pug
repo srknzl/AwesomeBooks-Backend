@@ -1,0 +1,34 @@
+.backdrop
+header.main-header
+  button#side-menu-toggle Menu
+  nav.main-header__nav
+    ul.main-header__item-list
+      li.main-header__item
+        a(href="/",class = active ==='welcome' ? 'active' :'') Home
+      li.main-header__item
+        a(href="/user/shop",class = active ==='shop' ? 'active' :'') Shop
+      li.main-header__item
+        a(href="/user/products",class = active ==='products' ? 'active' :'') Search products
+      
+    ul.main-header__item-list
+      li.main-header__item
+        a(href="/login" class = active==='login' ? 'active' : '' ) Login
+      li.main-header__item
+        a(href="/admin-login" class = active==='admin-login' ? 'active' : '' ) Admin login
+      li.main-header__item
+        a(href="/signup" class = active==='signup' ? 'active' : '' ) Signup
+  nav.mobile-nav
+    ul.mobile-nav__item-list
+      li.mobile-nav__item
+        a(href="/",class = active ==='welcome' ? 'active' :'') Home
+      li.mobile-nav__item
+        a(href="/user/shop",class = active ==='shop' ? 'active' :'') Shop
+      li.mobile-nav__item
+        a(href="/user/products",class = active ==='products' ? 'active' :'') Search products
+    ul.mobile-nav__item-list
+      li.mobile-nav__item
+        a(href="/login",class = active ==='login' ? 'active' :'') Login 
+      li.mobile-nav__item
+        a(href="/admin-login",class = active ==='admin-login' ? 'active' :'') Admin login 
+      li.mobile-nav__item
+        a(href="/signup" class = active==='signup' ? 'active' : '' ) Signup

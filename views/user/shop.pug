@@ -3,6 +3,12 @@ extends ../layouts/user-main-layout.pug
 block styles
   link(rel="stylesheet", href="/styles/user/shop.css")
 
+block header 
+  if userLoggedIn
+    include ../includes/user-header.pug
+  else
+    include ../includes/home-header.pug
+
 block content
   h1.text_center Shop 
   if prods.length > 0
@@ -18,9 +24,13 @@ block content
             p.product__description=  product.description
           .card__actions
             a(href="/user/view-product/" + product._id).btn View product
-            form(action="/user/add-cart", method="post")
+            if userLoggedIn
+              form(action="/user/add-cart", method="post")
+                input(type="hidden", name="id",value=product._id,id="productId")
+                button(type="submit").btn Add to Cart
+            else
               input(type="hidden", name="id",value=product._id,id="productId")
-              button(type="submit").btn Add to Cart
+
   else
     p: b No products yet
 block scripts

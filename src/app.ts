@@ -6,10 +6,7 @@ import session from "express-session";
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
 import * as authRoutes from "./routes/auth";
-
-import * as notFoundController from "./controllers/errors";
-import * as welcomeController from "./controllers/welcome";
-import User, { IUser } from "./models/user";
+import * as homeRoutes from "./routes/home";
 
 const app = express();
 
@@ -27,41 +24,15 @@ app.use(
   })
 );
 
-app.use(async (req, res, next) => {
-  try {
-    const user: IUser | null = await User.findById("5d40946927860429a7955209");
-    if (user) {
-      (req as any).user = user;
-    }
-  } catch (err) {
-    throw err;
-  }
-  next();
-});
-
 app.use("/admin", adminRoutes.router);
 app.use("/user", userRoutes.router);
 app.use(authRoutes.router);
-app.get("/", welcomeController.getWelcomePage);
-
-app.use(notFoundController.getWelcomeNotFound);
+app.use(homeRoutes.router);
 
 connect(
   "mongodb+srv://srknzl:PaWS1EQ7E85MHMJP@srknzl-m0-development-cluster-hgcsl.mongodb.net/learnnode-shop?retryWrites=true&w=majority",
   async err => {
     if (err) console.error(err);
-    try {
-      let user: IUser | null = await User.findById("5d40946927860429a7955209");
-      if (!user) {
-        user = new User({
-          name: "Serkan Özel",
-          email: "serkan.ozel@boun.edu.tr"
-        });
-        await user.save();
-      }
-    } catch (err) {
-      throw err;
-    }
     app.listen(3000, "localhost");
   }
 );

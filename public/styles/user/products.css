@@ -1,7 +1,20 @@
-@import '../variables.css';
+@import '../layouts/variables.css';
 @import '../layouts/card.css';
 @import '../layouts/button.css';
+
+
 form .btn {
   width: 100%;
 }
-
+.search-box{
+  margin: 1rem;
+  border-radius: 8px;
+  border: 2px solid black;
+}
+.search_container{
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  margin-bottom: 2rem; 
+}

@@ -41,8 +41,7 @@ export const getWelcome: RequestHandler = (req, res, next) => {
     active: "welcome"
   });
 };
-export const getProductDetail: RequestHandler = async (req, res, next) => {
-  
+export const getProductDetail: RequestHandler = async (req, res, next) => { 
   try {
     const prod: IProduct | null = await Product.findById(
       req.params.id
@@ -117,7 +116,7 @@ export const removeAllFromCart: RequestHandler = async (req, res, next) => {
   }
 };
 export const getNotFound: RequestHandler = (req, res, next) => {
-  res.render("errors/user-not-found", {
+  res.status(404).render("errors/user-not-found", {
     pageTitle: "Not found",
     active: ""
   });

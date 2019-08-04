@@ -1,17 +1,18 @@
 import * as express from "express";
 import * as adminController from "../controllers/admin/adminController";
+import { isAdminAuth } from "../middleware/isAuth";
 
 export const router = express.Router();
 
- router.get('/add-product', adminController.getAddProduct);
- router.post('/add-product', adminController.postAddProduct);
+router.get("/add-product", isAdminAuth, adminController.getAddProduct);
+router.post("/add-product", isAdminAuth, adminController.postAddProduct);
 
- router.get('/edit-product/:id',adminController.getEditProduct);
- router.get('/view-product/:id',adminController.getProductDetail);
+router.get("/edit-product/:id", isAdminAuth, adminController.getEditProduct);
+router.get("/view-product/:id", isAdminAuth, adminController.getProductDetail);
 
- router.post('/edit-product',adminController.postEditProduct);
- router.post('/delete-product',adminController.postDeleteProduct);
+router.post("/edit-product", isAdminAuth, adminController.postEditProduct);
+router.post("/delete-product", isAdminAuth, adminController.postDeleteProduct);
 
- router.get('/products', adminController.getProducts);
- router.get('/welcome',adminController.getWelcome);
- router.use('/',adminController.getNotFound);
+router.get("/products", isAdminAuth, adminController.getProducts);
+router.get("/welcome", isAdminAuth, adminController.getWelcome);
+router.use(isAdminAuth, adminController.getNotFound);

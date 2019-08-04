@@ -21,6 +21,7 @@ main {
     align-content: center;
     align-items: center;
     margin: 0rem;
+    padding-top: 2rem; 
 }
 
 .sidebar {
