@@ -10,6 +10,7 @@ import * as userRoutes from "./routes/user";
 import * as authRoutes from "./routes/auth";
 import * as homeRoutes from "./routes/home";
 import User from "./models/user";
+import Admin from "./models/admin";
 
 const app = express();
 const MONGODB_URI = "mongodb+srv://srknzl:PaWS1EQ7E85MHMJP@srknzl-m0-development-cluster-hgcsl.mongodb.net/learnnode-shop?retryWrites=true&w=majority";
@@ -42,6 +43,12 @@ app.use(async (req,res,next) => {
   if(req.session && req.session.user){
     try {
       req.session.user = await User.findById(req.session.user._id);
+    } catch (error) {
+      console.error(error);
+    }
+  }else if(req.session && req.session.admin){
+    try {
+      req.session.admin = await Admin.findById(req.session.admin._id);
     } catch (error) {
       console.error(error);
     }

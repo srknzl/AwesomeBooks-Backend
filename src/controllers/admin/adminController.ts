@@ -38,7 +38,7 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
     price: price,
     imageUrl: imageUrl,
     description: description,
-    user: (req as any).user._id
+    user: req.session.admin._id
   });
 
   try {
