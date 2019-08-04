@@ -31,6 +31,7 @@ Learning Node.js on Udemy with Maximillian Schwarzmüller
     * Readme: Does my code change readme?
     * Routes: Does my code change routes?
     * Format: Is my change a code formating or linting?
+    * Cleanup: Does my change remove unused stuff?
     
 # Images:
 ![1](repoImages/1.png)
