@@ -49,8 +49,8 @@ router.post(
   [
     body("email").isEmail().withMessage('Please enter a valid e-mail'),
     body("password").isLength({
-      min: 6
-    }).withMessage('Your password should be at least 6 characters')
+      min: 4
+    }).withMessage('Your password should be at least 4 characters')
   ],
   authController.postAdminLogin
 );
