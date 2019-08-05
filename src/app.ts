@@ -15,9 +15,10 @@ import * as homeRoutes from "./routes/home";
 import User from "./models/user";
 import Admin from "./models/admin";
 
+import { MONGODB_URI } from "../credentials/mongo_uri";
+import { apiKey } from "../credentials/sendgrid";
+
 const app = express();
-const MONGODB_URI =
-  "mongodb+srv://srknzl:PaWS1EQ7E85MHMJP@srknzl-m0-development-cluster-hgcsl.mongodb.net/learnnode-shop?retryWrites=true&w=majority";
 
 const MongoDBStore = connectMongoDb(session);
 const store = new MongoDBStore({
@@ -27,7 +28,7 @@ const store = new MongoDBStore({
 const csrfProtection = csrf();
 export const transport = nodemailer.createTransport(
   nodemailerSendgrid({
-      apiKey: "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"
+      apiKey: apiKey
   })
 ); 
 store.on("error", err => {
