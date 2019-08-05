@@ -16,18 +16,33 @@ block content
     each valMsg in validationMessages
       p.errorMessage= valMsg.msg  
   form.product-form(action="/admin/edit-product",method="POST")
-    .form-control
-      label(for="title") Title
-      input(type="text",name="title",value=product.title)#title
-    .form-control
-      label(for="price") Price
-      input(type="number",name="price",step="0.01",value=product.price)#price
-    .form-control  
-      label(for="imageurl") Image Url
-      input(type="text",name="imageUrl",value=product.imageUrl)#imageUrl
-    .form-control  
-      label(for="description") Description
-      textarea(name="description",rows="5")= product.description
-    input(type="hidden", name="id",value=product._id)
+    if validationMessages.length > 0
+      .form-control
+        label(for="title") Title
+        input(type="text",name="title",value= autoFill.title,class= validationMessages.find(valMsg => valMsg.param === "title") ? 'invalid' : '')#title
+      .form-control
+        label(for="price") Price
+        input(type="number",name="price",step="0.01", value= autoFill.price,class= validationMessages.find(valMsg => valMsg.param === "price") ? 'invalid' : '')#price
+      .form-control  
+        label(for="imageurl") Image Url
+        input(type="text",name="imageUrl",value= autoFill.imageUrl,class= validationMessages.find(valMsg => valMsg.param === "imageUrl") ? 'invalid' : '')#imageUrl
+      .form-control  
+        label(for="description") Description
+        textarea(name="description",rows="5",class= validationMessages.find(valMsg => valMsg.param === "description") ? 'invalid' : '')= autoFill.description
+      input(type="hidden", name="id",value=productId)    
+    else
+      .form-control
+        label(for="title") Title
+        input(type="text",name="title",value=product.title)#title
+      .form-control
+        label(for="price") Price
+        input(type="number",name="price",step="0.01",value=product.price)#price
+      .form-control  
+        label(for="imageurl") Image Url
+        input(type="text",name="imageUrl",value=product.imageUrl)#imageUrl
+      .form-control  
+        label(for="description") Description
+        textarea(name="description",rows="5")= product.description
+      input(type="hidden", name="id",value=product._id)
     input(type="hidden", name="_csrf",value= csrfToken)
     button.btn(type="submit") Update Product

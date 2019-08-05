@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
 import Product, { IProduct } from "../models/product";
+import { validationResult } from "express-validator";
 // import { User } from "../../models/user";
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
-
     const products = await Product.find();
     res.render("admin/products", {
       pageTitle: "Products",
@@ -17,15 +17,16 @@ export const getProducts: RequestHandler = async (req, res, next) => {
 };
 
 export const getAddProduct: RequestHandler = (req, res, next) => {
-  const errors = req.flash('error');
-  const successes = req.flash('success');
+  const errors = req.flash("error");
+  const successes = req.flash("success");
 
   res.render("admin/add-product", {
     pageTitle: "Add Product",
     active: "admin-add-product",
     errors: errors,
     successes: successes,
-    validationMessages: []
+    validationMessages: [],
+    autoFill: {}
   });
 };
 export const getWelcome: RequestHandler = (req, res, next) => {
@@ -41,6 +42,24 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   const description = req.body.description;
 
   if (!req.session) throw "No session";
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("admin/add-product", {
+      pageTitle: "Add Product",
+      active: "admin-add-product",
+      errors: [],
+      successes: [],
+      validationMessages: errors.array(),
+      autoFill: {
+        title: title,
+        imageUrl: imageUrl,
+        price: price,
+        description: description
+      }
+    });
+  }
 
   const product = new Product({
     title: title,
@@ -59,8 +78,8 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
 };
 export const getEditProduct: RequestHandler = async (req, res, next) => {
   try {
-    const errors = req.flash('error');
-    const successes = req.flash('success');
+    const errors = req.flash("error");
+    const successes = req.flash("success");
 
     const prod: IProduct | null = await Product.findById(req.params.id);
     if (prod) {
@@ -69,7 +88,8 @@ export const getEditProduct: RequestHandler = async (req, res, next) => {
         product: prod,
         errors: errors,
         successes: successes,
-        validationMessages: []
+        validationMessages: [],
+        autoFill: {}
       });
     } else {
       throw "Product not found";
@@ -103,6 +123,25 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   const imageUrl = req.body.imageUrl;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("admin/edit-product", {
+      pageTitle: "Edit Product",
+      active: "admin-edit-product",
+      errors: [],
+      successes: [],
+      validationMessages: errors.array(),
+      autoFill: {
+        title: title,
+        imageUrl: imageUrl,
+        price: price,
+        description: description
+      },
+      productId: id
+    });
+  }
 
   try {
     await Product.findByIdAndUpdate(id, {

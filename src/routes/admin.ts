@@ -12,24 +12,34 @@ router.post(
   [
     body("title")
       .isString()
+      .withMessage("Title must be a text")
       .isLength({
         min: 5
-      }),
+      })
+      .withMessage("Title should have at least five characters"),
     body("price")
       .isFloat({
         min: 0.0,
         max: 1000.0
       })
+      .withMessage("Price must be between 0 and 1000")
       .isDecimal({
         decimal_digits: "0,2"
-      }),
-    body("imageUrl").isURL(),
+      })
+      .withMessage("Price can have 2 decimals steps"),
+    body("imageUrl")
+      .isURL()
+      .withMessage("Image URL is not an URL"),
     body("description")
       .isLength({
         min: 10,
         max: 300
       })
+      .withMessage(
+        "Description must have at least 10 characters, maximum of 300."
+      )
       .isString()
+      .withMessage("Description must be a string")
   ],
   isAdminAuth,
   adminController.postAddProduct
@@ -43,24 +53,34 @@ router.post(
   [
     body("title")
       .isString()
+      .withMessage("Title must be a text")
       .isLength({
         min: 5
-      }),
+      })
+      .withMessage("Title should have at least five characters"),
     body("price")
       .isFloat({
         min: 0.0,
         max: 1000.0
       })
+      .withMessage("Price must be between 0 and 1000")
       .isDecimal({
         decimal_digits: "0,2"
-      }),
-    body("imageUrl").isURL(),
+      })
+      .withMessage("Price can have 2 decimals steps"),
+    body("imageUrl")
+      .isURL()
+      .withMessage("Image URL is not an URL"),
     body("description")
       .isLength({
         min: 10,
         max: 300
       })
+      .withMessage(
+        "Description must have at least 10 characters, maximum of 300."
+      )
       .isString()
+      .withMessage("Description must be a string")
   ],
   isAdminAuth,
   adminController.postEditProduct
