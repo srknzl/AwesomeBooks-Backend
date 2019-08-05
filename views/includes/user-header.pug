@@ -15,6 +15,7 @@ header.main-header
         a(href="/user/orders" class = active==='orders' ? 'active' : '' ) Orders
       li.main-header__item
         form(action='/logout',method='POST')
+          input(type="hidden", name="_csrf",value= csrfToken)
           button(type="submit").hidden_btn Logout
     
 nav.mobile-nav
@@ -31,4 +32,5 @@ nav.mobile-nav
       a(href="/user/orders" class = active==='orders' ? 'active' : '' ) Orders
     li.mobile-nav__item
       form(action='/logout',method='POST')
+        input(type="hidden", name="_csrf",value= csrfToken)
         button(type="submit").hidden_btn Logout  

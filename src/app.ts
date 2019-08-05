@@ -4,6 +4,7 @@ import { connect } from "mongoose";
 import session from "express-session";
 import flash from "connect-flash";
 import connectMongoDb from "connect-mongodb-session";
+import csrf from "csurf";
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
@@ -21,6 +22,7 @@ const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: "sessions"
 });
+const csrfProtection = csrf();
 
 store.on("error", err => {
   console.error(err);
@@ -40,6 +42,12 @@ app.use(
     store: store
   })
 );
+app.use(csrfProtection);
+app.use((req,res,next)=>{
+  res.locals.userLoggedIn = (req as any).session.user;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+})
 app.use(async (req, res, next) => {
   if (req.session && req.session.user) {
     try {

@@ -28,6 +28,7 @@ block content
       input(type="password",name="password")#password
     .form-control
       label(for="confirmPassword") Enter the password again
-      input(type="password",name="confirmPassword")#confirmPassword        
+      input(type="password",name="confirmPassword")#confirmPassword
+      input(type="hidden", name="_csrf",value= csrfToken)      
     button.btn(type="submit") Signup
   

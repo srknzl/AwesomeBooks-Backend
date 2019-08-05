@@ -31,6 +31,7 @@ block content
             a(href="/user/view-product/" + product._id).btn View product
             if userLoggedIn
               form(action="/user/add-cart", method="post")
+                input(type="hidden", name="_csrf",value= csrfToken)
                 input(type="hidden", name="id",value=product._id,id="productId")
                 button(type="submit").btn Add to Cart
             else

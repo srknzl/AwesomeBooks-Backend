@@ -10,8 +10,7 @@ export const getProducts: RequestHandler = async (req, res, next) => {
     res.render("user/products", {
       pageTitle: "Products",
       prods: prods,
-      active: "products",
-      userLoggedIn: req.session.userLoggedIn
+      active: "products"
     });
   } catch (err) {
     throw err;
@@ -25,8 +24,7 @@ export const getShop: RequestHandler = async (req, res, next) => {
     res.render("user/shop", {
       pageTitle: "Shop",
       prods: prods,
-      active: "shop",
-      userLoggedIn: req.session.userLoggedIn
+      active: "shop"
     });
   } catch (err) {
     throw err;
@@ -66,8 +64,7 @@ export const getProductDetail: RequestHandler = async (req, res, next) => {
         pageTitle: "Product Detail",
         active: "products",
         product: prod,
-        creator: prod.user,
-        userLoggedIn: req.session.userLoggedIn
+        creator: prod.user
       });
     } else {
       res.redirect("/user/not-found");

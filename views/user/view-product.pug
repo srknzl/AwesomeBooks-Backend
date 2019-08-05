@@ -28,6 +28,7 @@ block content
       if userLoggedIn
         form(action="/user/add-cart", method="post")
           input(type="hidden", name="id",value=product._id)
+          input(type="hidden", name="_csrf",value= csrfToken)
           button(type="submit").btn Add to Cart
       else
         input(type="hidden", name="id",value=product._id,id="productId")

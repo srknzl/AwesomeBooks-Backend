@@ -23,18 +23,22 @@ block content
           .card__actions
             form(action="/user/add-cart", method="post")
               input(type="hidden", name="id",value=entry.product._id,id="productId")
+              input(type="hidden", name="_csrf",value= csrfToken)
               button(type="submit").btn Add one more
             form(action="/user/remove-from-cart", method="post")
               input(type="hidden", name="id",value=entry.product._id)
+              input(type="hidden", name="_csrf",value= csrfToken)
               button.btn(type="submit") Remove one from cart
             form(action="/user/remove-all-from-cart", method="post")
               input(type="hidden", name="id",value=entry.product._id)
+              input(type="hidden", name="_csrf",value= csrfToken)
               button(type="submit").btn Remove all from cart
     else
       p.text_center: b No cart items yet
   .checkout__container
     p.price Total price #{price}
     form(action="/user/order", method="post")
+      input(type="hidden", name="_csrf",value= csrfToken)
       if entries.length > 0
         button(type="submit").checkout__btn.btn Checkout
       else
