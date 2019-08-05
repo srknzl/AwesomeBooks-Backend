@@ -2,7 +2,7 @@
 @import '../layouts/card.css';
 
 
-form .btn {
+form button.btn {
   width: 100%;
 }
 .search-box{

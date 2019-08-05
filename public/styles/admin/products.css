@@ -1,7 +1,7 @@
 @import '../layouts/variables.css';
 @import '../layouts/card.css';
 
-form .btn {
+form button.btn {
     width: 100%;
 }
 

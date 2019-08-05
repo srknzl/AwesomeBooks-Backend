@@ -15,10 +15,11 @@ block content
     .card__content
       h2.product__price #{product.price}$
       p.product__description= "Description:  " + product.description
-    .card__creator
-      p Creator of this product: 
-      p: b #{creator.name}
-      a(href= "mailto:" + creator.email)=  creator.email 
+    if creator
+      .card__creator
+        p Creator of this product: 
+        p: b #{creator.name}
+        a(href= "mailto:" + creator.email)=  creator.email 
     .card__actions
       a(href="/admin/edit-product/" + product._id).btn Edit Product
       form(action="/admin/delete-product", method="POST")
