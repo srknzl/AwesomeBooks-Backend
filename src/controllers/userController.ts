@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
-import Product, { IProduct } from "../../models/product";
-import Order from "../../models/order";
+import Product, { IProduct } from "../models/product";
+import Order from "../models/order";
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {

@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import Product, { IProduct } from "../../models/product";
+import Product, { IProduct } from "../models/product";
 // import { User } from "../../models/user";
 
 export const getProducts: RequestHandler = async (req, res, next) => {
