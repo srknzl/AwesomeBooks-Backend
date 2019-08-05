@@ -9,4 +9,11 @@ block header
 
 
 block content
+  .messagesContainer
+    each error in errors
+      p.errorMessage= error
+    each success in successes
+      p.successMessage= success
+    each valMsg in validationMessages
+      p.errorMessage= valMsg.msg  
   h1.text_center Welcome to awesome bookstore!

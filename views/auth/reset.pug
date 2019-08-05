@@ -4,10 +4,10 @@ block header
   include ../includes/home-header.pug
 
 block styles
-  link(rel="stylesheet", href="/styles/auth/login.css")
+  link(rel="stylesheet", href="/styles/auth/reset.css")
 
 block content
-  h2 Login
+  h2 Enter your password
   .messagesContainer
     each error in errors
       p.errorMessage= error
@@ -15,14 +15,10 @@ block content
       p.successMessage= success
     each valMsg in validationMessages
       p.errorMessage= valMsg.msg  
-  form.medium-form(action="/login",method="POST")
+  form.medium-form(action="/reset",method="POST")
     .form-control
       label(for="email") Email
       input(type="email",name="email",value= autoFill.email,class= validationMessages.find(valMsg => valMsg.param === "email") ? 'invalid' : '')#email
-    .form-control
-      label(for="password") Password
-      input(type="password",name="password",value= autoFill.password,class= validationMessages.find(valMsg => valMsg.param === "password") ? 'invalid' : '')#password
     input(type="hidden", name="_csrf",value= csrfToken)
-    button.btn(type="submit") Login 
-  a(href="/reset") Forgot your password?
+    button.btn(type="submit") Submit 
   

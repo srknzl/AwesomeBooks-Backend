@@ -5,6 +5,8 @@ import session from "express-session";
 import flash from "connect-flash";
 import connectMongoDb from "connect-mongodb-session";
 import csrf from "csurf";
+import nodemailer from "nodemailer";
+const  nodemailerSendgrid = require("nodemailer-sendgrid");
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
@@ -23,7 +25,11 @@ const store = new MongoDBStore({
   collection: "sessions"
 });
 const csrfProtection = csrf();
-
+export const transport = nodemailer.createTransport(
+  nodemailerSendgrid({
+      apiKey: "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"
+  })
+); 
 store.on("error", err => {
   console.error(err);
 });

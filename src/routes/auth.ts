@@ -54,3 +54,8 @@ router.post(
   ],
   authController.postAdminLogin
 );
+router.get("/reset",authController.getReset);
+router.post("/reset",
+[
+  body('email').isEmail().withMessage('Please enter a valid e-mail')
+],authController.postReset);

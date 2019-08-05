@@ -1,9 +1,11 @@
 import { RequestHandler } from "express";
 import { hash, compare } from "bcrypt";
 import { validationResult} from "express-validator";
+import crypto from "crypto";
 
 import User from "../models/user";
 import Admin from "../models/admin";
+import  { transport } from "../app";
 
 export const getLogin: RequestHandler = (req, res, next) => {
   const successes = req.flash("success");
@@ -18,14 +20,7 @@ export const getLogin: RequestHandler = (req, res, next) => {
     autoFill: {}
   });
 };
-export const postLogout: RequestHandler = (req, res, next) => {
-  if (!req.session) throw "No session";
 
-  req.session.destroy(err => {
-    if (err) console.log(err);
-    res.redirect("/");
-  });
-};
 export const getSignup: RequestHandler = (req, res, next) => {
   const errors = req.flash("error");
   const successes = req.flash("success");
@@ -48,6 +43,19 @@ export const getAdminLogin: RequestHandler = (req, res, next) => {
     pageTitle: "Admin login",
     errors: errors,
     successes: successes,
+    validationMessages: [],
+    autoFill: {}
+  });
+};
+export const getReset: RequestHandler = (req, res, next) => {
+  const successes = req.flash("success");
+  const errors = req.flash("error");
+
+  res.render("auth/reset", {
+    active: "",
+    pageTitle: "Reset your password",
+    successes: successes,
+    errors: errors,
     validationMessages: [],
     autoFill: {}
   });
@@ -254,4 +262,71 @@ export const postAdminLogin: RequestHandler = async (req, res, next) => {
     console.error(error);
   }
   next();
+};
+export const postLogout: RequestHandler = (req, res, next) => {
+  if (!req.session) throw "No session";
+
+  req.session.destroy(err => {
+    if (err) console.log(err);
+    res.redirect("/");
+  });
+};
+
+export const postReset: RequestHandler = async (req, res, next) => {
+  const email = req.body.email;
+  const errors = validationResult(req);
+  
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/reset", {
+      active: "",
+      pageTitle: "Reset your password",
+      successes: [],
+      errors: [],
+      validationMessages: errors,
+      autoFill: {
+        email: email
+      }
+    });
+  }
+  const user = await User.findOne({
+    email: email
+  });
+  if(!user){
+    req.flash('error','This e-mail is not associated with an account!');
+    const errors = req.flash('error');
+    const successes = req.flash('success');
+
+    return res.status(422).render("auth/reset", {
+      active: "",
+      pageTitle: "Reset your password",
+      successes: successes,
+      errors: errors,
+      validationMessages: [],
+      autoFill: {
+        email: email
+      }
+    });
+  }
+  const bytes = crypto.randomBytes(32);
+  
+  const hex = bytes.toString('hex');
+
+  user.resetToken = hex;
+  user.resetTokenExpiry = new Date(Date.now() + 1000*60*60);
+
+  await user.save();
+
+  transport.sendMail({
+    from: 'registration@awesomebookshop.com',
+    to: email,
+    subject: 'Password Reset',
+    html: `
+      <p> You requested a password reset, and here is your <a href="http://localhost:3000/newPassword/${hex}">link</a> that you can use for that.  </p>
+      <p> Keep in mind that you have 1 hour until expiration of this url. </p>
+      <p> Please do not share this link.</p>
+    `
+  });
+  req.flash('success','Email sent!');
+  res.redirect('/');
 };

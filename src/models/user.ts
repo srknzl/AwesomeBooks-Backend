@@ -15,7 +15,8 @@ export interface IUser extends Document {
   email: string;
   cart: ICart;
   password: string;
-  // product: Schema.Types.ObjectId | IProduct;
+  resetToken?: string;
+  resetTokenExpiry?: Date;
 }
 
 const userSchema = new Schema({
@@ -45,7 +46,9 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  resetToken: String,
+  resetTokenExpiry: Schema.Types.Date
 });
 
 userSchema.methods.addToCart = async function(productId: string) {
