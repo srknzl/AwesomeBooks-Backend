@@ -17,6 +17,7 @@ import Admin from "./models/admin";
 
 import { MONGODB_URI } from "../credentials/mongo_uri";
 import { apiKey } from "../credentials/sendgrid";
+import { expressSessionSecret } from "../credentials/expressSession";
 
 const app = express();
 
@@ -42,8 +43,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(
   session({
-    secret:
-      "UlEuikYPJivAXVMR5KUX24bDU202JkQgv0QrctQRRFEIHrktim1yMgWTI3gwKhbXsnWiNfufv",
+    secret: expressSessionSecret,
     resave: false,
     saveUninitialized: false,
     store: store
