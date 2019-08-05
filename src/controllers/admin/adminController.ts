@@ -4,6 +4,7 @@ import Product, { IProduct } from "../../models/product";
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
+
     const products = await Product.find();
     res.render("admin/products", {
       pageTitle: "Products",
@@ -16,9 +17,14 @@ export const getProducts: RequestHandler = async (req, res, next) => {
 };
 
 export const getAddProduct: RequestHandler = (req, res, next) => {
+  const errors = req.flash('error');
+  const successes = req.flash('success');
+
   res.render("admin/add-product", {
     pageTitle: "Add Product",
     active: "admin-add-product",
+    errors: errors,
+    successes: successes,
     validationMessages: []
   });
 };
@@ -53,11 +59,16 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
 };
 export const getEditProduct: RequestHandler = async (req, res, next) => {
   try {
+    const errors = req.flash('error');
+    const successes = req.flash('success');
+
     const prod: IProduct | null = await Product.findById(req.params.id);
     if (prod) {
       res.render("admin/edit-product", {
         active: "edit-product",
         product: prod,
+        errors: errors,
+        successes: successes,
         validationMessages: []
       });
     } else {
