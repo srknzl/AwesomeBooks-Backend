@@ -8,6 +8,9 @@
   font: inherit;
   border-radius: 8px;
 }
+form .invalid{
+  border: 2px solid red;
+}
 .form-control textarea {
   resize: none;
 }

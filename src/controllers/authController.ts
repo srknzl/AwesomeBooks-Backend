@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { hash, compare } from "bcrypt";
-import { validationResult } from "express-validator";
+import { validationResult} from "express-validator";
 
 import User from "../models/user";
 import Admin from "../models/admin";
@@ -14,7 +14,8 @@ export const getLogin: RequestHandler = (req, res, next) => {
     pageTitle: "Login",
     successes: successes,
     errors: errors,
-    validationMessages: []
+    validationMessages: [],
+    autoFill: {}
   });
 };
 export const postLogout: RequestHandler = (req, res, next) => {
@@ -34,7 +35,8 @@ export const getSignup: RequestHandler = (req, res, next) => {
     pageTitle: "Signup",
     errors: errors,
     successes: successes,
-    validationMessages: []
+    validationMessages: [],
+    autoFill: {}
   });
 };
 export const getAdminLogin: RequestHandler = (req, res, next) => {
@@ -46,13 +48,13 @@ export const getAdminLogin: RequestHandler = (req, res, next) => {
     pageTitle: "Admin login",
     errors: errors,
     successes: successes,
-    validationMessages: []
+    validationMessages: [],
+    autoFill: {}
   });
 };
 export const postLogin: RequestHandler = async (req, res, next) => {
   const password = req.body.password;
   const email = req.body.email;
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/login", {
@@ -60,7 +62,11 @@ export const postLogin: RequestHandler = async (req, res, next) => {
       pageTitle: "Login",
       successes: [],
       errors: [],
-      validationMessages: errors.array()
+      validationMessages: errors.array(),
+      autoFill: {
+        email: email,
+        password: password
+      }
     });
   }
 
@@ -77,11 +83,37 @@ export const postLogin: RequestHandler = async (req, res, next) => {
         return res.redirect("/user/welcome");
       } else {
         req.flash("error", "Email or password was wrong");
-        return res.redirect("/login");
+        const errors = req.flash("error");
+        const successes = req.flash("success");
+
+        return res.status(401).render("auth/login", {
+          active: "login",
+          pageTitle: "Login",
+          successes: successes,
+          errors: errors,
+          validationMessages: [],
+          autoFill: {
+            email: email,
+            password: password
+          }
+        });
       }
     } else {
       req.flash("error", "Email or password was wrong");
-      return res.redirect("/login");
+      const errors = req.flash("error");
+      const successes = req.flash("success");
+
+      return res.status(401).render("auth/login", {
+        active: "login",
+        pageTitle: "Login",
+        successes: successes,
+        errors: errors,
+        validationMessages: [],
+        autoFill: {
+          email: email,
+          password: password
+        }
+      });
     }
   } catch (error) {
     console.error(error);
@@ -92,6 +124,7 @@ export const postSignup: RequestHandler = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const name = req.body.name;
+  const confirmPassword = req.body.confirmPassword;
 
   const errors = validationResult(req);
 
@@ -101,7 +134,13 @@ export const postSignup: RequestHandler = async (req, res, next) => {
       pageTitle: "Signup",
       errors: [],
       successes: [],
-      validationMessages: errors.array()
+      validationMessages: errors.array(),
+      autoFill: {
+        email: email,
+        password: password,
+        name: name,
+        confirmPassword: confirmPassword
+      }
     });
   }
 
@@ -111,7 +150,22 @@ export const postSignup: RequestHandler = async (req, res, next) => {
 
   if (foundUser) {
     req.flash("error", "Email is already in use!");
-    return res.redirect("/signup");
+    const errors = req.flash('error');
+    const successes = req.flash('success');
+
+    return res.status(422).render("auth/signup", {
+      active: "signup",
+      pageTitle: "Signup",
+      errors: errors,
+      successes: successes,
+      validationMessages: [],
+      autoFill: {
+        email: email,
+        password: password,
+        name: name,
+        confirmPassword: confirmPassword
+      }
+    });
   }
 
   const hashPass = await hash(password, 12);
@@ -138,12 +192,16 @@ export const postAdminLogin: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.render("auth/admin-login", {
+    return res.status(422).render("auth/admin-login", {
       active: "admin-login",
       pageTitle: "Admin login",
       errors: [],
       successes: [],
-      validationMessages: errors.array()
+      validationMessages: errors.array(),
+      autoFill: {
+        email: email,
+        password: password
+      }
     });
   }
 
@@ -160,11 +218,37 @@ export const postAdminLogin: RequestHandler = async (req, res, next) => {
         return res.redirect("/admin/welcome");
       } else {
         req.flash("error", "Email or password was wrong");
-        return res.redirect("/admin-login");
+        const errors = req.flash("error");
+        const successes = req.flash("success");
+
+        return res.status(401).render("auth/admin-login", {
+          active: "admin-login",
+          pageTitle: "Admin login",
+          errors: errors,
+          successes: successes,
+          validationMessages: [],
+          autoFill: {
+            email: email,
+            password: password
+          }
+        });
       }
     } else {
       req.flash("error", "Email or password was wrong");
-      return res.redirect("/admin-login");
+      const errors = req.flash("error");
+      const successes = req.flash("success");
+
+      return res.status(401).render("auth/admin-login", {
+        active: "admin-login",
+        pageTitle: "Admin login",
+        errors: errors,
+        successes: successes,
+        validationMessages: [],
+        autoFill: {
+          email: email,
+          password: password
+        }
+      });
     }
   } catch (error) {
     console.error(error);

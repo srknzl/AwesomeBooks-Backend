@@ -19,16 +19,16 @@ block content
   form.medium-form(action="/signup",method="POST")
     .form-control
       label(for="email") Please enter your e-mail
-      input(type="email",name="email")#email
+      input(type="email",name="email",value= autoFill.email,class= validationMessages.find(valMsg => valMsg.param === "email") ? 'invalid' : '')#email
     .form-control
       label(for="name") Please enter your full name
-      input(type="text",name="name")#name
+      input(type="text",name="name",value= autoFill.name,class= validationMessages.find(valMsg => valMsg.param === "name") ? 'invalid' : '')#name
     .form-control
       label(for="password") Password
-      input(type="password",name="password")#password
+      input(type="password",name="password",value= autoFill.password,class= validationMessages.find(valMsg => valMsg.param === "password") ? 'invalid' : '')#password
     .form-control
       label(for="confirmPassword") Enter the password again
-      input(type="password",name="confirmPassword")#confirmPassword
+      input(type="password",name="confirmPassword",value= autoFill.confirmPassword,class= validationMessages.find(valMsg => valMsg.param === "confirmPassword") ? 'invalid' : '')#confirmPassword
       input(type="hidden", name="_csrf",value= csrfToken)      
     button.btn(type="submit") Signup
   
