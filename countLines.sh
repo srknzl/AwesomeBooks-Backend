@@ -30,8 +30,18 @@ do
   cssCounter=$(($cssCounter + `cat $file | wc -l`))
 done
 
+bashFiles=`find . -name "countLines.sh"`
+
+bashCounter=0
+for file in $bashFiles
+do 
+  bashCounter=$(($bashCounter + `cat $file | wc -l`))
+done
+
 echo "css:" $cssCounter lines
 echo "js:"  $jsCounter lines
 echo "pug:"  $pugCounter lines
 echo "ts:"  $tsCounter lines
-echo "total:"  $(($pugCounter + $tsCounter + $cssCounter + $jsCounter)) lines 
+echo "bash:"  $bashCounter lines
+
+echo "total:"  $(($pugCounter + $tsCounter + $cssCounter + $jsCounter + $bashCounter)) lines 
