@@ -15,9 +15,9 @@ import * as homeRoutes from "./routes/home";
 import User from "./models/user";
 import Admin from "./models/admin";
 
-import { MONGODB_URI } from "../credentials/mongo_uri";
-import { apiKey } from "../credentials/sendgrid";
-import { expressSessionSecret } from "../credentials/expressSession";
+import { MONGODB_URI } from "./credentials/mongo_uri";
+import { apiKey } from "./credentials/sendgrid";
+import { expressSessionSecret } from "./credentials/expressSession";
 
 const app = express();
 
