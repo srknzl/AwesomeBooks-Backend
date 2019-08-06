@@ -59,3 +59,16 @@ router.post("/reset",
 [
   body('email').isEmail().withMessage('Please enter a valid e-mail')
 ],authController.postReset);
+
+router.get('/newPassword/:token',authController.getNewPassword);
+router.post('/newPassword',[
+  body("newPassword").isLength({
+    min: 6
+  }).withMessage('Your password must be at least 6 characters long'),
+  body("confirmNewPassword").custom((value, { req }) => {
+    if (req.body.newPassword !== value) {
+      throw new Error("Passwords did not match");
+    }
+    return true;
+  })
+],authController.postNewPassword)

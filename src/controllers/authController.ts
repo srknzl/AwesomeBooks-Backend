@@ -1,11 +1,11 @@
 import { RequestHandler } from "express";
 import { hash, compare } from "bcrypt";
-import { validationResult} from "express-validator";
+import { validationResult } from "express-validator";
 import crypto from "crypto";
 
 import User from "../models/user";
 import Admin from "../models/admin";
-import  { transport } from "../app";
+import { transport } from "../app";
 
 export const getLogin: RequestHandler = (req, res, next) => {
   const successes = req.flash("success");
@@ -58,6 +58,31 @@ export const getReset: RequestHandler = (req, res, next) => {
     errors: errors,
     validationMessages: [],
     autoFill: {}
+  });
+};
+export const getNewPassword: RequestHandler = async (req, res, next) => {
+  const token = req.params.token;
+
+  const user = await User.findOne({
+    resetToken: token,
+    resetTokenExpiry: {
+      $gt: Date.now()
+    }
+  });
+
+  if (!user) {
+    req.flash("error", "Your token is not valid!");
+    return res.redirect("/");
+  }
+
+  res.render("auth/new-password", {
+    active: "",
+    pageTitle: "Update your password",
+    successes: [],
+    errors: [],
+    validationMessages: [],
+    autoFill: {},
+    token: token
   });
 };
 export const postLogin: RequestHandler = async (req, res, next) => {
@@ -124,9 +149,10 @@ export const postLogin: RequestHandler = async (req, res, next) => {
       });
     }
   } catch (error) {
+    req.flash('error','Something went wrong.');
     console.error(error);
+    return res.redirect('/login');
   }
-  next();
 };
 export const postSignup: RequestHandler = async (req, res, next) => {
   const email = req.body.email;
@@ -158,8 +184,8 @@ export const postSignup: RequestHandler = async (req, res, next) => {
 
   if (foundUser) {
     req.flash("error", "Email is already in use!");
-    const errors = req.flash('error');
-    const successes = req.flash('success');
+    const errors = req.flash("error");
+    const successes = req.flash("success");
 
     return res.status(422).render("auth/signup", {
       active: "signup",
@@ -259,9 +285,10 @@ export const postAdminLogin: RequestHandler = async (req, res, next) => {
       });
     }
   } catch (error) {
+    req.flash('error','Something went wrong');
     console.error(error);
+    return res.redirect('/admin-login');
   }
-  next();
 };
 export const postLogout: RequestHandler = (req, res, next) => {
   if (!req.session) throw "No session";
@@ -275,7 +302,6 @@ export const postLogout: RequestHandler = (req, res, next) => {
 export const postReset: RequestHandler = async (req, res, next) => {
   const email = req.body.email;
   const errors = validationResult(req);
-  
 
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/reset", {
@@ -292,10 +318,10 @@ export const postReset: RequestHandler = async (req, res, next) => {
   const user = await User.findOne({
     email: email
   });
-  if(!user){
-    req.flash('error','This e-mail is not associated with an account!');
-    const errors = req.flash('error');
-    const successes = req.flash('success');
+  if (!user) {
+    req.flash("error", "This e-mail is not associated with an account!");
+    const errors = req.flash("error");
+    const successes = req.flash("success");
 
     return res.status(422).render("auth/reset", {
       active: "",
@@ -309,24 +335,97 @@ export const postReset: RequestHandler = async (req, res, next) => {
     });
   }
   const bytes = crypto.randomBytes(32);
-  
-  const hex = bytes.toString('hex');
+
+  const hex = bytes.toString("hex");
 
   user.resetToken = hex;
-  user.resetTokenExpiry = new Date(Date.now() + 1000*60*60);
+  user.resetTokenExpiry = new Date(Date.now() + 1000 * 60 * 60);
 
   await user.save();
 
-  transport.sendMail({
-    from: 'registration@awesomebookshop.com',
-    to: email,
-    subject: 'Password Reset',
-    html: `
-      <p> You requested a password reset, and here is your <a href="http://localhost:3000/newPassword/${hex}">link</a> that you can use for that.  </p>
-      <p> Keep in mind that you have 1 hour until expiration of this url. </p>
-      <p> Please do not share this link.</p>
-    `
-  });
-  req.flash('success','Email sent!');
-  res.redirect('/');
+  try {
+    const info = await transport.sendMail({
+      from: "reset@awesomebookshop.com",
+      to: email,
+      subject: "Password Reset",
+      html: `
+        <h3>Password reset link</h3>
+        <hr>
+        <p> You requested a password reset, and here is your <a href="http://localhost:3000/newPassword/${hex}">link</a>.  </p>
+        <p> Please note that this url can be used once and has 1 hour to expire.</p>
+        <p> <b>Please do not share this link with anyone</b>, including AwesomeShop representatives.</p>
+        <p> Thanks for securing your account.</p>
+      `
+    });
+    console.log(info);
+  } catch (error) {
+    req.flash("error", "Could not send the e-mail, please contact site owner.");
+    return res.redirect("/");
+  }
+
+  req.flash("success", "Email sent!");
+  res.redirect("/");
+};
+
+export const postNewPassword: RequestHandler = async (req, res, next) => {
+  const token = req.body.token;
+  const newPassword = req.body.newPassword;
+  const confirmNewPassword = req.body.confirmNewPassword;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/new-password", {
+      active: "",
+      pageTitle: "Update your password",
+      successes: [],
+      errors: [],
+      validationMessages: errors.array(),
+      autoFill: {
+        newPassword: newPassword,
+        confirmNewPassword: confirmNewPassword
+      },
+      token: token
+    });
+  }
+
+  try {
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiry: {
+        $gt: Date.now()
+      }
+    });
+    if (!user) {
+      req.flash(
+        "error",
+        "Your token is not valid, try sending a new token to your e-mail."
+      );
+      return res.redirect("/");
+    } else {
+      const hashPass = await hash(newPassword, 12);
+      
+      await User.updateOne(
+        {
+          resetToken: token,
+          resetTokenExpiry: {
+            $gt: Date.now()
+          }
+        },
+        {
+          $set: {
+            password: hashPass,
+            resetToken: undefined,
+            resetTokenExpiry: undefined
+          }
+        }
+      );
+      req.flash("success", "Successfully updated your password");
+      res.redirect("/login");
+    }
+  } catch (error) {
+    req.flash("error", "Something went wrong, could not update the password");
+    res.redirect("/login");
+    console.error(error);
+  }
 };
