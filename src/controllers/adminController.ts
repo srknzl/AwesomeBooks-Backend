@@ -5,14 +5,22 @@ import { validationResult } from "express-validator";
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({
+      user: (req as any).session.admin._id
+    });
+    const errors = req.flash("error");
+    const successes = req.flash("success");
+
     res.render("admin/products", {
       pageTitle: "Products",
       active: "admin-products",
-      prods: products
+      prods: products,
+      errors: errors,
+      successes: successes
     });
   } catch (err) {
-    throw err;
+    req.flash("error", "Something went wrong!");
+    return res.redirect("/admin/products");
   }
 };
 
@@ -41,7 +49,10 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  if (!req.session) throw "No session";
+  if (!req.session){
+    req.flash('error','Please login!');
+    return res.redirect("/");
+  }
 
   const errors = validationResult(req);
 
@@ -73,7 +84,8 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
     await product.save();
     res.redirect("/admin/products");
   } catch (err) {
-    throw err;
+    req.flash('error','Something went wrong');
+    return res.redirect("/admin/products");
   }
 };
 export const getEditProduct: RequestHandler = async (req, res, next) => {
@@ -81,7 +93,10 @@ export const getEditProduct: RequestHandler = async (req, res, next) => {
     const errors = req.flash("error");
     const successes = req.flash("success");
 
-    const prod: IProduct | null = await Product.findById(req.params.id);
+    const prod: IProduct | null = await Product.findOne({
+      _id: req.params.id,
+      user: (req as any).session.admin._id
+    });
     if (prod) {
       res.render("admin/edit-product", {
         active: "edit-product",
@@ -92,17 +107,20 @@ export const getEditProduct: RequestHandler = async (req, res, next) => {
         autoFill: {}
       });
     } else {
-      throw "Product not found";
+      req.flash("error", "Product not found!");
+      return res.redirect("/admin/products");
     }
   } catch (err) {
-    throw err;
+    req.flash("error", "Something is not right!");
+    return res.redirect("/admin/products");
   }
 };
 export const getProductDetail: RequestHandler = async (req, res, next) => {
   try {
-    const prod: IProduct | null = await Product.findById(
-      req.params.id
-    ).populate("user");
+    const prod: IProduct | null = await Product.findOne({
+      _id: req.params.id,
+      user: (req as any).session.admin._id
+    }).populate("user");
     if (prod) {
       res.render("admin/view-product", {
         active: "edit-product",
@@ -110,11 +128,12 @@ export const getProductDetail: RequestHandler = async (req, res, next) => {
         creator: prod.user
       });
     } else {
-      res.redirect("/admin/not-found");
-      throw "Product not found";
+      req.flash("error", "Product not found");
+      return res.redirect("/admin/products");
     }
   } catch (err) {
-    throw err;
+    req.flash("error", "Something went wrong");
+    return res.redirect("/admin/products");
   }
 };
 export const postEditProduct: RequestHandler = async (req, res, next) => {
@@ -150,18 +169,29 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
       description: description,
       imageUrl: imageUrl
     });
-    res.redirect("/admin/products");
+    return res.redirect("/admin/products");
   } catch (err) {
-    throw err;
+    console.log(err);
+    return res.redirect("/admin/welcome");
   }
 };
 export const postDeleteProduct: RequestHandler = async (req, res, next) => {
   const id = req.body.id;
   try {
-    await Product.deleteOne({ _id: id });
-    res.redirect("/admin/products");
+    const result = await Product.deleteOne({
+      _id: id,
+      user: (req as any).session.admin._id
+    });
+    if (result.n) {
+      req.flash("success", "Product deleted.");
+      return res.redirect("/admin/products");
+    } else {
+      req.flash("error", "Could not delete the product!");
+      return res.redirect("/admin/products");
+    }
   } catch (err) {
-    throw err;
+    req.flash("error", "Something went wrong");
+    return res.redirect("/admin/products");
   }
 };
 export const getNotFound: RequestHandler = (req, res, next) => {

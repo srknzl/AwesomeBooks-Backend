@@ -8,6 +8,11 @@ block header
 
 block content
   h1.text_center All products
+  .messagesContainer
+    each error in errors
+      p.errorMessage= error
+    each success in successes
+      p.successMessage= success
   if prods.length > 0
     .grid
       each product in prods 
