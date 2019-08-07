@@ -3,7 +3,6 @@ import { RequestHandler } from "express";
 export const getWelcome: RequestHandler = (req, res, next) => {
   const successes = req.flash('success');
   const errors = req.flash('error');
-
   res.render("welcome", {
     pageTitle: "Awesome bookstore",
     active: "welcome",
@@ -12,8 +11,17 @@ export const getWelcome: RequestHandler = (req, res, next) => {
     validationMessages: []
   });
 };
-export const getWelcomeNotFound: RequestHandler = (req, res, next) => {
-  res.status(404).render("errors/welcome-not-found", {
-    pageTitle: "Not found"
+export const get404: RequestHandler = (req, res, next) => {
+  res.status(404).render("errors/404", {
+    pageTitle: "Not found",
+    userLoggedIn: (req as any).session.userLoggedIn,
+    adminLoggedIn: (req as any).session.adminLoggedIn
+  });
+};
+export const get500: RequestHandler = (req, res, next) => {
+  res.status(500).render("errors/500", {
+    pageTitle: "Error",
+    userLoggedIn: (req as any).session.userLoggedIn,
+    adminLoggedIn: (req as any).session.adminLoggedIn
   });
 };

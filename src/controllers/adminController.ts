@@ -19,8 +19,7 @@ export const getProducts: RequestHandler = async (req, res, next) => {
       successes: successes
     });
   } catch (err) {
-    req.flash("error", "Something went wrong!");
-    return res.redirect("/admin/products");
+    next(new Error(err));
   }
 };
 
@@ -84,8 +83,7 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
     await product.save();
     res.redirect("/admin/products");
   } catch (err) {
-    req.flash('error','Something went wrong');
-    return res.redirect("/admin/products");
+    next(new Error(err));
   }
 };
 export const getEditProduct: RequestHandler = async (req, res, next) => {
@@ -111,8 +109,7 @@ export const getEditProduct: RequestHandler = async (req, res, next) => {
       return res.redirect("/admin/products");
     }
   } catch (err) {
-    req.flash("error", "Something is not right!");
-    return res.redirect("/admin/products");
+    next(new Error(err));
   }
 };
 export const getProductDetail: RequestHandler = async (req, res, next) => {
@@ -132,8 +129,7 @@ export const getProductDetail: RequestHandler = async (req, res, next) => {
       return res.redirect("/admin/products");
     }
   } catch (err) {
-    req.flash("error", "Something went wrong");
-    return res.redirect("/admin/products");
+    next(new Error(err));
   }
 };
 export const postEditProduct: RequestHandler = async (req, res, next) => {
@@ -171,8 +167,7 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
     });
     return res.redirect("/admin/products");
   } catch (err) {
-    console.log(err);
-    return res.redirect("/admin/welcome");
+    next(new Error(err));
   }
 };
 export const postDeleteProduct: RequestHandler = async (req, res, next) => {
@@ -190,13 +185,6 @@ export const postDeleteProduct: RequestHandler = async (req, res, next) => {
       return res.redirect("/admin/products");
     }
   } catch (err) {
-    req.flash("error", "Something went wrong");
-    return res.redirect("/admin/products");
+    next(new Error(err));
   }
-};
-export const getNotFound: RequestHandler = (req, res, next) => {
-  res.status(404).render("errors/admin-not-found", {
-    pageTitle: "Not found",
-    active: ""
-  });
 };

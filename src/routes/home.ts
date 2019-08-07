@@ -5,4 +5,5 @@ export const router = express.Router();
 
 router.get("/", homeController.getWelcome);
 
-router.use(homeController.getWelcomeNotFound);
+router.get('/500',homeController.get500);
+router.use(homeController.get404);

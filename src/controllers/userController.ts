@@ -5,15 +5,19 @@ import Order from "../models/order";
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
     if (!req.session) throw "No session";
+    const errors = req.flash('error');
+    const successes = req.flash('success');
 
     const prods = await Product.find();
     res.render("user/products", {
       pageTitle: "Products",
       prods: prods,
-      active: "products"
+      active: "products",
+      errors : errors,
+      successes: successes
     });
   } catch (err) {
-    throw err;
+    next(new Error(err));
   }
 };
 export const getShop: RequestHandler = async (req, res, next) => {
@@ -27,7 +31,7 @@ export const getShop: RequestHandler = async (req, res, next) => {
       active: "shop"
     });
   } catch (err) {
-    throw err;
+    next(new Error(err));
   }
 };
 export const getOrders: RequestHandler = async (req, res, next) => {
@@ -52,14 +56,19 @@ export const getOrders: RequestHandler = async (req, res, next) => {
       orders: orders,
       active: "orders"
     });
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    next(new Error(err));
   }
 };
 export const getWelcome: RequestHandler = (req, res, next) => {
+  const errors = req.flash('error');
+  const successes = req.flash('success');
+
   res.render("user/welcome", {
     pageTitle: "Welcome",
-    active: "welcome"
+    active: "welcome",
+    errors: errors,
+    successes: successes
   });
 };
 export const getProductDetail: RequestHandler = async (req, res, next) => {
@@ -77,11 +86,11 @@ export const getProductDetail: RequestHandler = async (req, res, next) => {
         creator: prod.user
       });
     } else {
-      res.redirect("/user/not-found");
-      throw "Product not found";
+      req.flash('error','Product not found!');
+      return res.redirect("/user/products");
     }
   } catch (err) {
-    throw err;
+    next(new Error(err));
   }
 };
 export const getCart: RequestHandler = async (req, res, next) => {
@@ -105,11 +114,11 @@ export const getCart: RequestHandler = async (req, res, next) => {
         price: price
       });
     } else {
-      res.redirect("/user/not-found");
-      throw "User not found";
+      req.flash('error','User not found!');
+      return res.redirect("/user/welcome");
     }
   } catch (err) {
-    throw err;
+    next(new Error(err));
   }
 };
 
@@ -120,7 +129,7 @@ export const addToCart: RequestHandler = async (req, res, next) => {
     await req.session.user.addToCart(req.body.id);
     res.redirect("/user/cart");
   } catch (err) {
-    throw err;
+    next(new Error(err));
   }
 };
 export const removeFromCart: RequestHandler = async (req, res, next) => {
@@ -130,7 +139,7 @@ export const removeFromCart: RequestHandler = async (req, res, next) => {
     await req.session.user.removeOneFromCart(req.body.id);
     res.redirect("/user/cart");
   } catch (err) {
-    throw err;
+    next(new Error(err));
   }
 };
 export const addOrder: RequestHandler = async (req, res, next) => {
@@ -140,7 +149,7 @@ export const addOrder: RequestHandler = async (req, res, next) => {
     await req.session.user.order();
     res.redirect("/user/orders");
   } catch (err) {
-    throw err;
+    next(new Error(err));
   }
 };
 export const removeAllFromCart: RequestHandler = async (req, res, next) => {
@@ -150,12 +159,6 @@ export const removeAllFromCart: RequestHandler = async (req, res, next) => {
     await req.session.user.removeAllFromCart(req.body.id);
     res.redirect("/user/cart");
   } catch (err) {
-    throw err;
+    next(new Error(err));
   }
-};
-export const getNotFound: RequestHandler = (req, res, next) => {
-  res.status(404).render("errors/user-not-found", {
-    pageTitle: "Not found",
-    active: ""
-  });
 };

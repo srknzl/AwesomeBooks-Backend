@@ -15,5 +15,3 @@ router.post("/add-cart", isAuth, userController.addToCart);
 router.post("/remove-from-cart", isAuth, userController.removeFromCart);
 router.post("/remove-all-from-cart", isAuth, userController.removeAllFromCart);
 router.post("/order", isAuth, userController.addOrder);
-
-router.use(isAuth, userController.getNotFound);

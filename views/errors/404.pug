@@ -1,0 +1,21 @@
+extends ../layouts/main.pug
+
+block header
+  if userLoggedIn
+    include ../includes/user-header.pug
+  else if adminLoggedIn
+    include ../includes/admin-header.pug
+  else
+    include ../includes/home-header.pug
+
+block styles
+  link(rel="stylesheet", href="/styles/404.css")
+
+block content
+  h1 Page not found
+  if userLoggedIn
+    a(href="/user/welcome") Go to the main page
+  else if adminLoggedIn
+    a(href="/admin/welcome") Go to the main page
+  else
+    a(href="/") Go to the main page

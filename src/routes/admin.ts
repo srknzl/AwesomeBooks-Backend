@@ -90,4 +90,3 @@ router.post("/delete-product", isAdminAuth, adminController.postDeleteProduct);
 
 router.get("/products", isAdminAuth, adminController.getProducts);
 router.get("/welcome", isAdminAuth, adminController.getWelcome);
-router.use(isAdminAuth, adminController.getNotFound);

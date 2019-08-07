@@ -1,4 +1,4 @@
-import express from "express";
+import express, { ErrorRequestHandler } from "express";
 import bodyParser from "body-parser";
 import { connect } from "mongoose";
 import session from "express-session";
@@ -77,6 +77,13 @@ app.use("/admin", adminRoutes.router);
 app.use("/user", userRoutes.router);
 app.use(authRoutes.router);
 app.use(homeRoutes.router);
+
+const errorHandler: ErrorRequestHandler = (err,req,res,next) => {
+  console.log(err);
+  res.redirect('/500');
+};
+
+app.use(errorHandler);
 
 connect(
   MONGODB_URI,
