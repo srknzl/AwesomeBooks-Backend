@@ -1,6 +1,5 @@
 @import '../layouts/variables.css';
 @import '../layouts/card.css';
-@import '../layouts/flash.css';
 
 form button.btn {
     width: 100%;
