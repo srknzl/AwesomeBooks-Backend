@@ -4,7 +4,7 @@ export interface IProduct extends Document {
   title: string;
   price: number;
   description: string;
-  imageUrl: string;
+  imageUrl: string | undefined;
   user: Schema.Types.ObjectId;
 }
 

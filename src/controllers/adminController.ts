@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import Product, { IProduct } from "../models/product";
 import { validationResult } from "express-validator";
+import fs from "fs";
 // import { User } from "../../models/user";
 
 export const getProducts: RequestHandler = async (req, res, next) => {
@@ -8,15 +9,11 @@ export const getProducts: RequestHandler = async (req, res, next) => {
     const products = await Product.find({
       user: (req as any).session.admin._id
     });
-    const errors = req.flash("error");
-    const successes = req.flash("success");
 
     res.render("admin/products", {
       pageTitle: "Products",
       active: "admin-products",
       prods: products,
-      errors: errors,
-      successes: successes
     });
   } catch (err) {
     next(new Error(err));
@@ -24,14 +21,10 @@ export const getProducts: RequestHandler = async (req, res, next) => {
 };
 
 export const getAddProduct: RequestHandler = (req, res, next) => {
-  const errors = req.flash("error");
-  const successes = req.flash("success");
 
   res.render("admin/add-product", {
     pageTitle: "Add Product",
     active: "admin-add-product",
-    errors: errors,
-    successes: successes,
     validationMessages: [],
     autoFill: {}
   });
@@ -48,8 +41,8 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  if (!req.session){
-    req.flash('error','Please login!');
+  if (!req.session) {
+    req.flash('error', 'Please login!');
     return res.redirect("/");
   }
 
@@ -72,14 +65,14 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
 
   let product;
 
-  if(!image){
+  if (!image) {
     product = new Product({
       title: title,
       price: price,
       description: description,
       user: req.session.admin._id
     });
-  }else{
+  } else {
     product = new Product({
       title: title,
       price: price,
@@ -88,7 +81,7 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
       user: req.session.admin._id
     });
   }
-  
+
 
   try {
     await product.save();
@@ -99,9 +92,6 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
 };
 export const getEditProduct: RequestHandler = async (req, res, next) => {
   try {
-    const errors = req.flash("error");
-    const successes = req.flash("success");
-
     const prod: IProduct | null = await Product.findOne({
       _id: req.params.id,
       user: (req as any).session.admin._id
@@ -110,8 +100,6 @@ export const getEditProduct: RequestHandler = async (req, res, next) => {
       res.render("admin/edit-product", {
         active: "edit-product",
         product: prod,
-        errors: errors,
-        successes: successes,
         validationMessages: [],
         autoFill: {}
       });
@@ -149,6 +137,7 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   const image = req.file;
+  const deleteImage = req.body.deleteImage;
 
   const errors = validationResult(req);
 
@@ -162,42 +151,69 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
       autoFill: {
         title: title,
         price: price,
-        description: description
+        description: description,
+        imageUrl: "/" + image.destination + "/" + image.filename
       },
       productId: id
     });
   }
-  
-  if(image){
-    try {
-      await Product.findByIdAndUpdate(id, {
-        title: title,
-        price: price,
-        description: description,
-        imageUrl: '/' + image.destination + '/' + image.filename
-      });
+  try {
+    if (image) {
+      if (deleteImage) {
+        req.flash("error", "If you only want to delete the existing image and not update it, do not select any new image.");
+        return res.redirect("/admin/edit-product/" + id);
+      }
+      const prod = await Product.findById(id);
+      if (prod && prod.imageUrl) {
+        fs.unlink(prod.imageUrl, err => {
+          console.log("Cannot delete file", prod.imageUrl, err);
+        });
+        prod.imageUrl = '/' + image.destination + '/' + image.filename;
+        await prod.save();
+      }
       return res.redirect("/admin/products");
-    } catch (err) {
-      next(new Error(err));
-    }
-  }else{
-    try {
-      await Product.findByIdAndUpdate(id, {
-        title: title,
-        price: price,
-        description: description,
-        imageUrl: undefined
-      });
+
+    } else {
+      if (deleteImage) {
+        const prod = await Product.findById(id);
+
+        if (prod) {
+          if (prod.imageUrl) {
+            fs.unlink(prod.imageUrl, err => {
+              console.log("Cannot delete file", prod.imageUrl, err);
+            });
+          }
+          prod.imageUrl = undefined;
+          await prod.save();
+        }
+      } else {
+        await Product.findByIdAndUpdate(id, {
+          title: title,
+          price: price,
+          description: description,
+        });
+      }
+
       return res.redirect("/admin/products");
-    } catch (err) {
-      next(new Error(err));
+
     }
+  } catch (err) {
+    next(new Error(err));
   }
-  
 };
 export const postDeleteProduct: RequestHandler = async (req, res, next) => {
   const id = req.body.id;
   try {
+    const prod = await Product.findOne({
+      _id: id,
+      user: (req as any).session.admin_id
+    });
+    
+    if (prod && prod.imageUrl) {
+      fs.unlink(prod.imageUrl, err => {
+        console.log("Cannot delete file", prod.imageUrl, err);
+      });
+    }
     const result = await Product.deleteOne({
       _id: id,
       user: (req as any).session.admin._id
