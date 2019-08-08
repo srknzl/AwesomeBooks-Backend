@@ -1,20 +1,19 @@
 import { RequestHandler } from "express";
+import PDFDocument from "pdfkit";
+import fs from "fs";
+
 import Product, { IProduct } from "../models/product";
 import Order from "../models/order";
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
     if (!req.session) throw "No session";
-    const errors = req.flash('error');
-    const successes = req.flash('success');
 
     const prods = await Product.find();
     res.render("user/products", {
       pageTitle: "Products",
       prods: prods,
-      active: "products",
-      errors : errors,
-      successes: successes
+      active: "products"
     });
   } catch (err) {
     next(new Error(err));
@@ -50,7 +49,7 @@ export const getOrders: RequestHandler = async (req, res, next) => {
     orders = await Order.find()
       .populate("items.product")
       .exec();
-      
+
     res.render("user/orders", {
       pageTitle: "Orders",
       orders: orders,
@@ -61,14 +60,9 @@ export const getOrders: RequestHandler = async (req, res, next) => {
   }
 };
 export const getWelcome: RequestHandler = (req, res, next) => {
-  const errors = req.flash('error');
-  const successes = req.flash('success');
-
   res.render("user/welcome", {
     pageTitle: "Welcome",
-    active: "welcome",
-    errors: errors,
-    successes: successes
+    active: "welcome"
   });
 };
 export const getProductDetail: RequestHandler = async (req, res, next) => {
@@ -86,7 +80,7 @@ export const getProductDetail: RequestHandler = async (req, res, next) => {
         creator: prod.user
       });
     } else {
-      req.flash('error','Product not found!');
+      req.flash("error", "Product not found!");
       return res.redirect("/user/products");
     }
   } catch (err) {
@@ -114,12 +108,121 @@ export const getCart: RequestHandler = async (req, res, next) => {
         price: price
       });
     } else {
-      req.flash('error','User not found!');
+      req.flash("error", "User not found!");
       return res.redirect("/user/welcome");
     }
   } catch (err) {
     next(new Error(err));
   }
+};
+export const getInvoice: RequestHandler = async (req, res, next) => {
+  const orderId = req.params.orderId;
+  const pdfDoc = new PDFDocument();
+
+  const fileStream = fs.createWriteStream("data/invoices/" + orderId + ".pdf");
+
+  const order = await Order.findById(orderId)
+    .populate("user")
+    .populate("items.product")
+    .exec();
+
+  if (!order) {
+    req.flash("error", "Order not found. An invoice can't be generated!");
+    return res.redirect("/user/orders");
+  }
+
+  pdfDoc.pipe(fileStream);
+  pdfDoc.pipe(res);
+
+  pdfDoc.registerFont("regular", "assets/fonts/PalanquinDark-Regular.ttf");
+  pdfDoc.registerFont("bold", "assets/fonts/PalanquinDark-Bold.ttf");
+
+  pdfDoc
+  .fontSize(13)
+  .font("bold")
+  .text("Order Date: ", {
+    continued: true
+  })
+  .font("regular")
+  .text(order.orderDate.toLocaleString("en-US"));
+  
+  pdfDoc.moveDown(1);
+
+  pdfDoc
+    .fontSize(20)
+    .font("bold")
+    .text("Invoice", {
+      underline: true,
+      align: "center"
+    });
+  pdfDoc.fontSize(13);
+
+  pdfDoc.font("regular").text("Dear " + (order as any).user.name + ", here is your invoice.");
+  
+  pdfDoc
+      .font("bold")
+      .text("Order Id : ", {
+        continued: true
+      })
+      .font("regular")
+      .text(order._id.toString());
+
+  pdfDoc.moveDown(1);
+
+  let counter = 0;
+  let priceCounter = 0;
+  order.items.forEach(order => {
+    counter++;
+    priceCounter += (order as any).product.price;
+    pdfDoc
+      .image((order as any).product.imageUrl.substring(1), {
+        height: 100
+      });
+
+    pdfDoc
+      .font("bold")
+      .text("Product " + counter.toString() + " : ", {
+        continued: true
+      })
+      .font("regular")
+      .text((order as any).product.title + " x" + (order as any).quantity);
+
+    pdfDoc
+      .font("bold")
+      .text("Description : ", {
+        continued: true
+      })
+      .font("regular")
+      .text((order as any).product.description);
+
+    pdfDoc
+      .font("bold")
+      .text("Price : ", {
+        continued: true
+      })
+      .font("regular")
+      .text((order as any).product.price + "$");
+    pdfDoc.moveDown(1);
+  });
+ 
+
+  pdfDoc
+    .font("bold")
+    .text("Address: ", {
+      continued: true
+    })
+    .font("regular")
+    .text(order.address);
+  pdfDoc.moveDown(2);
+  pdfDoc
+    .font("bold")
+    .text("Total : ", {
+      continued: true
+    })
+    .font("regular")
+    .text(priceCounter.toString() + "$");
+
+  pdfDoc.end();
 };
 
 export const addToCart: RequestHandler = async (req, res, next) => {
