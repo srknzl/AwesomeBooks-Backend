@@ -164,10 +164,12 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
         return res.redirect("/admin/edit-product/" + id);
       }
       const prod = await Product.findById(id);
-      if (prod && prod.imageUrl) {
-        fs.unlink(prod.imageUrl, err => {
-          console.log("Cannot delete file", prod.imageUrl, err);
-        });
+      if (prod ) {
+        if(prod.imageUrl){
+          fs.unlink(prod.imageUrl, err => {
+            console.log("Cannot delete file", prod.imageUrl, err);
+          });
+        }
         prod.imageUrl = '/' + image.destination + '/' + image.filename;
         await prod.save();
       }
