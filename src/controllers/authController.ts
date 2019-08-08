@@ -8,54 +8,38 @@ import Admin from "../models/admin";
 import { transport } from "../app";
 
 export const getLogin: RequestHandler = (req, res, next) => {
-  const successes = req.flash("success");
-  const errors = req.flash("error");
 
   res.render("auth/login", {
     active: "login",
     pageTitle: "Login",
-    successes: successes,
-    errors: errors,
     validationMessages: [],
     autoFill: {}
   });
 };
 
 export const getSignup: RequestHandler = (req, res, next) => {
-  const errors = req.flash("error");
-  const successes = req.flash("success");
 
   res.render("auth/signup", {
     active: "signup",
     pageTitle: "Signup",
-    errors: errors,
-    successes: successes,
     validationMessages: [],
     autoFill: {}
   });
 };
 export const getAdminLogin: RequestHandler = (req, res, next) => {
-  const errors = req.flash("error");
-  const successes = req.flash("success");
 
   res.render("auth/admin-login", {
     active: "admin-login",
     pageTitle: "Admin login",
-    errors: errors,
-    successes: successes,
     validationMessages: [],
     autoFill: {}
   });
 };
 export const getReset: RequestHandler = (req, res, next) => {
-  const successes = req.flash("success");
-  const errors = req.flash("error");
 
   res.render("auth/reset", {
     active: "",
     pageTitle: "Reset your password",
-    successes: successes,
-    errors: errors,
     validationMessages: [],
     autoFill: {}
   });
@@ -78,8 +62,6 @@ export const getNewPassword: RequestHandler = async (req, res, next) => {
   res.render("auth/new-password", {
     active: "",
     pageTitle: "Update your password",
-    successes: [],
-    errors: [],
     validationMessages: [],
     autoFill: {},
     token: token
@@ -93,8 +75,6 @@ export const postLogin: RequestHandler = async (req, res, next) => {
     return res.status(422).render("auth/login", {
       active: "login",
       pageTitle: "Login",
-      successes: [],
-      errors: [],
       validationMessages: errors.array(),
       autoFill: {
         email: email,
@@ -116,14 +96,10 @@ export const postLogin: RequestHandler = async (req, res, next) => {
         return res.redirect("/user/welcome");
       } else {
         req.flash("error", "Email or password was wrong");
-        const errors = req.flash("error");
-        const successes = req.flash("success");
 
         return res.status(401).render("auth/login", {
           active: "login",
           pageTitle: "Login",
-          successes: successes,
-          errors: errors,
           validationMessages: [],
           autoFill: {
             email: email,
@@ -133,14 +109,10 @@ export const postLogin: RequestHandler = async (req, res, next) => {
       }
     } else {
       req.flash("error", "Email or password was wrong");
-      const errors = req.flash("error");
-      const successes = req.flash("success");
 
       return res.status(401).render("auth/login", {
         active: "login",
         pageTitle: "Login",
-        successes: successes,
-        errors: errors,
         validationMessages: [],
         autoFill: {
           email: email,
@@ -150,7 +122,6 @@ export const postLogin: RequestHandler = async (req, res, next) => {
     }
   } catch (error) {
     req.flash('error','Something went wrong.');
-    console.error(error);
     return res.redirect('/login');
   }
 };
@@ -166,8 +137,6 @@ export const postSignup: RequestHandler = async (req, res, next) => {
     return res.status(422).render("auth/signup", {
       active: "signup",
       pageTitle: "Signup",
-      errors: [],
-      successes: [],
       validationMessages: errors.array(),
       autoFill: {
         email: email,
@@ -184,14 +153,10 @@ export const postSignup: RequestHandler = async (req, res, next) => {
 
   if (foundUser) {
     req.flash("error", "Email is already in use!");
-    const errors = req.flash("error");
-    const successes = req.flash("success");
 
     return res.status(422).render("auth/signup", {
       active: "signup",
       pageTitle: "Signup",
-      errors: errors,
-      successes: successes,
       validationMessages: [],
       autoFill: {
         email: email,
@@ -229,8 +194,6 @@ export const postAdminLogin: RequestHandler = async (req, res, next) => {
     return res.status(422).render("auth/admin-login", {
       active: "admin-login",
       pageTitle: "Admin login",
-      errors: [],
-      successes: [],
       validationMessages: errors.array(),
       autoFill: {
         email: email,
@@ -252,14 +215,10 @@ export const postAdminLogin: RequestHandler = async (req, res, next) => {
         return res.redirect("/admin/welcome");
       } else {
         req.flash("error", "Email or password was wrong");
-        const errors = req.flash("error");
-        const successes = req.flash("success");
 
         return res.status(401).render("auth/admin-login", {
           active: "admin-login",
           pageTitle: "Admin login",
-          errors: errors,
-          successes: successes,
           validationMessages: [],
           autoFill: {
             email: email,
@@ -269,14 +228,10 @@ export const postAdminLogin: RequestHandler = async (req, res, next) => {
       }
     } else {
       req.flash("error", "Email or password was wrong");
-      const errors = req.flash("error");
-      const successes = req.flash("success");
 
       return res.status(401).render("auth/admin-login", {
         active: "admin-login",
         pageTitle: "Admin login",
-        errors: errors,
-        successes: successes,
         validationMessages: [],
         autoFill: {
           email: email,
@@ -307,8 +262,6 @@ export const postReset: RequestHandler = async (req, res, next) => {
     return res.status(422).render("auth/reset", {
       active: "",
       pageTitle: "Reset your password",
-      successes: [],
-      errors: [],
       validationMessages: errors,
       autoFill: {
         email: email
@@ -320,14 +273,10 @@ export const postReset: RequestHandler = async (req, res, next) => {
   });
   if (!user) {
     req.flash("error", "This e-mail is not associated with an account!");
-    const errors = req.flash("error");
-    const successes = req.flash("success");
 
     return res.status(422).render("auth/reset", {
       active: "",
       pageTitle: "Reset your password",
-      successes: successes,
-      errors: errors,
       validationMessages: [],
       autoFill: {
         email: email
@@ -378,8 +327,6 @@ export const postNewPassword: RequestHandler = async (req, res, next) => {
     return res.status(422).render("auth/new-password", {
       active: "",
       pageTitle: "Update your password",
-      successes: [],
-      errors: [],
       validationMessages: errors.array(),
       autoFill: {
         newPassword: newPassword,
