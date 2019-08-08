@@ -1,10 +1,6 @@
 @import '../layouts/variables.css';
 @import '../layouts/card.css';
 
-* {
-    box-sizing: border-box;
-}
-
 form button.btn{
     width: 100%;
 }
