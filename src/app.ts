@@ -18,6 +18,7 @@ import Admin from "./models/admin";
 import { MONGODB_URI } from "./credentials/mongo_uri";
 import { apiKey } from "./credentials/sendgrid";
 import { expressSessionSecret } from "./credentials/expressSession";
+import multer = require("multer");
 
 const app = express();
 
@@ -32,6 +33,32 @@ export const transport = nodemailer.createTransport(
       apiKey: apiKey
   })
 ); 
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "data/images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + "-" + file.originalname);
+  }
+});
+
+
+const imageUpload = multer({
+  storage: imageStorage,
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype === "image/jpg" ||
+      file.mimetype === "image/png" ||
+      file.mimetype === "image/jpeg"
+    ) {
+      cb(null, true);
+    } else {
+      cb(new Error("Png,jpg and jpeg are supported only."), false);
+    }
+  }
+});
+
+
 store.on("error", err => {
   console.error(err);
 });
@@ -41,6 +68,7 @@ app.set("view engine", "pug");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use('/data/images', express.static("data/images"));
 app.use(
   session({
     secret: expressSessionSecret,
@@ -49,6 +77,7 @@ app.use(
     store: store
   })
 );
+app.use(imageUpload.single('image'));
 app.use(csrfProtection);
 app.use((req,res,next)=>{
   res.locals.userLoggedIn = (req as any).session.user;

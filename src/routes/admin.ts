@@ -27,9 +27,6 @@ router.post(
         decimal_digits: "0,2"
       })
       .withMessage("Price can have 2 decimals steps"),
-    body("imageUrl")
-      .isURL()
-      .withMessage("Image URL is not an URL"),
     body("description")
       .isLength({
         min: 10,
@@ -68,9 +65,6 @@ router.post(
         decimal_digits: "0,2"
       })
       .withMessage("Price can have 2 decimals steps"),
-    body("imageUrl")
-      .isURL()
-      .withMessage("Image URL is not an URL"),
     body("description")
       .isLength({
         min: 10,
