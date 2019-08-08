@@ -79,9 +79,12 @@ app.use(
 );
 app.use(imageUpload.single('image'));
 app.use(csrfProtection);
+app.use(flash());
 app.use((req,res,next)=>{
   res.locals.userLoggedIn = (req as any).session.user;
   res.locals.csrfToken = req.csrfToken();
+  res.locals.errors = req.flash("error");
+  res.locals.successes = req.flash("success");
   next();
 })
 app.use(async (req, res, next) => {
@@ -100,7 +103,6 @@ app.use(async (req, res, next) => {
   }
   next();
 });
-app.use(flash());
 
 app.use("/admin", adminRoutes.router);
 app.use("/user", userRoutes.router);
