@@ -15,7 +15,7 @@ block content
       each order in orders
         - let overallPrice = 0;
         - counter++;
-        h2 Order No: #{counter} 
+        h2 #{counter}.Order - #[a(href= "/user/invoices/" + order._id) Invoice]
         .order__container
           each item in order.items
             .item__container
@@ -27,9 +27,9 @@ block content
                 input(type="hidden",id="productId",value= item.product._id)
               .info__container
                 p.quantity Quantity: #{item.quantity}
-        h3 Total price for this order: #{overallPrice}$
-        h3 Order Date: #{order.orderDate}
-        h3 Adress: #{order.address}
+        p #[b Total price for this order]: #{overallPrice}$
+        p #[b Order Date]: #{order.orderDate.toLocaleString("en-US")}
+        p #[b Address]: #{order.address}
   else
     h4.text_center No orders yet
 block scripts

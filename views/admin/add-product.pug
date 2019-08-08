@@ -7,14 +7,7 @@ block header
   include ../includes/admin-header.pug
 
 block content
-  h2 Add a product
-  .messagesContainer
-    each error in errors
-      p.errorMessage= error
-    each success in successes
-      p.successMessage= success
-    each valMsg in validationMessages
-      p.errorMessage= valMsg.msg  
+  h2 Add a product  
   form.product-form(action="/admin/add-product",method="POST",enctype="multipart/form-data")
     .form-control
       label(for="title") Title

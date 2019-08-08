@@ -14,6 +14,17 @@ body(class= enableSidebar ? 'sidebarEnabled' : '')
   .sidebar
     block sidebar
   main
+    .messagesContainer
+      if errors
+        each error in errors
+          p.errorMessage= error
+      if successes
+        each success in successes
+          p.successMessage= success
+      if validationMessages
+        each valMsg in validationMessages
+          p.errorMessage= valMsg.msg
+
     block content
     block scripts
     script(src="/js/main.js")

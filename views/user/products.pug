@@ -10,11 +10,6 @@ block header
     include ../includes/home-header.pug
     
 block content
-  .messagesContainer
-    each error in errors
-      p.errorMessage= error
-    each success in successes
-      p.successMessage= success
   h1.text_center All products
   .search_container
     form(action="/user/products",met)

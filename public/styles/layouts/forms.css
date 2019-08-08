@@ -1,9 +1,10 @@
-.form-control label,input,textarea
+.form-control label, .form-control input,.form-control textarea
 {
   display: block;
   width: 100%;
 }
-.form-control input,textarea {
+
+.form-control input,.form-control textarea {
   border: 1px solid rgb(1, 44, 78);
   font: inherit;
   border-radius: 8px;
