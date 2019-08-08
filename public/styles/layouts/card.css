@@ -1,7 +1,7 @@
 .card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   cursor: pointer;
-  background-color: darksalmon;
+  background-color: khaki;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -37,9 +37,7 @@
 }
 
 .card__image img {
-  width: 100%;
-  max-width: 20rem;
-  max-height: 30rem;
+  width: 20rem;
 }
 
 .card__actions {
