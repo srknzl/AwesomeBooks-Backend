@@ -38,6 +38,7 @@
     "@types/mysql2": "github:types/mysql2",
     "@types/node": "^12.6.8",
     "@types/nodemailer": "^6.2.1",
+    "@types/pdfkit": "^0.10.0",
     "@types/pug": "^2.0.4",
     "@types/sequelize": "^4.28.4",
     "@types/validator": "^10.11.2",
@@ -61,6 +62,7 @@
     "mysql2": "^1.6.5",
     "nodemailer": "^6.3.0",
     "nodemailer-sendgrid": "^1.0.3",
+    "pdfkit": "^0.10.0",
     "pug": "^2.0.4",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^5.10.2"
