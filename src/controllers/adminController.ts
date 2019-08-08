@@ -69,14 +69,26 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
       }
     });
   }
+
+  let product;
+
+  if(!image){
+    product = new Product({
+      title: title,
+      price: price,
+      description: description,
+      user: req.session.admin._id
+    });
+  }else{
+    product = new Product({
+      title: title,
+      price: price,
+      imageUrl: '/' + image.destination + '/' + image.filename,
+      description: description,
+      user: req.session.admin._id
+    });
+  }
   
-  const product = new Product({
-    title: title,
-    price: price,
-    imageUrl: '/' + image.destination + '/' + image.filename,
-    description: description,
-    user: req.session.admin._id
-  });
 
   try {
     await product.save();
@@ -155,17 +167,33 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
       productId: id
     });
   }
-  try {
-    await Product.findByIdAndUpdate(id, {
-      title: title,
-      price: price,
-      description: description,
-      imageUrl: image.destination
-    });
-    return res.redirect("/admin/products");
-  } catch (err) {
-    next(new Error(err));
+  
+  if(image){
+    try {
+      await Product.findByIdAndUpdate(id, {
+        title: title,
+        price: price,
+        description: description,
+        imageUrl: '/' + image.destination + '/' + image.filename
+      });
+      return res.redirect("/admin/products");
+    } catch (err) {
+      next(new Error(err));
+    }
+  }else{
+    try {
+      await Product.findByIdAndUpdate(id, {
+        title: title,
+        price: price,
+        description: description,
+        imageUrl: undefined
+      });
+      return res.redirect("/admin/products");
+    } catch (err) {
+      next(new Error(err));
+    }
   }
+  
 };
 export const postDeleteProduct: RequestHandler = async (req, res, next) => {
   const id = req.body.id;

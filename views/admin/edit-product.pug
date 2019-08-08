@@ -15,7 +15,7 @@ block content
       p.successMessage= success
     each valMsg in validationMessages
       p.errorMessage= valMsg.msg  
-  form.product-form(action="/admin/edit-product",method="POST")
+  form.product-form(action="/admin/edit-product",method="POST",enctype="multipart/form-data")
     if validationMessages.length > 0
       .form-control
         label(for="title") Title
@@ -23,9 +23,11 @@ block content
       .form-control
         label(for="price") Price
         input(type="number",name="price",step="0.01", value= autoFill.price,class= validationMessages.find(valMsg => valMsg.param === "price") ? 'invalid' : '')#price
-      .form-control  
-        label(for="imageurl") Image Url
-        input(type="text",name="imageUrl",value= autoFill.imageUrl,class= validationMessages.find(valMsg => valMsg.param === "imageUrl") ? 'invalid' : '')#imageUrl
+      .form-control
+        img(src= product.imageUrl, alt="Image", srcset="")
+        p #[i To change image load another one and update]
+        label(for="image") Image
+        input(type="file",name="image")#image
       .form-control  
         label(for="description") Description
         textarea(name="description",rows="5",class= validationMessages.find(valMsg => valMsg.param === "description") ? 'invalid' : '')= autoFill.description
@@ -37,9 +39,11 @@ block content
       .form-control
         label(for="price") Price
         input(type="number",name="price",step="0.01",value=product.price)#price
-      .form-control  
-        label(for="imageurl") Image Url
-        input(type="text",name="imageUrl",value=product.imageUrl)#imageUrl
+      .form-control
+        img(src= product.imageUrl, alt="Image", srcset="")  
+        p #[i To change image load another one and update]
+        label(for="image") Image
+        input(type="file",name="image")#image
       .form-control  
         label(for="description") Description
         textarea(name="description",rows="5")= product.description
