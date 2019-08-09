@@ -1,6 +1,16 @@
 if pages
   section.pagination
-    - let counter = 1;
+    if(currentPage === 1)
+      a.active(class="firstPage",href= "?page=" + 1) First
+    else
+      a(class="firstPage",href= "?page=" + 1) First
     each page in pages
-      a(href= "?page=" + counter) #{counter}
-      - counter++;
+      if(page === currentPage)
+        a.active(href= "?page=" + page) #{page}
+      else
+        a(href= "?page=" + page) #{page}
+
+    if(currentPage === lastPage)
+      a.active(class="lastPage",href= "?page=" + lastPage) Last
+    else 
+      a(class="lastPage",href= "?page=" + lastPage) Last

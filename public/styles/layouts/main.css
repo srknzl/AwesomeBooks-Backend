@@ -217,8 +217,16 @@ body {
     margin: 0 0.5rem;
 }
 .pagination a:active,
-.pagination a:hover
+.pagination a:hover,
+.pagination a.active
 {
     color: white;
     background-color: var(--firstColor);
+}
+.pagination a.firstPage {
+    margin-right: 2rem;
+}
+
+.pagination a.lastPage {
+    margin-left: 2rem;
 }
