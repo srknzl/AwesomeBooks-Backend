@@ -4,16 +4,18 @@ import fs from "fs";
 
 import Product, { IProduct } from "../models/product";
 import Order from "../models/order";
+const PRODUCTS_PER_PAGE = 6;
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
     if (!req.session) throw "No session";
-
-    const prods = await Product.find();
+    const page = req.query.page;
+    const prods = await Product.find().skip((page-1)*PRODUCTS_PER_PAGE).limit(PRODUCTS_PER_PAGE);
     res.render("user/products", {
       pageTitle: "Products",
       prods: prods,
-      active: "products"
+      active: "products",
+      pages: [...Array(5).keys()]
     });
   } catch (err) {
     next(new Error(err));
@@ -23,11 +25,14 @@ export const getShop: RequestHandler = async (req, res, next) => {
   try {
     if (!req.session) throw "No session";
 
-    const prods = await Product.find();
+    const page = req.query.page;
+    const prods = await Product.find().skip((page-1)*PRODUCTS_PER_PAGE).limit(PRODUCTS_PER_PAGE);
+    
     res.render("user/shop", {
       pageTitle: "Shop",
       prods: prods,
-      active: "shop"
+      active: "shop",
+      pages: [...Array(5).keys()]
     });
   } catch (err) {
     next(new Error(err));

@@ -36,6 +36,8 @@ block content
                 button(type="submit").btn Add to Cart
             else
               input(type="hidden", name="id",value=product._id,id="productId")
+    include ../includes/pagination.pug
+
   else
     p: b No products yet
 block scripts

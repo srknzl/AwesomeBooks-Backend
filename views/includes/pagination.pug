@@ -1,0 +1,6 @@
+if pages
+  section.pagination
+    - let counter = 1;
+    each page in pages
+      a(href= "?page=" + counter) #{counter}
+      - counter++;

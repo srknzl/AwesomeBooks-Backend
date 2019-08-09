@@ -26,7 +26,10 @@ block content
               input(type="hidden", name="_csrf",value= csrfToken)
               input(type="hidden", name="id",value= product._id,id="productId")
               button(type="submit").btn Delete Product
+    include ../includes/pagination.pug
+
   else
     p.text_center: b No products exist yet
 block scripts
   script(src="/js/admin/products.js")
+  

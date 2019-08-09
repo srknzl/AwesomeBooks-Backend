@@ -3,17 +3,20 @@ import Product, { IProduct } from "../models/product";
 import { validationResult } from "express-validator";
 import fs from "fs";
 // import { User } from "../../models/user";
+const PRODUCTS_PER_PAGE = 6;
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
+    const page = req.query.page;
     const products = await Product.find({
       user: (req as any).session.admin._id
-    });
+    }).limit(PRODUCTS_PER_PAGE).skip((page - 1) * PRODUCTS_PER_PAGE);
 
     res.render("admin/products", {
       pageTitle: "Products",
       active: "admin-products",
       prods: products,
+      pages: [...Array(5).keys()]
     });
   } catch (err) {
     next(new Error(err));
@@ -164,8 +167,8 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
         return res.redirect("/admin/edit-product/" + id);
       }
       const prod = await Product.findById(id);
-      if (prod ) {
-        if(prod.imageUrl){
+      if (prod) {
+        if (prod.imageUrl) {
           fs.unlink(prod.imageUrl, err => {
             console.log("Cannot delete file", prod.imageUrl, err);
           });
@@ -210,7 +213,7 @@ export const postDeleteProduct: RequestHandler = async (req, res, next) => {
       _id: id,
       user: (req as any).session.admin_id
     });
-    
+
     if (prod && prod.imageUrl) {
       fs.unlink(prod.imageUrl, err => {
         console.log("Cannot delete file", prod.imageUrl, err);
