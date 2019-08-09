@@ -4,7 +4,7 @@ import fs from "fs";
 
 import Product, { IProduct } from "../models/product";
 import Order from "../models/order";
-import takeFive from "../util/takeFive";
+import takeFive from "../util/pagination";
 
 const PRODUCTS_PER_PAGE = 6;
 
