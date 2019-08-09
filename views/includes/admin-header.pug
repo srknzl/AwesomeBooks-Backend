@@ -9,10 +9,10 @@ header.main-header
         a(href="/admin/products" class = active==='admin-products' ? 'active' : '' ) Browse Products 
       li.main-header__item
         a(href="/admin/add-product" class = active==='admin-add-product' ? 'active' : '' ) Add Product 
-      li.main-header__item
-        form(action='/logout',method='POST')
-          input(type="hidden", name="_csrf",value= csrfToken)
-          button(type="submit").hidden_btn Logout
+    li.main-header__item
+      form(action='/logout',method='POST')
+        input(type="hidden", name="_csrf",value= csrfToken)
+        button(type="submit").hidden_btn Logout
 
 nav.mobile-nav
   ul.mobile-nav__item-list
@@ -22,7 +22,7 @@ nav.mobile-nav
       a(href="/admin/products" class = active==='admin-products' ? 'active' : '' ) Browse Products 
     li.mobile-nav__item
       a(href="/admin/add-product" class = active==='admin-add-product' ? 'active' : '' ) Add Product
-    li.mobile-nav__item
-      form(action='/logout',method='POST')
-        input(type="hidden", name="_csrf",value= csrfToken)
-        button(type="submit").hidden_btn Logout
+  li.mobile-nav__item
+    form(action='/logout',method='POST')
+      input(type="hidden", name="_csrf",value= csrfToken)
+      button(type="submit").hidden_btn Logout

@@ -55,6 +55,7 @@ main {
 .main-header__nav {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 
 .main-header__item-list {
@@ -69,6 +70,7 @@ main {
 .main-header__item {
   margin: 0px 1rem;
   padding: 0px;
+  display: flex;
 }
 
 .main-header__item a {
@@ -115,6 +117,8 @@ main {
   margin: 1rem;
   padding: 0;
   border: 1px solid blue;
+  display: flex;
+  justify-content: center;
 }
 .mobile-nav__item a:hover,
 .mobile-nav__item a:active,
