@@ -124,6 +124,11 @@ body {
     padding: 0;
     border: 1px solid blue;
 }
+.mobile-nav__item a:hover,
+.mobile-nav__item a:active,
+.mobile-nav__item a.active {
+    color: var(--headerActiveLinkColor);
+}
 
 .mobile-nav__item p {
     font-size: 1.4rem;
@@ -139,13 +144,6 @@ body {
     text-align: center;
 }
 
-.mobile-nav__item a:active,
-.mobile-nav__item a:hover,
-.mobile-nav__item a.active {
-    background: var(--firstColor);
-    color: white;
-    border-radius: 3px;
-}
 
 #side-menu-toggle {
     border: 1px solid white;
@@ -199,4 +197,28 @@ body {
     .main {
         margin: 1rem;
     }
+}
+@media(max-width: 600px){
+    .mobile-nav__item a {
+        color: white;
+    }
+    .mobile-nav__item{
+        text-align: center;
+    }
+}
+.pagination{
+    margin-top: 2rem; 
+}
+.pagination a{
+    text-decoration: none;
+    color: var(--firstColor);
+    padding: 1rem;
+    border: 1px solid var(--firstColor);
+    margin: 0 0.5rem;
+}
+.pagination a:active,
+.pagination a:hover
+{
+    color: white;
+    background-color: var(--firstColor);
 }
