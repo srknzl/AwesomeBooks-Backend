@@ -40,11 +40,11 @@ block content
         label(for="price") Price
         input(type="number",name="price",step="0.01",value=product.price)#price
       .form-control
+        p Current image:
         img(src= product.imageUrl, alt="Image", srcset="")  
         p #[i To change image load another one and update]
         label(for="image") Image
-        input(type="file",name="image")#image
-
+        input(type="file",name="image",oninput="showImage()")#image
       label(for="deleteImage") Delete image
       if product.imageUrl
         input(type="checkbox", name="deleteImage", value="True")
@@ -58,3 +58,6 @@ block content
       input(type="hidden", name="id",value=product._id)
     input(type="hidden", name="_csrf",value= csrfToken)
     button.btn(type="submit") Update Product
+
+block scripts
+  script(src="/js/showImage.js")
