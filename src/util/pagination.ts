@@ -4,11 +4,11 @@ export const takeFive = (numberOfPages: number, page: number, pages: number[]) =
   }
   let offset = 1;
   while(page - offset > 0 || page + offset <= numberOfPages){
-    if (page + offset < numberOfPages && page + offset > 0) {
+    if (page + offset < numberOfPages && page + offset > 1) {
       pages.push(page + offset);
       if(pages.length === 5) break;
     }
-    if (page - offset < numberOfPages && page - offset > 0) {
+    if (page - offset < numberOfPages && page - offset > 1) {
       pages.push(page - offset);
       if(pages.length === 5) break;
     }
