@@ -1,16 +1,21 @@
 if pages
   section.pagination
-    if(currentPage === 1)
-      a.active(class="firstPage",href= "?page=" + 1) First
-    else
-      a(class="firstPage",href= "?page=" + 1) First
-    each page in pages
-      if(page === currentPage)
-        a.active(href= "?page=" + page) #{page}
+    .buttonsContainer
+      if(currentPage === 1)
+        a.active(class="firstPage",href= "?page=" + 1) <<1
       else
-        a(href= "?page=" + page) #{page}
+        a(class="firstPage",href= "?page=" + 1) <<1
+      each page in pages
+        if(page === currentPage)
+          a.active(href= "?page=" + page) #{page}
+        else
+          a(href= "?page=" + page) #{page}
 
-    if(currentPage === lastPage)
-      a.active(class="lastPage",href= "?page=" + lastPage) Last
-    else 
-      a(class="lastPage",href= "?page=" + lastPage) Last
+      if(currentPage === lastPage)
+        a.active(class="lastPage",href= "?page=" + lastPage) #{lastPage}>>
+      else 
+        a(class="lastPage",href= "?page=" + lastPage) #{lastPage}>>
+    form(action="", method="get")
+      label(for="page") #[b Jump to] 
+      input(type="text",name="page",id="page")
+      button.btn(type="submit") Go
