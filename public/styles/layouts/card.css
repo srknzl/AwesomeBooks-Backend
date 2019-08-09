@@ -77,4 +77,10 @@
       align-items: center;
       width: 90vw;
   }
+  .card{
+    width: 80%;
+  }
+  .card__image img {
+    width: 80%;
+  }
 }
