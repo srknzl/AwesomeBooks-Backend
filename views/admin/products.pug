@@ -22,14 +22,13 @@ block content
           .card__actions
             a(href="/admin/edit-product/" + product._id).btn Edit Product
             a(href="/admin/view-product/" + product._id).btn View product
-            form(action="/admin/delete-product", method="POST")
-              input(type="hidden", name="_csrf",value= csrfToken)
-              input(type="hidden", name="id",value= product._id,id="productId")
-              button(type="submit").btn Delete Product
-    include ../includes/pagination.pug
+            input(type="hidden", name="_csrf",value= csrfToken)
+            input(type="hidden", name="id",value= product._id,id="productId")
+            button(onclick="deleteProduct(this)").btn Delete Product
 
   else
     p.text_center: b No products exist yet
+  include ../includes/pagination.pug
 block scripts
   script(src="/js/admin/products.js")
   
