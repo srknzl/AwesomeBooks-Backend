@@ -80,7 +80,7 @@ router.post(
   adminController.postEditProduct
 );
 
-router.post("/delete-product", isAdminAuth, adminController.postDeleteProduct);
+router.delete("/product/delete/:prodId", isAdminAuth, adminController.deleteProduct);
 
 router.get("/products", isAdminAuth, adminController.getProducts);
 router.get("/welcome", isAdminAuth, adminController.getWelcome);

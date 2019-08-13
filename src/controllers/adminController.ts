@@ -17,7 +17,7 @@ export const getProducts: RequestHandler = async (req, res, next) => {
     }).limit(PRODUCTS_PER_PAGE).skip((page - 1) * PRODUCTS_PER_PAGE);
 
     const pages: number[] = []
-    takeFive(numberOfPages,page,pages);
+    takeFive(numberOfPages, page, pages);
     pages.sort();
 
 
@@ -217,8 +217,8 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-export const postDeleteProduct: RequestHandler = async (req, res, next) => {
-  const id = req.body.id;
+export const deleteProduct: RequestHandler = async (req, res, next) => {
+  const id = req.params.prodId;
   try {
     const prod = await Product.findOne({
       _id: id,
@@ -235,13 +235,17 @@ export const postDeleteProduct: RequestHandler = async (req, res, next) => {
       user: (req as any).session.admin._id
     });
     if (result.n) {
-      req.flash("success", "Product deleted.");
-      return res.redirect("/admin/products");
+      return res.status(200).json({
+        message: "Product deleted"
+      });
     } else {
-      req.flash("error", "Could not delete the product!");
-      return res.redirect("/admin/products");
+      return res.status(500).json({
+        message: "Product could not be deleted"
+      });
     }
   } catch (err) {
-    next(new Error(err));
+    return res.status(500).json({
+      message: "Product could not be deleted"
+    });
   }
 };
