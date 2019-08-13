@@ -96,7 +96,7 @@ export const postLogin: RequestHandler = async (req, res, next) => {
         return res.redirect("/user/welcome");
       } else {
         req.flash("error", "Email or password was wrong");
-
+        const errors = req.flash("error");
         return res.status(401).render("auth/login", {
           active: "login",
           pageTitle: "Login",
@@ -104,12 +104,13 @@ export const postLogin: RequestHandler = async (req, res, next) => {
           autoFill: {
             email: email,
             password: password
-          }
+          },
+          errors: errors
         });
       }
     } else {
       req.flash("error", "Email or password was wrong");
-
+      const errors = req.flash("error");
       return res.status(401).render("auth/login", {
         active: "login",
         pageTitle: "Login",
@@ -117,7 +118,8 @@ export const postLogin: RequestHandler = async (req, res, next) => {
         autoFill: {
           email: email,
           password: password
-        }
+        },
+        errors: errors
       });
     }
   } catch (error) {
