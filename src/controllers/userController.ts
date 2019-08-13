@@ -200,7 +200,7 @@ export const getInvoice: RequestHandler = async (req, res, next) => {
   let priceCounter = 0;
   order.items.forEach(order => {
     counter++;
-    priceCounter += (order as any).product.price;
+    priceCounter += (order as any).product.price * order.quantity;
     pdfDoc
       .image((order as any).product.imageUrl.substring(1), {
         height: 100
