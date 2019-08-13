@@ -85,7 +85,7 @@ main {
 }
 
 .mobile-nav {
-  width: 70vw;
+  width: 80vw;
   height: 100vh;
   position: fixed;
   left: 0;
@@ -97,9 +97,15 @@ main {
   transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
-
+.logout_form{
+  width: 100%
+}
+.logout_form button[type="submit"]{
+  width: 100%;
+}
 .mobile-nav.open {
   background-color: var(--navigationBackground);
   transform: translateX(0);

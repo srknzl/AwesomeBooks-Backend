@@ -10,7 +10,7 @@ header.main-header
       li.main-header__item
         a(href="/admin/add-product" class = active==='admin-add-product' ? 'active' : '' ) Add Product 
     li.main-header__item
-      form(action='/logout',method='POST')
+      form.logout_form(action='/logout',method='POST')
         input(type="hidden", name="_csrf",value= csrfToken)
         button(type="submit").hidden_btn Logout
 
@@ -23,6 +23,6 @@ nav.mobile-nav
     li.mobile-nav__item
       a(href="/admin/add-product" class = active==='admin-add-product' ? 'active' : '' ) Add Product
   li.mobile-nav__item
-    form(action='/logout',method='POST')
+    form.logout_form(action='/logout',method='POST')
       input(type="hidden", name="_csrf",value= csrfToken)
       button(type="submit").hidden_btn Logout

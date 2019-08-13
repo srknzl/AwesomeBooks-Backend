@@ -39,6 +39,9 @@
   color: var(--headerActiveLinkColor);
   background-color: transparent;
 }
+.hidden_btn:active {
+  border: none;
+}
 @media (max-width: 600px) {
   .hidden_btn {
     color: white;

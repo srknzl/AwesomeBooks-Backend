@@ -21,7 +21,7 @@ block content
             .item__container
               .product__container
                 p.title #{item.product.title} 
-                img(src= item.product.imageUrl)
+                img.product_img(src= item.product.imageUrl)
                 - overallPrice += item.product.price * item.quantity;   
                 p.price #{item.product.price}$ 
                 input(type="hidden",id="productId",value= item.product._id)
