@@ -1,4 +1,4 @@
-const items = document.querySelectorAll(".item__container");
+const items = document.querySelectorAll(".product_img");
 
 items.forEach((element)=>{
   const productIdInput = element.querySelector("#productId");
