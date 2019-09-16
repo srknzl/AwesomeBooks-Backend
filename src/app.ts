@@ -116,10 +116,15 @@ const errorHandler: ErrorRequestHandler = (err,req,res,next) => {
 
 app.use(errorHandler);
 
+let port : number | string | undefined = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+
 connect(
   MONGODB_URI,
   async err => {
     if (err) console.error(err);
-    app.listen(3000, "localhost");
+    app.listen(port);
   }
 );
