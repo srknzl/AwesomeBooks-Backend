@@ -2,11 +2,12 @@
   "name": "learnnode",
   "version": "1.0.0",
   "description": "Learning node.js ",
-  "main": "app.js",
+  "main": "build/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently -c \"blue,green\"  -n  tsc,nodemon \"tsc -w\" \"nodemon --delay 3\"",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "postinstall": "npm run build-ts"
   },
   "repository": {
     "type": "git",
