@@ -8,6 +8,7 @@ import csrf from "csurf";
 import nodemailer from "nodemailer";
 const  nodemailerSendgrid = require("nodemailer-sendgrid");
 import multer = require("multer");
+import fs from "fs";
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
@@ -51,7 +52,7 @@ export const transport = nodemailer.createTransport(
 ); 
 const imageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "data/images");
+    cb(null, "./data/images");
   },
   filename: (req, file, cb) => {
     cb(null, new Date().getTime() + "_" + file.originalname);
@@ -141,6 +142,10 @@ connect(
   MONGODB_URI,
   async err => {
     if (err) console.error(err);
+    if(!fs.existsSync("./data")){
+      fs.mkdirSync("./data/images",{recursive: true});
+      fs.mkdirSync("./data/invoices",{recursive: true});
+    }
     app.listen(port);
   }
 );
