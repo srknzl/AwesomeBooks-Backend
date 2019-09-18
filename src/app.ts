@@ -7,6 +7,7 @@ import connectMongoDb from "connect-mongodb-session";
 import csrf from "csurf";
 import nodemailer from "nodemailer";
 const  nodemailerSendgrid = require("nodemailer-sendgrid");
+import multer = require("multer");
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
@@ -15,10 +16,25 @@ import * as homeRoutes from "./routes/home";
 import User from "./models/user";
 import Admin from "./models/admin";
 
-import { MONGODB_URI } from "./credentials/mongo_uri";
-import { apiKey } from "./credentials/sendgrid";
-import { expressSessionSecret } from "./credentials/expressSession";
-import multer = require("multer");
+let MONGODB_URI;
+let apiKey;
+let expressSessionSecret;
+
+if (process.env.NODE_ENV === "production"){
+  MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@srknzl-m0-development-cluster-hgcsl.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
+}else {
+  MONGODB_URI = require("./credentials/mongo_uri").MONGODB_URI;
+}
+if (process.env.NODE_ENV === "production"){
+  apiKey = process.env.SENDGRID_API;
+}else {
+  apiKey = require("./credentials/sendgrid").apiKey;
+}
+if (process.env.NODE_ENV === "production"){
+  expressSessionSecret = process.env.EXPRESS_SESSION_SECRET;
+}else {
+  expressSessionSecret = require("./credentials/expressSession").expressSessionSecret;
+}
 
 const app = express();
 
@@ -38,7 +54,7 @@ const imageStorage = multer.diskStorage({
     cb(null, "data/images");
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
+    cb(null, new Date().getTime() + "_" + file.originalname);
   }
 });
 
