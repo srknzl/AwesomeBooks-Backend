@@ -8,6 +8,9 @@ import csrf from "csurf";
 import nodemailer from "nodemailer";
 const  nodemailerSendgrid = require("nodemailer-sendgrid");
 import multer = require("multer");
+import AWS from "aws-sdk";
+import uuid from "uuid";
+
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
@@ -37,6 +40,8 @@ if (process.env.NODE_ENV === "production"){
 }
 
 const app = express();
+
+AWS.config.update({region: 'eu-central-1'});
 
 const MongoDBStore = connectMongoDb(session);
 const store = new MongoDBStore({

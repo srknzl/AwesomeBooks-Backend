@@ -18,6 +18,11 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceFolder}/build/app.js"
+    },{
+      "type": "node",
+      "request": "launch",
+      "name": "AWS Test",
+      "program": "${workspaceFolder}/src/awsSdkTest.js"
     }
   ]
 }
