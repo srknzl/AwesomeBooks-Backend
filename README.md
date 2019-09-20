@@ -1,5 +1,6 @@
 Live at : [https://awesomebooks.herokuapp.com](https://awesomebooks.herokuapp.com)
 
+In this project amazon aws s3(simple storage service) is used to store images. Database server resides in mongodb atlas. Finally, code resides in heroku server.
 
 # LearnNode
 Learning Node.js on Udemy with Maximillian Schwarzmüller
