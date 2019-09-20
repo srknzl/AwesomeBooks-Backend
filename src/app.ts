@@ -6,11 +6,11 @@ import flash from "connect-flash";
 import connectMongoDb from "connect-mongodb-session";
 import csrf from "csurf";
 import nodemailer from "nodemailer";
-const  nodemailerSendgrid = require("nodemailer-sendgrid");
+const nodemailerSendgrid = require("nodemailer-sendgrid");
 import multer = require("multer");
-import AWS from "aws-sdk";
-import uuid from "uuid";
-
+import multerS3 from "multer-s3";
+import aws from "aws-sdk";
+const s3Proxy = require("s3-proxy");
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
@@ -19,29 +19,45 @@ import * as homeRoutes from "./routes/home";
 import User from "./models/user";
 import Admin from "./models/admin";
 
+
+const app = express();
+
+
 let MONGODB_URI;
 let apiKey;
 let expressSessionSecret;
 
-if (process.env.NODE_ENV === "production"){
+if (process.env.NODE_ENV === "production") {
   MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@srknzl-m0-development-cluster-hgcsl.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
-}else {
+} else {
   MONGODB_URI = require("./credentials/mongo_uri").MONGODB_URI;
 }
-if (process.env.NODE_ENV === "production"){
+if (process.env.NODE_ENV === "production") {
   apiKey = process.env.SENDGRID_API;
-}else {
+} else {
   apiKey = require("./credentials/sendgrid").apiKey;
 }
-if (process.env.NODE_ENV === "production"){
+if (process.env.NODE_ENV === "production") {
   expressSessionSecret = process.env.EXPRESS_SESSION_SECRET;
-}else {
+} else {
   expressSessionSecret = require("./credentials/expressSession").expressSessionSecret;
 }
 
-const app = express();
+aws.config.getCredentials(function (err) {
+  if (err) console.log(err.stack);
+});
 
-AWS.config.update({region: 'eu-central-1'});
+export let s3 : undefined | aws.S3 = undefined;
+
+if(aws && aws.config && aws.config.credentials){
+  s3 = new aws.S3({
+    accessKeyId: aws.config.credentials.accessKeyId,
+    secretAccessKey: aws.config.credentials.secretAccessKey,
+    region: 'eu-central-1'
+  })
+}else {
+  throw new Error("Cannot get credentials");
+}
 
 const MongoDBStore = connectMongoDb(session);
 const store = new MongoDBStore({
@@ -51,21 +67,33 @@ const store = new MongoDBStore({
 const csrfProtection = csrf();
 export const transport = nodemailer.createTransport(
   nodemailerSendgrid({
-      apiKey: apiKey
+    apiKey: apiKey
   })
-); 
-const imageStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "data/images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().getTime() + "_" + file.originalname);
-  }
-});
+);
 
+const s3Storage = multerS3(
+  {
+    s3: s3,
+    bucket: "awesomebooks",
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      cb(null, "media/images/" + new Date().getTime() + "_" + file.originalname)
+    }
+  }
+);
+
+app.get('/media/*', s3Proxy({
+  bucket: 'awesomebooks',
+  accessKeyId: aws.config.credentials.accessKeyId,
+  secretAccessKey: aws.config.credentials.secretAccessKey,
+  overrideCacheControl: 'max-age=100000',
+  defaultKey: false
+}));
 
 const imageUpload = multer({
-  storage: imageStorage,
+  storage: s3Storage,
   fileFilter: (req, file, cb) => {
     if (
       file.mimetype === "image/jpg" ||
@@ -101,7 +129,7 @@ app.use(
 app.use(imageUpload.single('image'));
 app.use(csrfProtection);
 app.use(flash());
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
   res.locals.userLoggedIn = (req as any).session.user;
   res.locals.csrfToken = req.csrfToken();
   res.locals.errors = req.flash("error");
@@ -130,14 +158,14 @@ app.use("/user", userRoutes.router);
 app.use(authRoutes.router);
 app.use(homeRoutes.router);
 
-const errorHandler: ErrorRequestHandler = (err,req,res,next) => {
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.log(err);
   res.redirect('/500');
 };
 
 app.use(errorHandler);
 
-let port : number | string | undefined = process.env.PORT;
+let port: number | string | undefined = process.env.PORT;
 if (port == null || port == "") {
   port = 3000;
 }
