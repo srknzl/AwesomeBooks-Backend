@@ -1,10 +1,21 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
+import aws from "aws-sdk";
 
 import Product, { IProduct } from "../models/product";
 import takeFive from "../util/pagination";
 
 const PRODUCTS_PER_PAGE = 6;
+
+let s3 : undefined | aws.S3 = undefined;
+if(aws && aws.config && aws.config.credentials){
+  s3 = new aws.S3({
+    accessKeyId: aws.config.credentials.accessKeyId,
+    secretAccessKey: aws.config.credentials.secretAccessKey,
+    region: 'eu-central-1'
+  })
+}
+
 
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
@@ -62,7 +73,6 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    const s3 = require("../app");
     if(s3){
       try {
         //@ts-ignore
@@ -188,7 +198,6 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
       }
       const prod = await Product.findById(id);
       if (prod && prod.imageUrl) {
-        const s3 = require("../app");
         if (s3) {
           try {
             //@ts-ignore
@@ -208,7 +217,6 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
         const prod = await Product.findById(id);
 
         if (prod) {
-          const s3 = require("../app");
           if (prod.imageUrl && s3) {
             try {
               //@ts-ignore
@@ -242,15 +250,15 @@ export const deleteProduct: RequestHandler = async (req, res, next) => {
       _id: id,
       user: (req as any).session.admin._id
     });
-  
-    const s3 = require("../app");
-    //@ts-ignore
 
+    if(prod)
+      console.log(prod,prod.imageUrl,s3);
+  
+    //@ts-ignore
     if (prod && prod.imageUrl && s3) {
       try {
-        console.log("deleting");
         //@ts-ignore
-        s3.deleteObject( {  Bucket: 'awesomebooks', Key: prod.imageUrl.substring(1) });
+        await s3.deleteObject( {  Bucket: 'awesomebooks', Key: prod.imageUrl.substring(1) }).promise();
       } catch (error) {
         next(error);
       }
@@ -273,7 +281,7 @@ export const deleteProduct: RequestHandler = async (req, res, next) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({
-      err: JSON.stringify(err),
+      err: err,
       message: "Product could not be deleted due to a server error"
     });
   }
