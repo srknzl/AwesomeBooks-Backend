@@ -17,7 +17,8 @@ block content
         label(for="price") Price
         input(type="number",name="price",step="0.01", value= autoFill.price,class= validationMessages.find(valMsg => valMsg.param === "price") ? 'invalid' : '')#price
       .form-control
-        img(src= product.imageUrl, alt="Image", srcset="")
+        p Current image:
+        img(src= product.imageUrl, alt="Image", srcset="",style="max-width: 300px; max-height: 300px;")
         p #[i To change image load another one and update]
         label(for="image") Image
         input(type="file",name="image")#image
@@ -41,7 +42,7 @@ block content
         input(type="number",name="price",step="0.01",value=product.price)#price
       .form-control
         p Current image:
-        img(src= product.imageUrl, alt="Image", srcset="")  
+        img(src= product.imageUrl, alt="Image", srcset="",style="max-width: 300px; max-height: 300px;")  
         p #[i To change image load another one and update]
         label(for="image") Image
         input(type="file",name="image",oninput="showImage()")#image
