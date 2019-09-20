@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
-import fs from "fs";
 
 import Product, { IProduct } from "../models/product";
 import takeFive from "../util/pagination";
@@ -63,6 +62,15 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
+    const s3 = require("../app");
+    if(s3){
+      try {
+        //@ts-ignore
+        await s3.deleteObject( {  Bucket: 'awesomebooks', Key: req.file.key });
+      } catch (error) {
+        next(error);
+      }
+    }
     return res.status(422).render("admin/add-product", {
       pageTitle: "Add Product",
       active: "admin-add-product",
@@ -78,7 +86,7 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   }
 
   let product;
-
+  
   if (!image) {
     product = new Product({
       title: title,
@@ -90,7 +98,8 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
     product = new Product({
       title: title,
       price: price,
-      imageUrl: '/' + image.destination + '/' + image.filename,
+      //@ts-ignore
+      imageUrl: "/" + req.file.key,
       description: description,
       user: req.session.admin._id
     });
@@ -178,13 +187,18 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
         return res.redirect("/admin/edit-product/" + id);
       }
       const prod = await Product.findById(id);
-      if (prod) {
-        if (prod.imageUrl) {
-          fs.unlink(prod.imageUrl, err => {
-            console.log("Cannot delete file", prod.imageUrl, err);
-          });
+      if (prod && prod.imageUrl) {
+        const s3 = require("../app");
+        if (s3) {
+          try {
+            //@ts-ignore
+            await s3.deleteObject( {  Bucket: 'awesomebooks', Key: req.file.key });
+          } catch (error) {
+            next(error);
+          }
         }
-        prod.imageUrl = '/' + image.destination + '/' + image.filename;
+        //@ts-ignore
+        prod.imageUrl = '/' + req.file.key;
         await prod.save();
       }
       return res.redirect("/admin/products");
@@ -194,10 +208,14 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
         const prod = await Product.findById(id);
 
         if (prod) {
-          if (prod.imageUrl) {
-            fs.unlink(prod.imageUrl, err => {
-              console.log("Cannot delete file", prod.imageUrl, err);
-            });
+          const s3 = require("../app");
+          if (prod.imageUrl && s3) {
+            try {
+              //@ts-ignore
+              await s3.deleteObject( {  Bucket: 'awesomebooks', Key: prod.imageUrl.substring(1) });
+            } catch (error) {
+              next(error);
+            }
           }
           prod.imageUrl = undefined;
           await prod.save();
@@ -222,14 +240,22 @@ export const deleteProduct: RequestHandler = async (req, res, next) => {
   try {
     const prod = await Product.findOne({
       _id: id,
-      user: (req as any).session.admin_id
+      user: (req as any).session.admin._id
     });
+  
+    const s3 = require("../app");
+    //@ts-ignore
 
-    if (prod && prod.imageUrl) {
-      fs.unlink(prod.imageUrl, err => {
-        console.log("Cannot delete file", prod.imageUrl, err);
-      });
+    if (prod && prod.imageUrl && s3) {
+      try {
+        console.log("deleting");
+        //@ts-ignore
+        s3.deleteObject( {  Bucket: 'awesomebooks', Key: prod.imageUrl.substring(1) });
+      } catch (error) {
+        next(error);
+      }
     }
+    
     const result = await Product.deleteOne({
       _id: id,
       user: (req as any).session.admin._id
@@ -239,13 +265,16 @@ export const deleteProduct: RequestHandler = async (req, res, next) => {
         message: "Product deleted"
       });
     } else {
-      return res.status(500).json({
-        message: "Product could not be deleted"
+      return res.status(404).json({
+        err: "No such product found to be deleted",
+        message: "Product not found"
       });
     }
   } catch (err) {
+    console.error(err);
     return res.status(500).json({
-      message: "Product could not be deleted"
+      err: JSON.stringify(err),
+      message: "Product could not be deleted due to a server error"
     });
   }
 };
