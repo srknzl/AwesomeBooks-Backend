@@ -25,10 +25,10 @@ const deleteProduct = btn => {
       }
       return res.json();
     })
-    .then(data => {
+    .then(function(data){
       console.log(data);
     })
-    .catch(err => {
+    .catch(function(err) {
       console.log(err);
     });
 };
