@@ -2,10 +2,17 @@ import { RequestHandler } from "express";
 import { hash, compare } from "bcrypt";
 import { validationResult } from "express-validator";
 import crypto from "crypto";
+import sendgridMail from "@sendgrid/mail";
 
 import User from "../models/user";
 import Admin from "../models/admin";
-import { transport } from "../app";
+
+
+if (process.env.NODE_ENV === "production" && process.env.SENDGRID_API) {
+  sendgridMail.setApiKey(process.env.SENDGRID_API);
+} else {
+  sendgridMail.setApiKey(require("../credentials/sendgrid").apiKey);
+}
 
 export const getLogin: RequestHandler = (req, res, next) => {
 
@@ -70,12 +77,16 @@ export const getNewPassword: RequestHandler = async (req, res, next) => {
 export const postLogin: RequestHandler = async (req, res, next) => {
   const password = req.body.password;
   const email = req.body.email;
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
+  const valErrors = validationResult(req);
+  if (!valErrors.isEmpty()) {
+    const errors = req.flash("error");
+    const successes = req.flash("success");
     return res.status(422).render("auth/login", {
       active: "login",
       pageTitle: "Login",
-      validationMessages: errors.array(),
+      validationMessages: valErrors.array(),
+      errors: errors,
+      successes: successes,
       autoFill: {
         email: email,
         password: password
@@ -123,7 +134,7 @@ export const postLogin: RequestHandler = async (req, res, next) => {
       });
     }
   } catch (error) {
-    req.flash('error','Something went wrong.');
+    req.flash('error', 'Something went wrong.');
     return res.redirect('/login');
   }
 };
@@ -133,13 +144,17 @@ export const postSignup: RequestHandler = async (req, res, next) => {
   const name = req.body.name;
   const confirmPassword = req.body.confirmPassword;
 
-  const errors = validationResult(req);
+  const valErrors = validationResult(req);
 
-  if (!errors.isEmpty()) {
+  if (!valErrors.isEmpty()) {
+    const errors = req.flash("error");
+    const successes = req.flash("success");
     return res.status(422).render("auth/signup", {
       active: "signup",
       pageTitle: "Signup",
-      validationMessages: errors.array(),
+      validationMessages: valErrors.array(),
+      errors: errors,
+      successes: successes,
       autoFill: {
         email: email,
         password: password,
@@ -190,13 +205,17 @@ export const postAdminLogin: RequestHandler = async (req, res, next) => {
   const password = req.body.password;
   const email = req.body.email;
 
-  const errors = validationResult(req);
+  const valErrors = validationResult(req);
 
-  if (!errors.isEmpty()) {
+  if (!valErrors.isEmpty()) {
+    const errors = req.flash("error");
+    const successes = req.flash("success");
     return res.status(422).render("auth/admin-login", {
       active: "admin-login",
       pageTitle: "Admin login",
-      validationMessages: errors.array(),
+      validationMessages: valErrors.array(),
+      errors: errors,
+      successes: successes,
       autoFill: {
         email: email,
         password: password
@@ -242,7 +261,7 @@ export const postAdminLogin: RequestHandler = async (req, res, next) => {
       });
     }
   } catch (error) {
-    req.flash('error','Something went wrong');
+    req.flash('error', 'Something went wrong');
     console.error(error);
     return res.redirect('/admin-login');
   }
@@ -258,13 +277,17 @@ export const postLogout: RequestHandler = (req, res, next) => {
 
 export const postReset: RequestHandler = async (req, res, next) => {
   const email = req.body.email;
-  const errors = validationResult(req);
+  const valErrors = validationResult(req);
 
-  if (!errors.isEmpty()) {
+  if (!valErrors.isEmpty()) {
+    const errors = req.flash("error");
+    const successes = req.flash("success");
     return res.status(422).render("auth/reset", {
       active: "",
       pageTitle: "Reset your password",
-      validationMessages: errors,
+      validationMessages: valErrors,
+      errors: errors,
+      successes: successes,
       autoFill: {
         email: email
       }
@@ -275,11 +298,14 @@ export const postReset: RequestHandler = async (req, res, next) => {
   });
   if (!user) {
     req.flash("error", "This e-mail is not associated with an account!");
-
+    const errors = req.flash("error");
+    const successes = req.flash("success");
     return res.status(422).render("auth/reset", {
       active: "",
       pageTitle: "Reset your password",
       validationMessages: [],
+      errors: errors,
+      successes: successes,
       autoFill: {
         email: email
       }
@@ -295,20 +321,21 @@ export const postReset: RequestHandler = async (req, res, next) => {
   await user.save();
 
   try {
-    const info = await transport.sendMail({
-      from: "reset@awesomebookshop.com",
+    const msg = {
       to: email,
+      from: 'reset@awesomebookshop.com',
       subject: "Password Reset",
+      text: 'and easy to do anywhere, even with Node.js',
       html: `
-        <h3>Password reset link</h3>
-        <hr>
-        <p> You requested a password reset, and here is your <a href="http://localhost:3000/newPassword/${hex}">link</a>.  </p>
-        <p> Please note that this url can be used once and has 1 hour to expire.</p>
-        <p> <b>Please do not share this link with anyone</b>, including AwesomeShop representatives.</p>
-        <p> Thanks for securing your account.</p>
-      `
-    });
-    console.log(info);
+      <h3>Password reset link</h3>
+      <hr>
+      <p> You requested a password reset, and here is your <a href="http://localhost:3000/newPassword/${hex}">link</a>.  </p>
+      <p> Please note that this url can be used once and has 1 hour to expire.</p>
+      <p> <b>Please do not share this link with anyone</b>, including AwesomeShop representatives.</p>
+      <p> Thanks for securing your account.</p>
+    `
+    };
+    sendgridMail.send(msg);
   } catch (error) {
     req.flash("error", "Could not send the e-mail, please contact site owner.");
     return res.redirect("/");
@@ -323,13 +350,17 @@ export const postNewPassword: RequestHandler = async (req, res, next) => {
   const newPassword = req.body.newPassword;
   const confirmNewPassword = req.body.confirmNewPassword;
 
-  const errors = validationResult(req);
+  const valErrors = validationResult(req);
 
-  if (!errors.isEmpty()) {
+  if (!valErrors.isEmpty()) {
+    const errors = req.flash("error");
+    const successes = req.flash("success");
     return res.status(422).render("auth/new-password", {
       active: "",
       pageTitle: "Update your password",
-      validationMessages: errors.array(),
+      validationMessages: valErrors.array(),
+      errors: errors,
+      successes: successes,
       autoFill: {
         newPassword: newPassword,
         confirmNewPassword: confirmNewPassword
@@ -353,7 +384,7 @@ export const postNewPassword: RequestHandler = async (req, res, next) => {
       return res.redirect("/");
     } else {
       const hashPass = await hash(newPassword, 12);
-      
+
       await User.updateOne(
         {
           resetToken: token,
