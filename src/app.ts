@@ -5,12 +5,13 @@ import session from "express-session";
 import flash from "connect-flash";
 import connectMongoDb from "connect-mongodb-session";
 import csrf from "csurf";
-import nodemailer from "nodemailer";
-const nodemailerSendgrid = require("nodemailer-sendgrid");
 import multer = require("multer");
 import multerS3 from "multer-s3";
 import aws from "aws-sdk";
 const s3Proxy = require("s3-proxy");
+import helmet from "helmet";
+import compression from "compression";
+import morgan from "morgan";
 
 import * as adminRoutes from "./routes/admin";
 import * as userRoutes from "./routes/user";
@@ -24,7 +25,6 @@ const app = express();
 
 
 let MONGODB_URI;
-let apiKey;
 let expressSessionSecret;
 
 if (process.env.NODE_ENV === "production") {
@@ -32,11 +32,7 @@ if (process.env.NODE_ENV === "production") {
 } else {
   MONGODB_URI = require("./credentials/mongo_uri").MONGODB_URI;
 }
-if (process.env.NODE_ENV === "production") {
-  apiKey = process.env.SENDGRID_API;
-} else {
-  apiKey = require("./credentials/sendgrid").apiKey;
-}
+
 if (process.env.NODE_ENV === "production") {
   expressSessionSecret = process.env.EXPRESS_SESSION_SECRET;
 } else {
@@ -65,11 +61,6 @@ const store = new MongoDBStore({
   collection: "sessions"
 });
 const csrfProtection = csrf();
-export const transport = nodemailer.createTransport(
-  nodemailerSendgrid({
-    apiKey: apiKey
-  })
-);
 
 const s3Storage = multerS3(
   {
@@ -117,7 +108,11 @@ app.set("view engine", "pug");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use('/data/images', express.static("data/images"));
+
+app.use(helmet());
+app.use(compression());
+app.use(morgan("combined"));
+
 app.use(
   session({
     secret: expressSessionSecret,
