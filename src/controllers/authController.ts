@@ -333,7 +333,7 @@ export const postReset: RequestHandler = async (req, res, next) => {
       html: `
       <h3>Password reset link</h3>
       <hr>
-      <p> You requested a password reset, and here is your <a href="http://localhost:3000/newPassword/${hex}">link</a>.  </p>
+      <p> You requested a password reset, and here is your <a href="http://awesomebooks.herokuapp.com/newPassword/${hex}">link</a>.  </p>
       <p> Please note that this url can be used once and has 1 hour to expire.</p>
       <p> <b>Please do not share this link with anyone</b>, including AwesomeShop representatives.</p>
       <p> Thanks for securing your account.</p>
