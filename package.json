@@ -5,9 +5,9 @@
   "main": "build/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node build/app.js",
+    "start": "sh ./build/credentials/aws.sh && concurrently -c \"blue,green\"  -n  tsc,nodemon \"tsc -w\" \"nodemon --delay 3\"",
+    "start:simple": "node build/app.js",
     "build-ts": "tsc",
-    "dev": "concurrently -c \"blue,green\"  -n  tsc,nodemon \"tsc -w\" \"nodemon --delay 3\"",
     "postinstall": "npm run build-ts"
   },
   "repository": {
