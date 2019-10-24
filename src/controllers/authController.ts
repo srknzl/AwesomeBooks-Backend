@@ -149,6 +149,7 @@ export const postSignup: RequestHandler = async (req, res, next) => {
   if (!valErrors.isEmpty()) {
     const errors = req.flash("error");
     const successes = req.flash("success");
+    
     return res.status(422).render("auth/signup", {
       active: "signup",
       pageTitle: "Signup",
@@ -170,7 +171,8 @@ export const postSignup: RequestHandler = async (req, res, next) => {
 
   if (foundUser) {
     req.flash("error", "Email is already in use!");
-
+    const errors = req.flash("error");
+    const successes = req.flash("success");
     return res.status(422).render("auth/signup", {
       active: "signup",
       pageTitle: "Signup",
@@ -180,7 +182,9 @@ export const postSignup: RequestHandler = async (req, res, next) => {
         password: password,
         name: name,
         confirmPassword: confirmPassword
-      }
+      },
+      errors: errors,
+      successes: successes
     });
   }
 
