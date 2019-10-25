@@ -13,12 +13,12 @@ export const getProducts: RequestHandler = async (req, res, next) => {
     if (!req.session) throw "No session";
     const page = +req.query.page || 1;
     const count = await Product.find().countDocuments();
-    const numberOfPages = Math.ceil(1.0 * count/PRODUCTS_PER_PAGE);
-    const prods = await Product.find().skip((page-1)*PRODUCTS_PER_PAGE).limit(PRODUCTS_PER_PAGE);
-    
-    
-    const pages : number[] = []
-    takeFive(numberOfPages,page,pages);
+    const numberOfPages = Math.ceil(1.0 * count / PRODUCTS_PER_PAGE);
+    const prods = await Product.find().skip((page - 1) * PRODUCTS_PER_PAGE).limit(PRODUCTS_PER_PAGE);
+
+
+    const pages: number[] = []
+    takeFive(numberOfPages, page, pages);
     pages.sort();
 
 
@@ -40,12 +40,12 @@ export const getShop: RequestHandler = async (req, res, next) => {
 
     const page = +req.query.page || 1;
     const count = await Product.find().countDocuments();
-    const numberOfPages = Math.ceil(1.0 * count/PRODUCTS_PER_PAGE);
-    const prods = await Product.find().skip((page-1)*PRODUCTS_PER_PAGE).limit(PRODUCTS_PER_PAGE);
+    const numberOfPages = Math.ceil(1.0 * count / PRODUCTS_PER_PAGE);
+    const prods = await Product.find().skip((page - 1) * PRODUCTS_PER_PAGE).limit(PRODUCTS_PER_PAGE);
 
-    const pages : number[] = []
-    
-    takeFive(numberOfPages,page,pages);
+    const pages: number[] = []
+
+    takeFive(numberOfPages, page, pages);
     pages.sort();
 
     res.render("user/shop", {
@@ -146,7 +146,14 @@ export const getInvoice: RequestHandler = async (req, res, next) => {
   const orderId = req.params.orderId;
   const pdfDoc = new PDFDocument();
 
+  if (!fs.existsSync("data")) {
+    fs.mkdirSync("data");
+  }
+  if (!fs.existsSync("data/invoices")) {
+    fs.mkdirSync("data/invoices");
+  }
   const fileStream = fs.createWriteStream("data/invoices/" + orderId + ".pdf");
+
 
   const order = await Order.findById(orderId)
     .populate("user")
@@ -159,20 +166,23 @@ export const getInvoice: RequestHandler = async (req, res, next) => {
   }
 
   pdfDoc.pipe(fileStream);
+
+
+  res.setHeader("Content-Type", "application/pdf")
   pdfDoc.pipe(res);
 
   pdfDoc.registerFont("regular", "assets/fonts/PalanquinDark-Regular.ttf");
   pdfDoc.registerFont("bold", "assets/fonts/PalanquinDark-Bold.ttf");
 
   pdfDoc
-  .fontSize(13)
-  .font("bold")
-  .text("Order Date: ", {
-    continued: true
-  })
-  .font("regular")
-  .text(order.orderDate.toLocaleString("en-US"));
-  
+    .fontSize(13)
+    .font("bold")
+    .text("Order Date: ", {
+      continued: true
+    })
+    .font("regular")
+    .text(order.orderDate.toLocaleString("en-US"));
+
   pdfDoc.moveDown(1);
 
   pdfDoc
@@ -185,26 +195,22 @@ export const getInvoice: RequestHandler = async (req, res, next) => {
   pdfDoc.fontSize(13);
 
   pdfDoc.font("regular").text("Dear " + (order as any).user.name + ", here is your invoice.");
-  
+
   pdfDoc
-      .font("bold")
-      .text("Order Id : ", {
-        continued: true
-      })
-      .font("regular")
-      .text(order._id.toString());
+    .font("bold")
+    .text("Order Id : ", {
+      continued: true
+    })
+    .font("regular")
+    .text(order._id.toString());
 
   pdfDoc.moveDown(1);
 
   let counter = 0;
   let priceCounter = 0;
-  order.items.forEach(order => {
+  order.items.forEach(async order => {
     counter++;
     priceCounter += (order as any).product.price * order.quantity;
-    pdfDoc
-      .image((order as any).product.imageUrl.substring(1), {
-        height: 100
-      });
 
     pdfDoc
       .font("bold")
