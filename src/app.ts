@@ -111,7 +111,9 @@ app.use(express.static("public"));
 
 app.use(helmet());
 app.use(compression());
-app.use(morgan("combined"));
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan("combined"));
+}
 
 app.use(
   session({
