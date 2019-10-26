@@ -54,6 +54,7 @@
     "@types/validator": "^10.11.2",
     "concurrently": "^4.1.1",
     "nodemon": "^1.19.1",
+    "style-loader": "^1.0.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
   },
@@ -83,8 +84,7 @@
     "pug": "^2.0.4",
     "reflect-metadata": "^0.1.13",
     "s3-proxy": "^1.2.1",
-    "sequelize": "^5.10.2",
-    "vue": "^2.6.10"
+    "sequelize": "^5.10.2"
   },
   "nodemonConfig": {
     "watch": [
