@@ -1,3 +1,18 @@
+Objective: To learn backend development with node.js
+
+Steps Taken: 
+
+1- Started with mysql.
+2- Switched to sequelize
+3- Switched to mongodb nosql and stayed on nosql.
+4- I implemented common backend logic like authentication, authorization, validation..
+5- Then I deployed it to heroku, using aws for image storage.
+6- Then I decided to convert to REST api.
+7- I selected to use VueJs.
+
+Currently I am trying to convert whole project to REST+Vue application.
+
+
 Live at : [https://awesomebooks.herokuapp.com](https://awesomebooks.herokuapp.com)
 
 In this project amazon aws s3(simple storage service) is used to store images. Database server resides in mongodb atlas. Finally, code resides in heroku server.
