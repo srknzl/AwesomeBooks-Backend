@@ -1,20 +1,13 @@
 <template>
   <div
     id="app"
-    :class="[{collapsed : collapsed}]"
+    :class="{collapsed : collapsed}"
   >
-    <p>Switch theme</p>
-    <SwitchButton v-model="switch1"></SwitchButton>
-    <!-- <select class="theme-selector" v-model="selectedTheme">
-      <option
-        v-for="(theme, index) in themes"
-        :key="index"
-        :value="theme.input"
-      >
-        {{ theme.name }}
-      </option>
-    </select> -->
-    
+    <div
+      id="backdrop"
+      :class="[{ activeBackdrop: !collapsed} ,{ disabledBackdrop : collapsed}]"
+      @click="onBackdropClick"
+    />
     <sidebar-menu
       class="menu"
       :menu="menu"
@@ -22,14 +15,47 @@
       :theme="selectedTheme"
       @toggle-collapse="onToggleCollapse"
       @item-click="onItemClick"
-    />
+    >
+      <div
+        slot="footer"
+        v-if="!collapsed"
+      ><span :class="{white: blackTheme}">Switch theme</span>
+        <SwitchButton
+          class="center"
+          v-model="blackTheme"
+        ></SwitchButton>
+      </div>
+    </sidebar-menu>
+    <sidebar-menu
+      class="mobileMenu"
+      :menu="menu"
+      :collapsed="collapsed"
+      :theme="selectedTheme"
+      :width="'150px'"
+      @toggle-collapse="onToggleCollapse"
+      @item-click="onItemClick"
+    >
+      <div
+        slot="footer"
+        v-if="!collapsed"
+        class="margin-top"
+      ><span :class="{white: blackTheme}">Switch theme</span>
+        <SwitchButton
+          class="center"
+          v-model="blackTheme"
+        ></SwitchButton>
+      </div>
+    </sidebar-menu>
 
     <router-view class="routerview" />
+
   </div>
 </template>
 
 <script>
 import SwitchButton from "../src/components/SwitchButton";
+import store from "./store";
+
 export default {
   data() {
     return {
@@ -48,9 +74,8 @@ export default {
           href: "/shop",
           title: "Shop",
           icon: "fa fa-book"
-        },
+        }
       ],
-      collapsed: true,
       themes: [
         {
           name: "Default theme",
@@ -61,40 +86,101 @@ export default {
           input: "white-theme"
         }
       ],
-      switch1: false
+      blackTheme: false
     };
   },
   components: {
     SwitchButton
   },
   computed: {
-    selectedTheme: function(){
-      if(this.switch1)return "";
+    selectedTheme: function() {
+      if (this.blackTheme) return "";
       else return "white-theme";
-    }  
+    },
+    collapsed: {
+      get: function() {
+        return store.state.sidebarCollapsed;
+      }
+    }
   },
   methods: {
     onToggleCollapse(collapsed) {
-      this.collapsed = collapsed;
+      if (store.state.sidebarCollapsed) store.commit("expandSidebar");
+      else store.commit("collapseSidebar");
     },
     onItemClick(event, item) {
       // console.log(event);
       // console.log(item);
+    },
+    onBackdropClick() {
+      store.commit("collapseSidebar");
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: flex;
   padding-left: 350px;
 }
 #app.collapsed {
   padding-left: 50px;
+}
+
+.disabledBackdrop {
+  display: hidden;
+  width: 0px;
+  height: 0px;
+}
+.activeBackdrop {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  opacity: 0.5;
+  background-color: black;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 800px) {
+  .mobileMenu {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 800px) {
+  .menu {
+    display: none !important;
+  }
+  #app {
+    padding-left: 150px;
+  }
+  #app.collapsed {
+    padding-left: 50px;
+  }
+  .v-sidebar-menu .vsm--list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .v-sidebar-menu .vsm--header {
+    height: 100%;
+  }
+   .v-sidebar-menu.vsm_collapsed .vsm--list{
+     padding-bottom: 100px;
+   }
+}
+.center {
+  justify-content: center;
+}
+.white {
+  color: white;
+}
+.margin-top {
+  margin-top: 50px;
 }
 </style>
