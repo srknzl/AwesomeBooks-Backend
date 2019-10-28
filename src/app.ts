@@ -12,11 +12,12 @@ const s3Proxy = require("s3-proxy");
 import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
+import path from "path";
 
-import * as adminRoutes from "./routes/admin";
-import * as userRoutes from "./routes/user";
-import * as authRoutes from "./routes/auth";
-import * as homeRoutes from "./routes/home";
+// import * as adminRoutes from "./routes/admin";
+// import * as userRoutes from "./routes/user";
+// import * as authRoutes from "./routes/auth";
+// import * as homeRoutes from "./routes/home";
 import User from "./models/user";
 import Admin from "./models/admin";
 
@@ -108,6 +109,7 @@ app.set("view engine", "pug");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(express.static(path.join(__dirname,"frontend","dist")))
 
 app.use(helmet());
 app.use(compression());
@@ -150,10 +152,10 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.use("/admin", adminRoutes.router);
-app.use("/user", userRoutes.router);
-app.use(authRoutes.router);
-app.use(homeRoutes.router);
+// app.use("/admin", adminRoutes.router);
+// app.use("/user", userRoutes.router);
+// app.use(authRoutes.router);
+// app.use(homeRoutes.router);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.log(err);
