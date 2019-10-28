@@ -4,6 +4,7 @@ import Home from "../views/Home";
 import Shop from "../views/Shop";
 import BookDetail from "../views/BookDetail";
 import Login from "../views/Login";
+import UserReset from "../views/UserReset";
 
 
 Vue.use(VueRouter);
@@ -37,6 +38,11 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login
+  },
+  {
+    path: "/resetPassword",
+    name: "userreset",
+    component: UserReset
   }
 ];
 
