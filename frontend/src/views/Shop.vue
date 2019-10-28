@@ -72,9 +72,6 @@ export default {
     Book
   },
   methods: {
-    onBookClick() {
-      console.log("On book click");
-    }
   },
   props: {
     collapsed: Boolean
