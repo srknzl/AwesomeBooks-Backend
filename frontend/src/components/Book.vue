@@ -95,7 +95,7 @@ form button.btn {
 }
 
 .image img {
-  width: 10rem;
+  width: 100%;
 }
 
 .actions {
