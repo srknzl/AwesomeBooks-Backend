@@ -74,7 +74,6 @@ data/
 
 frontend/.DS_Store
 frontend/node_modules
-frontend/dist
 
 # local env files
 frontend/.env.local
