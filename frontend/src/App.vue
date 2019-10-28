@@ -74,6 +74,11 @@ export default {
           href: "/shop",
           title: "Shop",
           icon: "fa fa-book"
+        },
+        {
+          href: "/login",
+          title: "Login",
+          icon: "fas fa-door-open"
         }
       ],
       themes: [
