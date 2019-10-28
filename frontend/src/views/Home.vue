@@ -63,8 +63,8 @@ export default {
   height: 100vh;
 }
 .tripleCard img {
-  max-width: 15rem;
-  max-height: 15rem;
+  width: 10rem;
+  height: 10rem;
 }
 .tripleCard{
   align-items: center;
