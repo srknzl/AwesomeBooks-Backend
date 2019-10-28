@@ -14,7 +14,7 @@ Steps Taken:
 
 6- Then I decided to convert to REST api.
 
-7- I selected to use VueJs.
+7- I selected to use VueJs. Deployed vuejs from now on.
 
 Currently I am trying to convert whole project to REST+Vue application.
 
