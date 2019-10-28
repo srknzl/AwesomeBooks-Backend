@@ -79,6 +79,11 @@ export default {
           href: "/login",
           title: "Login",
           icon: "fas fa-door-open"
+        },
+        {
+          href: "/signup",
+          title: "Signup",
+          icon: "fas fa-user-plus"
         }
       ],
       themes: [
