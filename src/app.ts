@@ -108,8 +108,8 @@ app.set("views", "views");
 app.set("view engine", "pug");
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
-app.use(express.static(path.join(__dirname,"frontend","dist")))
+// app.use(express.static("public"));
+app.use(express.static(path.join(__dirname,"..","frontend","dist")));
 
 app.use(helmet());
 app.use(compression());
