@@ -19,7 +19,7 @@
     </b-card>
 
     <b-card-group deck>
-    <b-card class="tripleCard" title="Best prices" img-src="http://www.8sinn.com/media/wysiwyg/icon-quote.png" img-alt="Price" img-top>
+    <b-card class="tripleCard" title="Best prices" img-src="https://www.marshcakes.com/images/price_icon.png" img-alt="Price" img-top>
       <b-card-text>
         Be sure to expect best prices due to our selling system. Users sells to users, thus making every book affordable!
       </b-card-text>
