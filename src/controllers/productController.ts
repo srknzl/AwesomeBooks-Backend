@@ -16,7 +16,6 @@ if(aws && aws.config && aws.config.credentials){
   })
 }
 
-
 export const getProducts: RequestHandler = async (req, res, next) => {
   try {
     const page = +req.query.page || 1;
@@ -43,7 +42,6 @@ export const getProducts: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-
 export const getAddProduct: RequestHandler = (req, res, next) => {
 
   res.render("admin/add-product", {
@@ -51,12 +49,6 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
     active: "admin-add-product",
     validationMessages: [],
     autoFill: {}
-  });
-};
-export const getWelcome: RequestHandler = (req, res, next) => {
-  res.render("admin/welcome", {
-    pageTitle: "Admin login successful",
-    active: "welcome"
   });
 };
 export const postAddProduct: RequestHandler = async (req, res, next) => {

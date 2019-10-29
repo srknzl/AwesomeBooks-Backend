@@ -5,10 +5,6 @@ import * as authController from "../controllers/authController";
 
 export const router = express.Router();
 
-router.get("/login", authController.getLogin);
-router.get("/signup", authController.getSignup);
-router.get("/admin-login", authController.getAdminLogin);
-
 router.post("/logout", authController.postLogout);
 
 router.post(
@@ -54,13 +50,12 @@ router.post(
   ],
   authController.postAdminLogin
 );
-router.get("/reset",authController.getReset);
 router.post("/reset",
 [
   body('email').isEmail().withMessage('Please enter a valid e-mail')
 ],authController.postReset);
 
-router.get('/newPassword/:token',authController.getNewPassword);
+router.get('/newPassword/:token', authController.getNewPassword);
 router.post('/newPassword',[
   body("newPassword").isLength({
     min: 6

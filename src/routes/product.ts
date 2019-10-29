@@ -1,12 +1,14 @@
 import * as express from "express";
 import { body } from "express-validator";
 
-import * as adminController from "../controllers/adminController";
+import * as productController from "../controllers/productController";
 import { isAdminAuth } from "../middleware/isAuth";
 
 export const router = express.Router();
 
-router.get("/add-product", isAdminAuth, adminController.getAddProduct);
+router.get("/products", productController.getProducts);
+router.get("/product/:id", productController.getProductDetail);
+
 router.post(
   "/add-product",
   [
@@ -39,13 +41,10 @@ router.post(
       .withMessage("Description must be a string")
   ],
   isAdminAuth,
-  adminController.postAddProduct
+  productController.postAddProduct
 );
 
-router.get("/edit-product/:id", isAdminAuth, adminController.getEditProduct);
-router.get("/view-product/:id", isAdminAuth, adminController.getProductDetail);
-
-router.post(
+router.put(
   "/edit-product",
   [
     body("title")
@@ -77,10 +76,7 @@ router.post(
       .withMessage("Description must be a string")
   ],
   isAdminAuth,
-  adminController.postEditProduct
+  productController.postEditProduct
 );
 
-router.delete("/product/delete/:prodId", isAdminAuth, adminController.deleteProduct);
-
-router.get("/products", isAdminAuth, adminController.getProducts);
-router.get("/welcome", isAdminAuth, adminController.getWelcome);
+router.delete("/product/delete/:prodId", isAdminAuth, productController.deleteProduct);

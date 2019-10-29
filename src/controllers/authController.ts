@@ -14,43 +14,6 @@ if (process.env.NODE_ENV === "production" && process.env.SENDGRID_API) {
   sendgridMail.setApiKey(require("../credentials/sendgrid").apiKey);
 }
 
-export const getLogin: RequestHandler = (req, res, next) => {
-
-  res.render("auth/login", {
-    active: "login",
-    pageTitle: "Login",
-    validationMessages: [],
-    autoFill: {}
-  });
-};
-
-export const getSignup: RequestHandler = (req, res, next) => {
-
-  res.render("auth/signup", {
-    active: "signup",
-    pageTitle: "Signup",
-    validationMessages: [],
-    autoFill: {}
-  });
-};
-export const getAdminLogin: RequestHandler = (req, res, next) => {
-
-  res.render("auth/admin-login", {
-    active: "admin-login",
-    pageTitle: "Admin login",
-    validationMessages: [],
-    autoFill: {}
-  });
-};
-export const getReset: RequestHandler = (req, res, next) => {
-
-  res.render("auth/reset", {
-    active: "",
-    pageTitle: "Reset your password",
-    validationMessages: [],
-    autoFill: {}
-  });
-};
 export const getNewPassword: RequestHandler = async (req, res, next) => {
   const token = req.params.token;
 
