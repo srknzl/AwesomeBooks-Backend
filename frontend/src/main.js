@@ -10,7 +10,7 @@ import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
-import '../src/styles/global.scss'
+import '../public/styles/global.scss'
 // library.add(faUserSecret)
 // Vue.component('font-awesome-icon', FontAwesomeIcon)
 

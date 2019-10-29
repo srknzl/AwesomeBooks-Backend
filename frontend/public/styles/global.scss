@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700");
+@import '../../node_modules/bootstrap/scss/bootstrap';
+@import '../../node_modules/bootstrap-vue/src/index.scss';
+
+$theme-colors: (
+  "primary": #0074d9,
+  "danger": #ff4136
+);
+
+body {
+  padding: 0px;
+  margin: 0px;
+  font-family: "Open Sans", sans-serif;
+  background-color: honeydew;
+  width: 100vw;
+  height: 100vh;
+  margin: 0rem;
+}
