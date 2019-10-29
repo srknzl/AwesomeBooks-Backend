@@ -72,6 +72,7 @@
     "express-validator": "^6.1.1",
     "helmet": "^3.21.1",
     "install": "^0.13.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.0-beta2",
     "mongoose": ">=5.7.5",
     "morgan": "^1.9.1",
