@@ -1,43 +1,24 @@
 import express, { ErrorRequestHandler } from "express";
 import bodyParser from "body-parser";
 import { connect } from "mongoose";
-import session from "express-session";
-import flash from "connect-flash";
-import connectMongoDb from "connect-mongodb-session";
 import csrf from "csurf";
 import multer = require("multer");
 import multerS3 from "multer-s3";
 import aws from "aws-sdk";
 const s3Proxy = require("s3-proxy");
 import helmet from "helmet";
-import compression from "compression";
 import morgan from "morgan";
 import path from "path";
-
-// import * as adminRoutes from "./routes/admin";
-// import * as userRoutes from "./routes/user";
-// import * as authRoutes from "./routes/auth";
-// import * as homeRoutes from "./routes/home";
-import User from "./models/user";
-import Admin from "./models/admin";
-
 
 const app = express();
 
 
 let MONGODB_URI;
-let expressSessionSecret;
 
 if (process.env.NODE_ENV === "production") {
   MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@srknzl-m0-development-cluster-hgcsl.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
 } else {
   MONGODB_URI = require("./credentials/mongo_uri").MONGODB_URI;
-}
-
-if (process.env.NODE_ENV === "production") {
-  expressSessionSecret = process.env.EXPRESS_SESSION_SECRET;
-} else {
-  expressSessionSecret = require("./credentials/expressSession").expressSessionSecret;
 }
 
 aws.config.getCredentials(function (err) {
@@ -56,11 +37,6 @@ if(aws && aws.config && aws.config.credentials){
   throw new Error("Cannot get credentials");
 }
 
-const MongoDBStore = connectMongoDb(session);
-const store = new MongoDBStore({
-  uri: MONGODB_URI,
-  collection: "sessions"
-});
 const csrfProtection = csrf();
 
 const s3Storage = multerS3(
@@ -99,67 +75,25 @@ const imageUpload = multer({
   }
 });
 
-
-store.on("error", err => {
-  console.error(err);
-});
-
-app.set("views", "views");
-app.set("view engine", "pug");
-
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(express.static("public"));
 app.use(express.static(path.join(__dirname,"..","frontend","dist")));
 
 app.use(helmet());
-app.use(compression());
 if (process.env.NODE_ENV === "production") {
   app.use(morgan("combined"));
 }
 
-app.use(
-  session({
-    secret: expressSessionSecret,
-    resave: false,
-    saveUninitialized: false,
-    store: store
-  })
-);
 app.use(imageUpload.single('image'));
 app.use(csrfProtection);
-app.use(flash());
 app.use((req, res, next) => {
-  res.locals.userLoggedIn = (req as any).session.user;
   res.locals.csrfToken = req.csrfToken();
-  res.locals.errors = req.flash("error");
-  res.locals.successes = req.flash("success");
-  next();
-})
-app.use(async (req, res, next) => {
-  if (req.session && req.session.user) {
-    try {
-      req.session.user = await User.findById(req.session.user._id);
-    } catch (error) {
-      console.error(error);
-    }
-  } else if (req.session && req.session.admin) {
-    try {
-      req.session.admin = await Admin.findById(req.session.admin._id);
-    } catch (error) {
-      console.error(error);
-    }
-  }
   next();
 });
 
-// app.use("/admin", adminRoutes.router);
-// app.use("/user", userRoutes.router);
-// app.use(authRoutes.router);
-// app.use(homeRoutes.router);
-
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.log(err);
-  res.redirect('/500');
+  res.status(err.statusCode).json({
+    error: err
+  });
 };
 
 app.use(errorHandler);
