@@ -3,6 +3,7 @@ import { hash, compare } from "bcrypt";
 import { validationResult } from "express-validator";
 import crypto from "crypto";
 import sendgridMail from "@sendgrid/mail";
+import jwt from "jsonwebtoken";
 
 import User from "../models/user";
 import Admin from "../models/admin";
@@ -37,24 +38,18 @@ export const getNewPassword: RequestHandler = async (req, res, next) => {
     token: token
   });
 };
+export const getCsrfToken: RequestHandler = async (req, res, next) => {
+  
+};
 export const postLogin: RequestHandler = async (req, res, next) => {
   const password = req.body.password;
   const email = req.body.email;
   const valErrors = validationResult(req);
   if (!valErrors.isEmpty()) {
-    const errors = req.flash("error");
-    const successes = req.flash("success");
-    return res.status(422).render("auth/login", {
-      active: "login",
-      pageTitle: "Login",
-      validationMessages: valErrors.array(),
-      errors: errors,
-      successes: successes,
-      autoFill: {
-        email: email,
-        password: password
-      }
-    });
+    const err: any = new Error("Validation failed");
+    err.statusCode = 422;
+    err.problems = valErrors.array();
+    throw err;
   }
 
   try {
@@ -64,41 +59,29 @@ export const postLogin: RequestHandler = async (req, res, next) => {
     if (user) {
       const match = await compare(password, user.password);
 
-      if (match && req.session) {
-        req.session.user = user;
-        req.session.userLoggedIn = true;
-        return res.redirect("/user/welcome");
-      } else {
-        req.flash("error", "Email or password was wrong");
-        const errors = req.flash("error");
-        return res.status(401).render("auth/login", {
-          active: "login",
-          pageTitle: "Login",
-          validationMessages: [],
-          autoFill: {
-            email: email,
-            password: password
-          },
-          errors: errors
-        });
+      if (!match) {
+        const err: any = new Error("Email or password was wrong");
+        err.statusCode = 401;
+        throw err;
       }
-    } else {
-      req.flash("error", "Email or password was wrong");
-      const errors = req.flash("error");
-      return res.status(401).render("auth/login", {
-        active: "login",
-        pageTitle: "Login",
-        validationMessages: [],
-        autoFill: {
-          email: email,
-          password: password
-        },
-        errors: errors
+      const token = jwt.sign({
+        email: email,
+        userid: user._id.toString()
+      }, "somesupersecretsecret", {
+        expiresIn: "1h"
       });
+
+      return res.status(200).json({
+        token: token
+      });
+    } else {
+      const err: any = new Error("Email or password was wrong");
+      err.statusCode = 401;
+      throw err;
     }
   } catch (error) {
-    req.flash('error', 'Something went wrong.');
-    return res.redirect('/login');
+    const err: any = new Error("Oops something went wrong.");
+    throw err;
   }
 };
 export const postSignup: RequestHandler = async (req, res, next) => {
@@ -112,7 +95,7 @@ export const postSignup: RequestHandler = async (req, res, next) => {
   if (!valErrors.isEmpty()) {
     const errors = req.flash("error");
     const successes = req.flash("success");
-    
+
     return res.status(422).render("auth/signup", {
       active: "signup",
       pageTitle: "Signup",
