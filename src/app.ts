@@ -1,7 +1,8 @@
 import express, { ErrorRequestHandler } from "express";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+var forceSSL = require('express-force-ssl');
 import { connect } from "mongoose";
-import csrf from "csurf";
 import multer = require("multer");
 import multerS3 from "multer-s3";
 import aws from "aws-sdk";
@@ -11,7 +12,7 @@ import morgan from "morgan";
 import path from "path";
 
 const app = express();
-
+app.use(forceSSL);
 
 let MONGODB_URI;
 
@@ -37,7 +38,8 @@ if(aws && aws.config && aws.config.credentials){
   throw new Error("Cannot get credentials");
 }
 
-const csrfProtection = csrf();
+app.use(cookieParser());
+
 
 const s3Storage = multerS3(
   {
@@ -75,7 +77,7 @@ const imageUpload = multer({
   }
 });
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname,"..","frontend","dist")));
 
 app.use(helmet());
@@ -84,14 +86,11 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use(imageUpload.single('image'));
-app.use(csrfProtection);
-app.use((req, res, next) => {
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  if(!err.statusCode)err.statusCode = 500;
   res.status(err.statusCode).json({
+    message: err.message,
     error: err
   });
 };
