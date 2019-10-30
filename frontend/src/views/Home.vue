@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <b-card
-      title="Welcome to awesome books!"
+      title="Welcome to awesome book store!"
       class="mb-2 homeCard"
       border-variant="primary"
       img-src="https://www.incimages.com/uploaded_files/image/970x450/getty_883231284_200013331818843182490_335833.jpg"
