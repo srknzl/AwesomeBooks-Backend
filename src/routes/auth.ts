@@ -5,6 +5,8 @@ import * as authController from "../controllers/authController";
 
 export const router = express.Router();
 
+router.get('/newPassword/:token', authController.getNewPassword);
+
 router.post("/logout", authController.postLogout);
 
 router.post(
@@ -12,8 +14,8 @@ router.post(
   [
     body("email").isEmail().withMessage('Please enter a valid e-mail'),
     body("password").isLength({
-      min: 6
-    }).withMessage('Your password should be at least 6 characters')
+      min: 8
+    }).withMessage('Your password should be at least 8 characters')
   ],
   authController.postLogin
 );
@@ -55,7 +57,6 @@ router.post("/reset",
   body('email').isEmail().withMessage('Please enter a valid e-mail')
 ],authController.postReset);
 
-router.get('/newPassword/:token', authController.getNewPassword);
 router.post('/newPassword',[
   body("newPassword").isLength({
     min: 6
