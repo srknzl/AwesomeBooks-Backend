@@ -186,7 +186,12 @@ export default {
    .v-sidebar-menu.vsm_collapsed .vsm--list{
      padding-bottom: 100px;
    }
+   
 }
+.v-sidebar-menu .vsm--toggle-btn {
+     height: 8rem !important;
+     margin-top: 2rem;
+   }
 .center {
   justify-content: center;
 }
