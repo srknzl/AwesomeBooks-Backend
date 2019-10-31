@@ -1,7 +1,10 @@
 const development = false;
-const selectDomain = function(){
-    if(development)return "http://localhost:3000/";
-    else return "https://www.awesomebook.store/";
+let domain = "";
+if(development){
+    domain = "http://localhost:3000/";
+} 
+else{
+    domain = "https://www.awesomebook.store/";
 }
 
-export default selectDomain; 
+export default domain; 

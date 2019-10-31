@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import backendSel from "../utils/host";
+import domain from "../utils/host";
 
 Vue.use(Vuex);
 
@@ -36,7 +36,7 @@ export default new Vuex.Store({
   actions: {
     async login (context,{ form }){
       try {
-        const res = await axios.post(backendSel() + "login", {
+        const res = await axios.post(domain + "login", {
           ...form
         }, {
           timeout: 3000,
@@ -56,7 +56,7 @@ export default new Vuex.Store({
     },
     async checklogin(context){
       try {
-        const res = await axios.post(backendSel() + "checklogin",{},{
+        const res = await axios.post(domain + "checklogin",{},{
           withCredentials: true,
           timeout: 3000
         });
