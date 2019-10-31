@@ -19,7 +19,7 @@ Steps Taken:
 Currently I am trying to convert whole project to REST+Vue application.
 
 
-Live at : [https://awesomebooks.herokuapp.com](https://awesomebooks.herokuapp.com)
+Live at : [https://www.awesomebook.store](https://www.awesomebook.store)
 
 In this project amazon aws s3(simple storage service) is used to store images. Database server resides in mongodb atlas. Finally, code resides in heroku server.
 
