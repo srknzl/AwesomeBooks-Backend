@@ -11,8 +11,20 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 
+import authRouter from "./routes/auth";
+import cartRouter from "./routes/cart";
+import orderRouter from "./routes/order";
+import productRouter from "./routes/product";
+
+
+
 const app = express();
-app.use(forceSSL);
+if (process.env.NODE_ENV === "production") {
+  app.use(forceSSL);
+}
+
+
+
 
 let MONGODB_URI;
 
@@ -26,19 +38,30 @@ aws.config.getCredentials(function (err) {
   if (err) console.log(err.stack);
 });
 
-export let s3 : undefined | aws.S3 = undefined;
+export let s3: undefined | aws.S3 = undefined;
 
-if(aws && aws.config && aws.config.credentials){
+if (aws && aws.config && aws.config.credentials) {
   s3 = new aws.S3({
     accessKeyId: aws.config.credentials.accessKeyId,
     secretAccessKey: aws.config.credentials.secretAccessKey,
     region: 'eu-central-1'
   })
-}else {
+} else {
   throw new Error("Cannot get credentials");
 }
 
 app.use(cookieParser());
+app.use(bodyParser.json());
+// CORS for development
+if (process.env.NODE_ENV !== "production") {
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Cookie");
+    next();
+  });
+}
 
 
 const s3Storage = multerS3(
@@ -77,8 +100,8 @@ const imageUpload = multer({
   }
 });
 
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname,"..","frontend","dist")));
+
+app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
 
 app.use(helmet());
 if (process.env.NODE_ENV === "production") {
@@ -88,12 +111,17 @@ if (process.env.NODE_ENV === "production") {
 app.use(imageUpload.single('image'));
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  if(!err.statusCode)err.statusCode = 500;
+  if (!err.statusCode) err.statusCode = 500;
   res.status(err.statusCode).json({
     message: err.message,
     error: err
   });
 };
+
+app.use(authRouter);
+app.use(cartRouter);
+app.use(orderRouter);
+app.use(productRouter);
 
 app.use(errorHandler);
 
