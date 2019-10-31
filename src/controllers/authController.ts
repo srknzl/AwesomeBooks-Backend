@@ -39,7 +39,7 @@ export const getNewPassword: RequestHandler = async (req, res, next) => {
   });
 };
 export const getCsrfToken: RequestHandler = async (req, res, next) => {
-  
+
 };
 export const postLogin: RequestHandler = async (req, res, next) => {
   const password = req.body.password;
@@ -48,41 +48,53 @@ export const postLogin: RequestHandler = async (req, res, next) => {
   if (!valErrors.isEmpty()) {
     const err: any = new Error("Validation failed");
     err.statusCode = 422;
+    valErrors.array().forEach((err: any) => {
+      delete err.value;  // Do not return value for security.
+    });
     err.problems = valErrors.array();
-    throw err;
+    next(err);
   }
-
+  let user;
   try {
-    const user = await User.findOne({
+    user = await User.findOne({
       email: email
     });
-    if (user) {
-      const match = await compare(password, user.password);
+  } catch (error) {
+    next(error);
+  }
 
-      if (!match) {
-        const err: any = new Error("Email or password was wrong");
-        err.statusCode = 401;
-        throw err;
-      }
-      const token = jwt.sign({
-        email: email,
-        userid: user._id.toString()
-      }, "somesupersecretsecret", {
-        expiresIn: "1h"
-      });
-
-      return res.status(200).json({
-        token: token
-      });
-    } else {
+  if (user) {
+    let match;
+    try {
+      match = await compare(password, user.password);
+    } catch (error) {
+      next(error);
+    }
+    if (!match) {
       const err: any = new Error("Email or password was wrong");
       err.statusCode = 401;
-      throw err;
+      next(err);
     }
-  } catch (error) {
-    const err: any = new Error("Oops something went wrong.");
-    throw err;
+    const token = jwt.sign({
+      email: email,
+      userid: user._id.toString()
+    }, "somesupersecretsecret", {
+      expiresIn: "1h"
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 // 1 hour
+    });
+    return res.status(200).json({
+      message: "Login successful"
+    });
+  } else {
+    const err: any = new Error("Email or password was wrong");
+    err.statusCode = 401;
+    next(err);
   }
+
 };
 export const postSignup: RequestHandler = async (req, res, next) => {
   const email = req.body.email;
