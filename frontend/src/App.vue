@@ -125,6 +125,9 @@ export default {
     onBackdropClick() {
       store.commit("collapseSidebar");
     }
+  },
+  created(){
+    store.dispatch("checklogin");
   }
 };
 </script>
