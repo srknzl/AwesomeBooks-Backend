@@ -68,3 +68,6 @@ router.post('/newPassword',[
     return true;
   })
 ],authController.postNewPassword)
+
+
+export default router;

@@ -80,3 +80,4 @@ router.put(
 );
 
 router.delete("/product/delete/:prodId", isAdminAuth, productController.deleteProduct);
+export default router;

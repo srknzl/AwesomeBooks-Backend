@@ -8,3 +8,4 @@ router.get("/orders", isAuth, orderController.getOrders);
 router.get("/invoices/:orderId",orderController.getInvoice);
 
 router.post("/order", isAuth, orderController.addOrder);
+export default router;

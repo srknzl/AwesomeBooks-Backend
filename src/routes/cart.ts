@@ -9,3 +9,5 @@ router.get("/cart", isAuth, cartController.getCart);
 router.post("/addCart", isAuth, cartController.addToCart);
 router.post("/removeFromCart", isAuth, cartController.removeFromCart);
 router.post("/removeAllFromCart", isAuth, cartController.removeAllFromCart);
+
+export default router;
