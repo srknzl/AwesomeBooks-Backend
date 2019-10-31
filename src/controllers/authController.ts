@@ -81,13 +81,18 @@ export const postLogin: RequestHandler = async (req, res, next) => {
     }, "somesupersecretsecret", {
       expiresIn: "1h"
     });
-
+    const decoded : any = jwt.decode(token);
+    
+    const exp = decoded["exp"];
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 // 1 hour
     });
     return res.status(200).json({
-      message: "Login successful"
+      message: "Login successful",
+      userid: user._id.toString(),
+      email: user.email,
+      exp: exp
     });
   } else {
     const err: any = new Error("Email or password was wrong");
@@ -371,3 +376,12 @@ export const postNewPassword: RequestHandler = async (req, res, next) => {
     console.error(error);
   }
 };
+export const postCheckLogin: RequestHandler = (req, res,next) => {
+  const token = req.cookies["token"];
+  try {
+    const decoded = jwt.verify(token,"somesupersecretsecret");
+    res.status(200).json(decoded);
+  } catch (error) {
+    next(error);
+  }
+}

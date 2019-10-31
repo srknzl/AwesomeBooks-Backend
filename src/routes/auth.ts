@@ -8,7 +8,7 @@ export const router = express.Router();
 router.get('/newPassword/:token', authController.getNewPassword);
 
 router.post("/logout", authController.postLogout);
-
+router.post("/checklogin", authController.postCheckLogin);
 router.post(
   "/login",
   [
@@ -53,11 +53,11 @@ router.post(
   authController.postAdminLogin
 );
 router.post("/reset",
-[
-  body('email').isEmail().withMessage('Please enter a valid e-mail')
-],authController.postReset);
+  [
+    body('email').isEmail().withMessage('Please enter a valid e-mail')
+  ], authController.postReset);
 
-router.post('/newPassword',[
+router.post('/newPassword', [
   body("newPassword").isLength({
     min: 6
   }).withMessage('Your password must be at least 6 characters long'),
@@ -67,7 +67,7 @@ router.post('/newPassword',[
     }
     return true;
   })
-],authController.postNewPassword)
+], authController.postNewPassword)
 
 
 export default router;
