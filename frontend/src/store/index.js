@@ -36,7 +36,7 @@ export default new Vuex.Store({
   actions: {
     async login (context,{ form }){
       try {
-        const res = await axios.post(backendSel(true) + "login", {
+        const res = await axios.post(backendSel() + "login", {
           ...form
         }, {
           timeout: 3000,
@@ -56,7 +56,7 @@ export default new Vuex.Store({
     },
     async checklogin(context){
       try {
-        const res = await axios.post(backendSel(true) + "checklogin",{},{
+        const res = await axios.post(backendSel() + "checklogin",{},{
           withCredentials: true,
           timeout: 3000
         });
