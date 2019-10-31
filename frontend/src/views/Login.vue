@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import store from "../store";
+
 export default {
   data() {
     return {
@@ -69,7 +71,11 @@ export default {
     };
   },
   methods: {
-    onSubmit(event) {}
+    onSubmit(event) {
+      store.dispatch("login", {
+        form: this.form
+      });
+    }
   },
   computed: {
     passwordValidation: function() {
