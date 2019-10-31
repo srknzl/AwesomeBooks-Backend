@@ -10,6 +10,7 @@ const s3Proxy = require("s3-proxy");
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
+import history from "connect-history-api-fallback";
 
 import authRouter from "./routes/auth";
 import cartRouter from "./routes/cart";
@@ -19,6 +20,7 @@ import productRouter from "./routes/product";
 
 
 const app = express();
+app.use(history());
 if (process.env.NODE_ENV === "production") {
   app.use(forceSSL);
 }

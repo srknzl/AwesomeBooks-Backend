@@ -7,7 +7,6 @@ import Login from "../views/Login";
 import UserReset from "../views/UserReset";
 import Signup from "../views/Signup";
 
-
 Vue.use(VueRouter);
 
 const routes = [
@@ -53,7 +52,8 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: "history"
 });
 
 export default router;
