@@ -7,6 +7,7 @@
       id="backdrop"
       :class="[{ activeBackdrop: !collapsed} ,{ disabledBackdrop : collapsed}]"
       @click="onBackdropClick"
+      v-touch:swipe.left="onSwipeLeft"
     />
     <sidebar-menu
       class="menu"
@@ -34,6 +35,8 @@
       :width="'150px'"
       @toggle-collapse="onToggleCollapse"
       @item-click="onItemClick"
+      v-touch:swipe.left="onSwipeLeft"
+      v-touch:swipe.right="onSwipeRight"
     >
       <div
         slot="footer"
@@ -47,7 +50,11 @@
       </div>
     </sidebar-menu>
 
-    <router-view class="routerview" />
+    <router-view
+      v-touch:swipe.left="onSwipeLeft"
+      v-touch:swipe.right="onSwipeRight"
+      class="routerview"
+    />
 
   </div>
 </template>
@@ -124,9 +131,15 @@ export default {
     },
     onBackdropClick() {
       store.commit("collapseSidebar");
+    },
+    onSwipeLeft(){
+      store.commit("collapseSidebar");
+    },
+    onSwipeRight(){
+      store.commit("expandSidebar");
     }
   },
-  created(){
+  created() {
     store.dispatch("checklogin");
   }
 };
@@ -183,15 +196,14 @@ export default {
   .v-sidebar-menu .vsm--header {
     height: 100%;
   }
-   .v-sidebar-menu.vsm_collapsed .vsm--list{
-     padding-bottom: 100px;
-   }
-   
+  .v-sidebar-menu.vsm_collapsed .vsm--list {
+    padding-bottom: 100px;
+  }
 }
 .v-sidebar-menu .vsm--toggle-btn {
-     height: 8rem !important;
-     margin-top: 2rem;
-   }
+  height: 8rem !important;
+  margin-top: 2rem;
+}
 .center {
   justify-content: center;
 }

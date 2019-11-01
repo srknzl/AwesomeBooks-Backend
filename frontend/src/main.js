@@ -7,6 +7,7 @@ import VueSidebarMenu from "vue-sidebar-menu";
 import BootstrapVue from 'bootstrap-vue'
 import "@fortawesome/fontawesome-free/css/all.css";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
+import vue2Touch from "vue2-touch-events";
 import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
@@ -16,6 +17,7 @@ import '../public/styles/global.scss'
 
 Vue.use(VueSidebarMenu);
 Vue.use(BootstrapVue);
+Vue.use(vue2Touch);
 
 Vue.config.productionTip = false;
 
