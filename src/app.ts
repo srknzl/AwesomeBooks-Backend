@@ -1,7 +1,6 @@
 import express, { ErrorRequestHandler } from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-var forceSSL = require('express-force-ssl');
 import { connect } from "mongoose";
 import multer = require("multer");
 import multerS3 from "multer-s3";
@@ -17,23 +16,10 @@ import cartRouter from "./routes/cart";
 import orderRouter from "./routes/order";
 import productRouter from "./routes/product";
 
-
-
 const app = express();
 app.use(history({
   
 }));
-app.set('forceSSLOptions', {
-  enable301Redirects: true,
-  httpsPort: 443,
-  sslRequiredMessage: 'SSL forced.'
-});
-if (process.env.NODE_ENV === "production") {
-  app.use(forceSSL);
-}
-
-
-
 
 let MONGODB_URI;
 

@@ -72,7 +72,6 @@
     "connect-mongodb-session": "^2.2.0",
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
-    "express-force-ssl": "^0.3.2",
     "express-session": "^1.16.2",
     "express-validator": "^6.1.1",
     "helmet": "^3.21.1",
