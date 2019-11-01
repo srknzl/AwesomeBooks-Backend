@@ -20,7 +20,14 @@ import productRouter from "./routes/product";
 
 
 const app = express();
-app.use(history());
+app.use(history({
+  
+}));
+app.set('forceSSLOptions', {
+  enable301Redirects: false,
+  httpsPort: 443,
+  sslRequiredMessage: 'SSL forced.'
+});
 if (process.env.NODE_ENV === "production") {
   app.use(forceSSL);
 }
