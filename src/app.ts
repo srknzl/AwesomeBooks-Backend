@@ -18,7 +18,7 @@ import productRouter from "./routes/product";
 
 const app = express();
 app.use(history({
-  
+
 }));
 
 let MONGODB_URI;
@@ -48,9 +48,17 @@ if (aws && aws.config && aws.config.credentials) {
 app.use(cookieParser());
 app.use(bodyParser.json());
 // CORS for development
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV === "production") {
   app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "awesomebooks.herokuapp.com,awesomebook.store");
+    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Cookie");
+    next();
+  });
+} else {
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
     res.setHeader("Access-Control-Allow-Methods", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type,Cookie");
