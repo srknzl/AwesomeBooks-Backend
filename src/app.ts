@@ -24,7 +24,7 @@ app.use(history({
   
 }));
 app.set('forceSSLOptions', {
-  enable301Redirects: false,
+  enable301Redirects: true,
   httpsPort: 443,
   sslRequiredMessage: 'SSL forced.'
 });
@@ -64,7 +64,7 @@ app.use(bodyParser.json());
 // CORS for development
 if (process.env.NODE_ENV !== "production") {
   app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+    res.setHeader("Access-Control-Allow-Origin", "awesomebooks.herokuapp.com,awesomebook.store");
     res.setHeader("Access-Control-Allow-Methods", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type,Cookie");
