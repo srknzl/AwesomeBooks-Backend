@@ -10,6 +10,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import history from "connect-history-api-fallback";
+import expressSSL from "express-sslify";
 
 import authRouter from "./routes/auth";
 import cartRouter from "./routes/cart";
@@ -17,18 +18,10 @@ import orderRouter from "./routes/order";
 import productRouter from "./routes/product";
 
 const app = express();
-app.use(history({
-
-}));
-app.use((req, res, next) => {
-  if (req.secure) {
-          // request was via https, so do no special handling
-          next();
-  } else {
-          // request was via http, so redirect to https
-          res.redirect('https://' + req.headers.host + req.url);
-  }
-});
+app.use(expressSSL.HTTPS({
+  trustProtoHeader: true
+}))
+app.use(history());
 
 let MONGODB_URI;
 
@@ -60,6 +53,7 @@ app.use(bodyParser.json());
 
 if (process.env.NODE_ENV === "production") {
   app.use((req, res, next) => {
+    console.log(req.headers["x-forwarded-proto"]);
     res.setHeader("Access-Control-Allow-Origin", "awesomebooks.herokuapp.com,awesomebook.store");
     res.setHeader("Access-Control-Allow-Methods", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
