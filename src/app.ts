@@ -20,6 +20,15 @@ const app = express();
 app.use(history({
 
 }));
+app.use((req, res, next) => {
+  if (req.secure) {
+          // request was via https, so do no special handling
+          next();
+  } else {
+          // request was via http, so redirect to https
+          res.redirect('https://' + req.headers.host + req.url);
+  }
+});
 
 let MONGODB_URI;
 
@@ -48,6 +57,7 @@ if (aws && aws.config && aws.config.credentials) {
 app.use(cookieParser());
 app.use(bodyParser.json());
 // CORS for development
+
 if (process.env.NODE_ENV === "production") {
   app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "awesomebooks.herokuapp.com,awesomebook.store");
