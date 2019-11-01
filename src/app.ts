@@ -18,10 +18,6 @@ import orderRouter from "./routes/order";
 import productRouter from "./routes/product";
 
 const app = express();
-app.use((req,res,next)=>{
-  console.log(req.headers["x-forwarded-proto"]);
-  next();
-})
 app.use(expressSSL.HTTPS({
   trustProtoHeader: true
 }))
