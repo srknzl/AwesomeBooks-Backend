@@ -81,8 +81,17 @@ export default new Vuex.Store({
         });
       }
     },
-    logout(context){
-      context.commit("logout");
+    async logout(context){
+      try {
+        await axios.post(domain + "logout",{},{
+          withCredentials: true,
+          timeout: 3000
+        });
+        context.commit("logout");
+      } catch (error) {
+        
+        context.commit("logout");
+      }
     }
   },
   modules: {}

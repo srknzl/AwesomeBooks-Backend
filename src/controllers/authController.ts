@@ -81,8 +81,8 @@ export const postLogin: RequestHandler = async (req, res, next) => {
     }, "somesupersecretsecret", {
       expiresIn: "1h"
     });
-    const decoded : any = jwt.decode(token);
-    
+    const decoded: any = jwt.decode(token);
+
     const exp = decoded["exp"];
     let secure = false;
     let sameSite = false;
@@ -242,12 +242,30 @@ export const postAdminLogin: RequestHandler = async (req, res, next) => {
   }
 };
 export const postLogout: RequestHandler = (req, res, next) => {
-  if (!req.session) throw "No session";
+  const token = req.cookies["token"];
+  let secure = false;
+  let sameSite = false;
+  if (process.env.NODE_ENV === "production") {
+    secure = true;
+    sameSite = true;
+  }
+  if (token) {
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: secure,
+      sameSite: sameSite,
+      expires: new Date(0)
+    });
+  } else {
+    res.cookie("token", "", {
+      httpOnly: true,
+      secure: secure,
+      sameSite: sameSite,
+      expires: new Date(0)
+    });
+  }
 
-  req.session.destroy(err => {
-    if (err) console.log(err);
-    res.redirect("/");
-  });
+  res.status(200).json(null);
 };
 
 export const postReset: RequestHandler = async (req, res, next) => {
@@ -384,10 +402,10 @@ export const postNewPassword: RequestHandler = async (req, res, next) => {
     console.error(error);
   }
 };
-export const postCheckLogin: RequestHandler = (req, res,next) => {
+export const postCheckLogin: RequestHandler = (req, res, next) => {
   const token = req.cookies["token"];
   try {
-    const decoded = jwt.verify(token,"somesupersecretsecret");
+    const decoded = jwt.verify(token, "somesupersecretsecret");
     res.status(200).json(decoded);
   } catch (error) {
     next(error);
