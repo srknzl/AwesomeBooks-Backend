@@ -85,13 +85,15 @@ export const postLogin: RequestHandler = async (req, res, next) => {
     
     const exp = decoded["exp"];
     let secure = false;
+    let sameSite = false;
     if (process.env.NODE_ENV === "production") {
       secure = true;
+      sameSite = true;
     }
-
     res.cookie("token", token, {
       httpOnly: true,
       secure: secure,
+      sameSite: sameSite,
       maxAge: 1000 * 60 * 60 // 1 hour
     });
     return res.status(200).json({

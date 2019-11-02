@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
 import domain from "../utils/host";
+import axios from "axios";
 
 Vue.use(Vuex);
 
@@ -14,19 +14,19 @@ export default new Vuex.Store({
     exp: null
   },
   mutations: {
-    collapseSidebar(state){
+    collapseSidebar(state) {
       state.sidebarCollapsed = true;
     },
-    expandSidebar(state){
+    expandSidebar(state) {
       state.sidebarCollapsed = false;
     },
-    login(state,{ userid, email, exp }){
+    login(state, { userid, email, exp }) {
       state.loggedIn = true;
       state.email = email;
       state.userid = userid;
       state.exp = exp;
     },
-    logout(state){
+    logout(state) {
       state.loggedIn = false;
       state.email = "";
       state.userid = "";
@@ -34,44 +34,45 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async login (context,{ form }){
+    async login(context, { form }) {
+      let res;
       try {
-        const res = await axios.post(domain + "login", {
+        res = await axios.post(domain + "login", {
           ...form
         }, {
           timeout: 3000,
           withCredentials: true
         });
-        console.log(res);
-        if (res.status == 200) {
-          context.commit("login",{
-            userid: res.data.userid,
-            email: res.data.email,
-            exp: res.data.exp
-          });
-        }
       }
       catch (err) {
         console.log(err);
       }
+      if (res.status == 200) {
+        context.commit("login", {
+          userid: res.data.userid,
+          email: res.data.email,
+          exp: res.data.exp
+        });
+      }
+
     },
-    async checklogin(context){
+    async checklogin(context) {
+      let res;
       try {
-        const res = await axios.post(domain + "checklogin",{},{
+        res = await axios.post(domain + "checklogin", {}, {
           withCredentials: true,
           timeout: 3000
         });
-        console.log(res);
-        if (res.status == 200) {
-          context.commit("login",{
-            userid: res.data.userid,
-            email: res.data.email,
-            exp: res.data.exp
-          });
-        }
       }
       catch (err) {
         console.log(err);
+      }
+      if (res.status == 200) {
+        context.commit("login", {
+          userid: res.data.userid,
+          email: res.data.email,
+          exp: res.data.exp
+        });
       }
     }
   },

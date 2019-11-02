@@ -60,8 +60,11 @@
 
 <script>
 import store from "../store";
+import domain from "../utils/host";
+import axios from "axios";
 
 export default {
+  
   data() {
     return {
       form: {
@@ -71,9 +74,10 @@ export default {
     };
   },
   methods: {
-    onSubmit(event) {
-      store.dispatch("login", {
-        form: this.form
+    async onSubmit(event) {
+      event.preventDefault();
+      store.dispatch("login",{
+        form : this.form
       });
     }
   },

@@ -18,9 +18,11 @@ import orderRouter from "./routes/order";
 import productRouter from "./routes/product";
 
 const app = express();
-app.use(expressSSL.HTTPS({
-  trustProtoHeader: true
-}))
+if(process.env.NODE_ENV === "production"){
+  app.use(expressSSL.HTTPS({
+    trustProtoHeader: true
+  }));
+}
 app.use(history());
 
 let MONGODB_URI;
@@ -53,10 +55,10 @@ app.use(bodyParser.json());
 
 if (process.env.NODE_ENV === "production") {
   app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "awesomebooks.herokuapp.com,awesomebook.store");
+    res.setHeader("Access-Control-Allow-Origin", "https://www.awesomebook.store");
     res.setHeader("Access-Control-Allow-Methods", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Cookie");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Cookie,Set-Cookie");
     next();
   });
 } else {
@@ -64,7 +66,7 @@ if (process.env.NODE_ENV === "production") {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
     res.setHeader("Access-Control-Allow-Methods", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Cookie");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Cookie,Set-Cookie");
     next();
   });
 }
