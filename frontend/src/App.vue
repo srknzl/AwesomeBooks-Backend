@@ -174,10 +174,10 @@ export default {
 </script>
 
 <style lang="scss">
-.menu{
+.menu {
   z-index: 10001 !important;
 }
-.mobileMenu{
+.mobileMenu {
   z-index: 10001 !important;
 }
 #app {
@@ -198,10 +198,12 @@ export default {
   background-color: black;
   box-sizing: border-box;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to{
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 
@@ -225,9 +227,12 @@ export default {
   .v-sidebar-menu.vsm_collapsed .vsm--list {
     padding-bottom: 100px;
   }
+  .v-sidebar-menu .vsm--toggle-btn {
+    height: 6rem !important;
+    margin-bottom: 6rem;
+  }
 }
 .v-sidebar-menu .vsm--toggle-btn {
-  height: 8rem !important;
   margin-top: 2rem;
 }
 .center {
