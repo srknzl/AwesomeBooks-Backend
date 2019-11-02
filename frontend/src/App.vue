@@ -66,7 +66,7 @@ import store from "./store";
 export default {
   data() {
     return {
-      menu: [
+      menuNotLoggedIn: [
         {
           header: true,
           title: "Main Navigation",
@@ -93,6 +93,28 @@ export default {
           icon: "fas fa-user-plus"
         }
       ],
+      menuLoggedIn: [
+        {
+          header: true,
+          title: "Main Navigation",
+          hiddenOnCollapse: true
+        },
+        {
+          href: "/welcome",
+          title: "Home",
+          icon: "fa fa-home"
+        },
+        {
+          href: "/shop",
+          title: "Shop",
+          icon: "fa fa-book"
+        },
+        {
+          href: "/logout",
+          title: "Logout",
+          icon: "fas fa-sign-out-alt"
+        }
+      ],
       themes: [
         {
           name: "Default theme",
@@ -110,14 +132,17 @@ export default {
     SwitchButton
   },
   computed: {
-    selectedTheme: function() {
+    selectedTheme() {
       if (this.blackTheme) return "";
       else return "white-theme";
     },
     collapsed: {
-      get: function() {
+      get(){
         return store.state.sidebarCollapsed;
       }
+    },
+    menu(){
+      return store.state.loggedIn ? this.menuLoggedIn : this.menuNotLoggedIn;
     }
   },
   methods: {
@@ -140,7 +165,7 @@ export default {
     }
   },
   created() {
-    store.dispatch("checklogin");
+    if(!store.state.loggedIn)store.dispatch("checklogin");
   }
 };
 </script>
