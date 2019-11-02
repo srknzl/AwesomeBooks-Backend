@@ -118,22 +118,13 @@ export const postSignup: RequestHandler = async (req, res, next) => {
   const valErrors = validationResult(req);
 
   if (!valErrors.isEmpty()) {
-    const errors = req.flash("error");
-    const successes = req.flash("success");
-
-    return res.status(422).render("auth/signup", {
-      active: "signup",
-      pageTitle: "Signup",
-      validationMessages: valErrors.array(),
-      errors: errors,
-      successes: successes,
-      autoFill: {
-        email: email,
-        password: password,
-        name: name,
-        confirmPassword: confirmPassword
-      }
+    const err: any = new Error("Validation failed");
+    err.statusCode = 422;
+    valErrors.array().forEach((err: any) => {
+      delete err.value;  // Do not return value for security.
     });
+    err.problems = valErrors.array();
+    next(err);
   }
 
   const foundUser = await User.findOne({
@@ -141,22 +132,9 @@ export const postSignup: RequestHandler = async (req, res, next) => {
   });
 
   if (foundUser) {
-    req.flash("error", "Email is already in use!");
-    const errors = req.flash("error");
-    const successes = req.flash("success");
-    return res.status(422).render("auth/signup", {
-      active: "signup",
-      pageTitle: "Signup",
-      validationMessages: [],
-      autoFill: {
-        email: email,
-        password: password,
-        name: name,
-        confirmPassword: confirmPassword
-      },
-      errors: errors,
-      successes: successes
-    });
+    const err : any = new Error("User already exists");
+    err.statusCode = 401;
+    next(err);
   }
 
   const hashPass = await hash(password, 12);
@@ -172,8 +150,9 @@ export const postSignup: RequestHandler = async (req, res, next) => {
 
   await user.save();
 
-  req.flash("success", "Successfully signed up!");
-  res.redirect("/login");
+  res.status(201).json({
+    message: "Successfully signed up"
+  });
 };
 
 export const postAdminLogin: RequestHandler = async (req, res, next) => {

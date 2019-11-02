@@ -13,10 +13,10 @@
         label-for="username"
       >
         <b-form-input
-          id="username"
-          v-model="form.username"
+          id="name"
+          v-model="form.name"
           required
-          placeholder="Enter username"
+          placeholder="Enter name"
           type="text"
           :state="nameValidation"
         ></b-form-input>
@@ -74,20 +74,20 @@
       <b-form-group
         id="input-group-4"
         label="Repeat Password:"
-        label-for="repeatpassword"
+        label-for="confirmpassword"
       >
         <b-form-input
-          id="repeatpassword"
-          v-model="form.repeatPassword"
+          id="confirmpassword"
+          v-model="form.confirmPassword"
           required
           placeholder="Enter password again"
           type="password"
-          :state="repeatPasswordValidation"
+          :state="confirmPasswordValidation"
         ></b-form-input>
-        <b-form-invalid-feedback :state="repeatPasswordValidation">
+        <b-form-invalid-feedback :state="confirmPasswordValidation">
           Your passwords should match
         </b-form-invalid-feedback>
-        <b-form-valid-feedback :state="repeatPasswordValidation">
+        <b-form-valid-feedback :state="confirmPasswordValidation">
           Match!
         </b-form-valid-feedback>
 
@@ -102,19 +102,26 @@
 </template>
 
 <script>
+import store from "../store"
+
 export default {
   data() {
     return {
       form: {
         email: "",
         password: "",
-        repeatPassword: "",
-        username: ""
+        confirmPassword: "",
+        name: ""
       }
     };
   },
   methods: {
-    onSubmit(event) {}
+    onSubmit(event) {
+      event.preventDefault();
+      store.dispatch("signup",{
+        form: this.form
+      });
+    }
   },
   computed: {
     passwordValidation: function() {
@@ -128,13 +135,13 @@ export default {
         return re.test(this.form.email);
       }
     },
-    repeatPasswordValidation: function() {
-      if (this.form.repeatPassword == "") return null;
-      else return this.form.repeatPassword == this.form.password;
+    confirmPasswordValidation: function() {
+      if (this.form.confirmPassword == "") return null;
+      else return this.form.confirmPassword == this.form.password;
     },
     nameValidation: function() {
-      if (this.form.username == "") return null;
-      else return this.form.username.length >= 5;
+      if (this.form.name == "") return null;
+      else return this.form.name.length >= 3;
     }
   }
 };

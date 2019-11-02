@@ -1,6 +1,24 @@
 <template>
   <div id="home">
     <b-card
+      text-variant="success"
+      v-if="message&&!isError"
+    >
+      <b-card-text>
+        {{message}}
+      </b-card-text>
+
+    </b-card>
+    <b-card
+      v-if="isError && message"
+      text-variant="danger"
+    >
+      <b-card-text>
+        {{message}}
+      </b-card-text>
+    </b-card>
+
+    <b-card
       title="Welcome to awesome book store!"
       class="mb-2 homeCard"
       border-variant="primary"
@@ -19,33 +37,58 @@
     </b-card>
 
     <b-card-group deck>
-    <b-card class="tripleCard" title="Best prices" img-src="https://www.marshcakes.com/images/price_icon.png" img-alt="Price" img-top>
-      <b-card-text>
-        Be sure to expect best prices due to our selling system. Users sells to users, thus making every book affordable!
-      </b-card-text>
-    </b-card>
+      <b-card
+        class="tripleCard"
+        title="Best prices"
+        img-src="https://www.marshcakes.com/images/price_icon.png"
+        img-alt="Price"
+        img-top
+      >
+        <b-card-text>
+          Be sure to expect best prices due to our selling system. Users sells to users, thus making every book affordable!
+        </b-card-text>
+      </b-card>
 
-    <b-card class="tripleCard" title="Trust" img-src="https://images.techhive.com/images/article/2015/11/millennials_trust-100625376-large3x2.jpg" img-alt="Image" img-top>
-      <b-card-text>
-        We check our sellers behaviours from beginning to end to ensure trust between users.
-      </b-card-text>
-    </b-card>
+      <b-card
+        class="tripleCard"
+        title="Trust"
+        img-src="https://images.techhive.com/images/article/2015/11/millennials_trust-100625376-large3x2.jpg"
+        img-alt="Image"
+        img-top
+      >
+        <b-card-text>
+          We check our sellers behaviours from beginning to end to ensure trust between users.
+        </b-card-text>
+      </b-card>
 
-    <b-card class="tripleCard" title="Money back guarantee" img-src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXgeAkt2L0xPvszAD-foldAZLY7PFAVpJbnenbN3pE5ObVYefvoQ&s" img-alt="Image" img-top>
-      <b-card-text>
-        If you do not like a book and wanted to return it, no problem, up to 15 days you will be able to return any book if it is in the same condition as before.
-      </b-card-text>
-    </b-card>
-  </b-card-group>
+      <b-card
+        class="tripleCard"
+        title="Money back guarantee"
+        img-src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXgeAkt2L0xPvszAD-foldAZLY7PFAVpJbnenbN3pE5ObVYefvoQ&s"
+        img-alt="Image"
+        img-top
+      >
+        <b-card-text>
+          If you do not like a book and wanted to return it, no problem, up to 15 days you will be able to return any book if it is in the same condition as before.
+        </b-card-text>
+      </b-card>
+    </b-card-group>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import router from "../router";
 
 export default {
   name: "home",
-  components: {}
+  components: {},
+  data() {
+    return {
+      message: router.currentRoute.params.message,
+      isError: router.currentRoute.params.isError
+    };
+  }
 };
 </script>
 
@@ -55,7 +98,7 @@ export default {
   align-items: center;
   padding: 1rem;
 }
-.homeCard img{
+.homeCard img {
   max-width: 20rem;
 }
 #home {
@@ -66,7 +109,7 @@ export default {
   width: 10rem;
   height: 10rem;
 }
-.tripleCard{
+.tripleCard {
   align-items: center;
   padding-top: 2rem;
 }

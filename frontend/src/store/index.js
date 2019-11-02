@@ -26,9 +26,9 @@ export default new Vuex.Store({
       state.email = email;
       state.userid = userid;
       state.exp = exp;
-      if(redirect)
+      if (redirect)
         router.push(redirect);
-      else if(router.currentRoute.path !== "/welcome"){
+      else if (router.currentRoute.path !== "/welcome") {
         router.push("welcome");
       }
     },
@@ -37,6 +37,15 @@ export default new Vuex.Store({
       state.email = "";
       state.userid = "";
       state.exp = null;
+    },
+    signup(state, { message }) {
+      router.push({
+        name: "home",
+        params: {
+          message: message,
+          isError: false
+        }
+      });
     }
   },
   actions: {
@@ -81,16 +90,29 @@ export default new Vuex.Store({
         });
       }
     },
-    async logout(context){
+    async logout(context) {
       try {
-        await axios.post(domain + "logout",{},{
+        await axios.post(domain + "logout", {}, {
           withCredentials: true,
           timeout: 3000
         });
         context.commit("logout");
       } catch (error) {
-        
         context.commit("logout");
+      }
+    },
+    async signup(context, { form }) {
+      let res;
+      try {
+        res = await axios.post(domain + "signup", {
+          ...form
+        }, {
+          withCredentials: true,
+          timeout: 3000
+        });
+        context.commit("signup", { message: res.data.message });
+      } catch (error) {
+        console.log(error);
       }
     }
   },

@@ -30,8 +30,8 @@ router.post(
         min: 3
       }).withMessage('Your name should have minimum of three characters'),
     body("password").isLength({
-      min: 6
-    }).withMessage('Your password must be at least 6 characters long'),
+      min: 8
+    }).withMessage('Your password must be at least 8 characters long'),
     body("confirmPassword").custom((value, { req }) => {
       if (req.body.password !== value) {
         throw new Error("Passwords did not match");
