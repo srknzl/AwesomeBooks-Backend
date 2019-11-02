@@ -3,12 +3,15 @@
     id="app"
     :class="{collapsed : collapsed}"
   >
-    <div
-      id="backdrop"
-      :class="[{ activeBackdrop: !collapsed} ,{ disabledBackdrop : collapsed}]"
-      @click="onBackdropClick"
-      v-touch:swipe.left="onSwipeLeft"
-    />
+    <transition name="fade">
+      <div
+        id="backdrop"
+        class="activeBackdrop"
+        @click="onBackdropClick"
+        v-touch:swipe.left="onSwipeLeft"
+        v-if="!collapsed"
+      />
+    </transition>
     <sidebar-menu
       class="menu"
       :menu="menu"
@@ -137,11 +140,11 @@ export default {
       else return "white-theme";
     },
     collapsed: {
-      get(){
+      get() {
         return store.state.sidebarCollapsed;
       }
     },
-    menu(){
+    menu() {
       return store.state.loggedIn ? this.menuLoggedIn : this.menuNotLoggedIn;
     }
   },
@@ -157,36 +160,34 @@ export default {
     onBackdropClick() {
       store.commit("collapseSidebar");
     },
-    onSwipeLeft(){
+    onSwipeLeft() {
       store.commit("collapseSidebar");
     },
-    onSwipeRight(){
+    onSwipeRight() {
       store.commit("expandSidebar");
     }
   },
   created() {
-    if(!store.state.loggedIn)store.dispatch("checklogin");
+    if (!store.state.loggedIn) store.dispatch("checklogin");
   }
 };
 </script>
 
 <style lang="scss">
+.menu{
+  z-index: 10001 !important;
+}
+.mobileMenu{
+  z-index: 10001 !important;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   text-align: center;
   color: #2c3e50;
   display: flex;
-  padding-left: 350px;
-}
-#app.collapsed {
   padding-left: 50px;
 }
 
-.disabledBackdrop {
-  display: hidden;
-  width: 0px;
-  height: 0px;
-}
 .activeBackdrop {
   position: fixed;
   top: 0;
@@ -197,6 +198,12 @@ export default {
   background-color: black;
   box-sizing: border-box;
 }
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to{
+  opacity: 0;
+}
 
 @media screen and (min-width: 800px) {
   .mobileMenu {
@@ -206,12 +213,6 @@ export default {
 @media screen and (max-width: 800px) {
   .menu {
     display: none !important;
-  }
-  #app {
-    padding-left: 150px;
-  }
-  #app.collapsed {
-    padding-left: 50px;
   }
   .v-sidebar-menu .vsm--list {
     display: flex;
