@@ -80,6 +80,9 @@ export default new Vuex.Store({
           exp: res.data.exp
         });
       }
+    },
+    logout(context){
+      context.commit("logout");
     }
   },
   modules: {}

@@ -55,7 +55,19 @@ const routes = [
   {
     path: "/welcome",
     name: "userwelcome",
-    component: Welcome
+    component: Welcome,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/logout",
+    name: "logout",
+    beforeEnter: (to ,from ,next) => {
+      store.dispatch("logout");
+      next();
+    },
+    redirect: "/"
   }
 ];
 
