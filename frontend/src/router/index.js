@@ -6,6 +6,9 @@ import BookDetail from "../views/BookDetail";
 import Login from "../views/Login";
 import UserReset from "../views/UserReset";
 import Signup from "../views/Signup";
+import Welcome from "../views/Welcome";
+
+import store from "../store";
 
 Vue.use(VueRouter);
 
@@ -48,6 +51,11 @@ const routes = [
     path: "/resetPassword",
     name: "userreset",
     component: UserReset
+  },
+  {
+    path: "/welcome",
+    name: "userwelcome",
+    component: Welcome
   }
 ];
 
@@ -55,5 +63,21 @@ const router = new VueRouter({
   routes,
   mode: "history"
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.state.loggedIn) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      });
+    } else {
+      next();
+    }
+  } else {
+    next(); // make sure to always call next()!
+  }
+})
+
 
 export default router;

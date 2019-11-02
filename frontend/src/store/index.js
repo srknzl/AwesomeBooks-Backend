@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import domain from "../utils/host";
 import axios from "axios";
+import router from "../router"
 
 Vue.use(Vuex);
 
@@ -20,11 +21,16 @@ export default new Vuex.Store({
     expandSidebar(state) {
       state.sidebarCollapsed = false;
     },
-    login(state, { userid, email, exp }) {
+    login(state, { userid, email, exp, redirect }) {
       state.loggedIn = true;
       state.email = email;
       state.userid = userid;
       state.exp = exp;
+      if(redirect)
+        router.push(redirect);
+      else if(router.currentRoute.path !== "/welcome"){
+        router.push("welcome");
+      }
     },
     logout(state) {
       state.loggedIn = false;
@@ -34,11 +40,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async login(context, { form }) {
+    async login(context, { form, redirect }) {
       let res;
       try {
         res = await axios.post(domain + "login", {
-          ...form
+          ...form,
+          redirect: redirect
         }, {
           timeout: 3000,
           withCredentials: true
@@ -47,14 +54,13 @@ export default new Vuex.Store({
       catch (err) {
         console.log(err);
       }
-      if (res.status == 200) {
+      if (res && res.status == 200) {
         context.commit("login", {
           userid: res.data.userid,
           email: res.data.email,
           exp: res.data.exp
         });
       }
-
     },
     async checklogin(context) {
       let res;
@@ -67,7 +73,7 @@ export default new Vuex.Store({
       catch (err) {
         console.log(err);
       }
-      if (res.status == 200) {
+      if (res && res.status == 200) {
         context.commit("login", {
           userid: res.data.userid,
           email: res.data.email,

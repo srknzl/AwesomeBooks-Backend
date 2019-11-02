@@ -77,7 +77,8 @@ export default {
     async onSubmit(event) {
       event.preventDefault();
       store.dispatch("login",{
-        form : this.form
+        form : this.form,
+        redirect: this.$router.currentRoute.params.redirect
       });
     }
   },
