@@ -78,7 +78,7 @@ export default {
       event.preventDefault();
       store.dispatch("login",{
         form : this.form,
-        redirect: this.$router.currentRoute.params.redirect
+        redirect: this.$router.currentRoute.query.redirect
       });
     }
   },

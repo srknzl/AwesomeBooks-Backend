@@ -7,7 +7,7 @@ import Login from "../views/Login";
 import UserReset from "../views/UserReset";
 import Signup from "../views/Signup";
 import Welcome from "../views/Welcome";
-
+import Cart from "../views/Cart";
 import store from "../store";
 
 Vue.use(VueRouter);
@@ -72,7 +72,15 @@ const router = new VueRouter({
           } catch (error) {
             next("/");
           }
-      },
+      }
+    },
+    {
+      path: "/cart",
+      name: "cart",
+      component: Cart,
+      meta: {
+        requiresAuth: true
+      }
     }
   ],
   mode: "history"

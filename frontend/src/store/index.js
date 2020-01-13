@@ -27,7 +27,7 @@ export default new Vuex.Store({
       state.userid = userid;
       state.exp = exp;
       if (redirect)
-        router.push(redirect);
+        router.push({path: redirect});
       else if (router.currentRoute.path !== "/welcome") {
         router.push("welcome");
       }
@@ -53,8 +53,7 @@ export default new Vuex.Store({
       let res;
       try {
         res = await axios.post(domain + "login", {
-          ...form,
-          redirect: redirect
+          ...form
         }, {
           timeout: 3000,
           withCredentials: true
@@ -67,7 +66,8 @@ export default new Vuex.Store({
         context.commit("login", {
           userid: res.data.userid,
           email: res.data.email,
-          exp: res.data.exp
+          exp: res.data.exp,
+          redirect: redirect
         });
       }
     },
