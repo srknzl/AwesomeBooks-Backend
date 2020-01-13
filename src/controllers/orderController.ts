@@ -1,10 +1,10 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Response, Request, NextFunction } from "express";
 import PDFDocument from "pdfkit";
 import fs from "fs";
 
 import Order from "../models/order";
 
-export const getOrders: RequestHandler = async (req, res, next) => {
+export const getOrders: RequestHandler = async (req: Request, res: Response, next: NextFunction)  => {
   try {
     let orders = await Order.find()
       .populate("items.product")
@@ -30,7 +30,7 @@ export const getOrders: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-export const getInvoice: RequestHandler = async (req, res, next) => {
+export const getInvoice : RequestHandler = async (req: Request, res: Response, next: NextFunction)   => {
   const orderId = req.params.orderId;
   const pdfDoc = new PDFDocument();
 
@@ -145,7 +145,7 @@ export const getInvoice: RequestHandler = async (req, res, next) => {
 
   pdfDoc.end();
 };
-export const addOrder: RequestHandler = async (req, res, next) => {
+export const addOrder : RequestHandler = async (req: Request, res: Response, next: NextFunction)  => {
   try {
     if (!req.session) throw "No session";
 

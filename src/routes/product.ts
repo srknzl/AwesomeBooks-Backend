@@ -2,8 +2,7 @@ import * as express from "express";
 import { body } from "express-validator";
 
 import * as productController from "../controllers/productController";
-import { isAdminAuth } from "../middleware/isAuth";
-
+import { isAdminAuth} from "../middleware/isAuth";
 export const router = express.Router();
 
 router.get("/products", productController.getProducts);

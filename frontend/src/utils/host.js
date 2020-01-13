@@ -1,4 +1,4 @@
-const development = false;
+const development = true;
 let domain = "";
 if(development){
     domain = "http://localhost:3000/";

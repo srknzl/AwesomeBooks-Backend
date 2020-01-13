@@ -111,7 +111,7 @@ export default {
         email: "",
         password: "",
         confirmPassword: "",
-        name: ""
+        nassa: ""
       }
     };
   },

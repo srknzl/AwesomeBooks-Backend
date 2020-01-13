@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import aws from "aws-sdk";
 
@@ -7,8 +7,8 @@ import takeFive from "../util/pagination";
 
 const PRODUCTS_PER_PAGE = 6;
 
-let s3 : undefined | aws.S3 = undefined;
-if(aws && aws.config && aws.config.credentials){
+let s3: undefined | aws.S3 = undefined;
+if (aws && aws.config && aws.config.credentials) {
   s3 = new aws.S3({
     accessKeyId: aws.config.credentials.accessKeyId,
     secretAccessKey: aws.config.credentials.secretAccessKey,
@@ -16,7 +16,7 @@ if(aws && aws.config && aws.config.credentials){
   })
 }
 
-export const getProducts: RequestHandler = async (req, res, next) => {
+export const getProducts: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const page = +req.query.page || 1;
     const count = await Product.find().countDocuments();
@@ -42,7 +42,7 @@ export const getProducts: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-export const getAddProduct: RequestHandler = (req, res, next) => {
+export const getAddProduct: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
 
   res.render("admin/add-product", {
     pageTitle: "Add Product",
@@ -51,7 +51,7 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
     autoFill: {}
   });
 };
-export const postAddProduct: RequestHandler = async (req, res, next) => {
+export const postAddProduct: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   const title = req.body.title;
   const image = req.file;
   const price = req.body.price;
@@ -65,10 +65,10 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    if(s3){
+    if (s3) {
       try {
         //@ts-ignore
-        await s3.deleteObject( {  Bucket: 'awesomebooks', Key: req.file.key });
+        await s3.deleteObject({ Bucket: 'awesomebooks', Key: req.file.key });
       } catch (error) {
         next(error);
       }
@@ -88,7 +88,7 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   }
 
   let product;
-  
+
   if (!image) {
     product = new Product({
       title: title,
@@ -115,7 +115,7 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-export const getEditProduct: RequestHandler = async (req, res, next) => {
+export const getEditProduct: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const prod: IProduct | null = await Product.findOne({
       _id: req.params.id,
@@ -136,7 +136,7 @@ export const getEditProduct: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-export const getProductDetail: RequestHandler = async (req, res, next) => {
+export const getProductDetail: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const prod: IProduct | null = await Product.findOne({
       _id: req.params.id,
@@ -156,7 +156,7 @@ export const getProductDetail: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-export const postEditProduct: RequestHandler = async (req, res, next) => {
+export const postEditProduct: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   const id = req.body.id;
   const title = req.body.title;
   const price = req.body.price;
@@ -193,7 +193,7 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
         if (s3) {
           try {
             //@ts-ignore
-            await s3.deleteObject( {  Bucket: 'awesomebooks', Key: req.file.key });
+            await s3.deleteObject({ Bucket: 'awesomebooks', Key: req.file.key });
           } catch (error) {
             next(error);
           }
@@ -212,7 +212,7 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
           if (prod.imageUrl && s3) {
             try {
               //@ts-ignore
-              await s3.deleteObject( {  Bucket: 'awesomebooks', Key: prod.imageUrl.substring(1) });
+              await s3.deleteObject({ Bucket: 'awesomebooks', Key: prod.imageUrl.substring(1) });
             } catch (error) {
               next(error);
             }
@@ -235,7 +235,7 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-export const deleteProduct: RequestHandler = async (req, res, next) => {
+export const deleteProduct: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.prodId;
   try {
     const prod = await Product.findOne({
@@ -243,19 +243,19 @@ export const deleteProduct: RequestHandler = async (req, res, next) => {
       user: (req as any).session.admin._id
     });
 
-    if(prod)
-      console.log(prod,prod.imageUrl,s3);
-  
+    if (prod)
+      console.log(prod, prod.imageUrl, s3);
+
     //@ts-ignore
     if (prod && prod.imageUrl && s3) {
       try {
         //@ts-ignore
-        await s3.deleteObject( {  Bucket: 'awesomebooks', Key: prod.imageUrl.substring(1) }).promise();
+        await s3.deleteObject({ Bucket: 'awesomebooks', Key: prod.imageUrl.substring(1) }).promise();
       } catch (error) {
         next(error);
       }
     }
-    
+
     const result = await Product.deleteOne({
       _id: id,
       user: (req as any).session.admin._id

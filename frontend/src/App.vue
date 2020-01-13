@@ -1,8 +1,12 @@
 <template>
-  <div
-    id="app"
-    :class="{collapsed : collapsed}"
-  >
+  <div id="app" :class="{collapsed : collapsed}">
+    <b-card text-variant="success" v-if="message&&!isError">
+      <b-card-text>{{message}}</b-card-text>
+    </b-card>
+    <b-card v-if="isError && message" text-variant="danger">
+      <b-card-text>{{message}}</b-card-text>
+    </b-card>
+
     <transition name="fade">
       <div
         id="backdrop"
@@ -20,14 +24,9 @@
       @toggle-collapse="onToggleCollapse"
       @item-click="onItemClick"
     >
-      <div
-        slot="footer"
-        v-if="!collapsed"
-      ><span :class="{white: blackTheme}">Switch theme</span>
-        <SwitchButton
-          class="center"
-          v-model="blackTheme"
-        ></SwitchButton>
+      <div slot="footer" v-if="!collapsed">
+        <span :class="{white: blackTheme}">Switch theme</span>
+        <SwitchButton class="center" v-model="blackTheme"></SwitchButton>
       </div>
     </sidebar-menu>
     <sidebar-menu
@@ -41,15 +40,9 @@
       v-touch:swipe.left="onSwipeLeft"
       v-touch:swipe.right="onSwipeRight"
     >
-      <div
-        slot="footer"
-        v-if="!collapsed"
-        class="margin-top"
-      ><span :class="{white: blackTheme}">Switch theme</span>
-        <SwitchButton
-          class="center"
-          v-model="blackTheme"
-        ></SwitchButton>
+      <div slot="footer" v-if="!collapsed" class="margin-top">
+        <span :class="{white: blackTheme}">Switch theme</span>
+        <SwitchButton class="center" v-model="blackTheme"></SwitchButton>
       </div>
     </sidebar-menu>
 
@@ -58,17 +51,19 @@
       v-touch:swipe.right="onSwipeRight"
       class="routerview"
     />
-
   </div>
 </template>
 
 <script>
 import SwitchButton from "../src/components/SwitchButton";
 import store from "./store";
+import router from "./router";
 
 export default {
   data() {
     return {
+      message: router.currentRoute.params.message,
+      isError: router.currentRoute.params.isError,
       menuNotLoggedIn: [
         {
           header: true,

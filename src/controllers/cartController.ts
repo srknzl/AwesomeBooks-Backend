@@ -1,6 +1,6 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Request, Response, NextFunction } from "express";
 
-export const getCart: RequestHandler = async (req, res, next) => {
+export const getCart: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.session) throw "No session";
 
@@ -28,7 +28,7 @@ export const getCart: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-export const addToCart: RequestHandler = async (req, res, next) => {
+export const addToCart: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.session) throw "No session";
 
@@ -38,7 +38,7 @@ export const addToCart: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-export const removeFromCart: RequestHandler = async (req, res, next) => {
+export const removeFromCart: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.session) throw "No session";
 
@@ -48,7 +48,7 @@ export const removeFromCart: RequestHandler = async (req, res, next) => {
     next(new Error(err));
   }
 };
-export const removeAllFromCart: RequestHandler = async (req, res, next) => {
+export const removeAllFromCart: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.session) throw "No session";
 

@@ -1,4 +1,4 @@
-import express, { ErrorRequestHandler } from "express";
+import express from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { connect } from "mongoose";
@@ -118,7 +118,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(imageUpload.single('image'));
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+const errorHandler= (err:any, req:any, res:any, next:any) => {
   if (!err.statusCode) err.statusCode = 500;
   res.status(err.statusCode).json({
     message: err.message,
@@ -140,6 +140,10 @@ if (port == null || port == "") {
 
 connect(
   MONGODB_URI,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  },
   async err => {
     if (err) console.error(err);
     app.listen(port);
