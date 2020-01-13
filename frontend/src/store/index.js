@@ -26,10 +26,12 @@ export default new Vuex.Store({
       state.email = email;
       state.userid = userid;
       state.exp = exp;
-      if (redirect)
-        router.push({path: redirect});
-      else if (router.currentRoute.path !== "/welcome") {
-        router.push("welcome");
+      if (redirect != "noredirect") {
+        if (redirect)
+          router.push({ path: redirect });
+        else if (router.currentRoute.path !== "/welcome") {
+          router.push("welcome");
+        }
       }
     },
     logout(state) {
@@ -71,7 +73,7 @@ export default new Vuex.Store({
         });
       }
     },
-    async checklogin(context) {
+    async checklogin(context, {redirect}) {
       let res;
       try {
         res = await axios.post(domain + "checklogin", {}, {
@@ -86,7 +88,8 @@ export default new Vuex.Store({
         context.commit("login", {
           userid: res.data.userid,
           email: res.data.email,
-          exp: res.data.exp
+          exp: res.data.exp,
+          redirect: red
         });
       }
     },

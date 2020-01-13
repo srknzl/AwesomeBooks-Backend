@@ -65,13 +65,13 @@ const router = new VueRouter({
     {
       path: "/logout",
       name: "logout",
-      async beforeEnter(to,from,next){
-          try {
-            await store.dispatch("logout");
-            next("/");
-          } catch (error) {
-            next("/");
-          }
+      async beforeEnter(to, from, next) {
+        try {
+          await store.dispatch("logout");
+          next("/");
+        } catch (error) {
+          next("/");
+        }
       }
     },
     {
@@ -86,8 +86,14 @@ const router = new VueRouter({
   mode: "history"
 });
 
-router.beforeEach((to, from, next) => {
+
+router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.state.loggedIn) {
+      await store.dispatch("checklogin", {
+        redirect: "noredirect"
+      });
+    }                                                                                                                                                                                                                                                                                                                                     
     if (!store.state.loggedIn) {
       next({
         path: '/login',
@@ -99,7 +105,7 @@ router.beforeEach((to, from, next) => {
   } else {
     next(); // make sure to always call next()!
   }
-})
+});
 
 
 export default router;
