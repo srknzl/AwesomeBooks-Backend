@@ -12,7 +12,8 @@ export default new Vuex.Store({
     loggedIn: false,
     email: "",
     userid: "",
-    exp: null
+    exp: null,
+    domain: domain
   },
   mutations: {
     collapseSidebar(state) {
@@ -89,7 +90,7 @@ export default new Vuex.Store({
           userid: res.data.userid,
           email: res.data.email,
           exp: res.data.exp,
-          redirect: red
+          redirect: redirect
         });
       }
     },

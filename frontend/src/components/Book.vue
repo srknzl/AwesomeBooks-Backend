@@ -1,5 +1,5 @@
 <template>
-  <div @click="onClick" class="book">
+  <div class="book">
     <header class="header">
       <h1 class="title">{{ title }}</h1>
     </header>
@@ -11,17 +11,15 @@
       <p class="description">{{ description }}</p>
     </div>
     <div class="actions">
-      <a class="btn" :href="'/user/view-product/' + id">View product</a>
-      <form action="/user/add-cart" method="post">
-        <input type="hidden" name="_csrf" :value="csrfToken" />
-        <input type="hidden" name="id" :value="id" id="productId" />
-        <button class="btn" type="submit">Add to Cart</button>
-      </form>
+      <a class="btn" :href="'/detail/' + id">View product</a>
+      <button class="btn" >Add to Cart</button>
     </div>
   </div>
 </template>
 
 <script>
+import store from "../store";
+
 export default {
   props: {
     imageUrl: String,
@@ -31,12 +29,12 @@ export default {
     id: String,
     csrfToken: String
   },
-  
-  methods: {
-    onClick(){
-      this.$router.push({ name: 'detail', params: { id: this.id } })
+  computed: {
+    domain() {
+      return store.state.domain;
     }
-  }
+  },
+  methods: {}
 };
 </script>
 
@@ -65,7 +63,6 @@ form button.btn {
 
 .book {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  cursor: pointer;
   background-color: khaki;
   padding: 1rem;
   display: flex;

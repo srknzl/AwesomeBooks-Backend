@@ -163,7 +163,7 @@ export default {
     }
   },
   created() {
-    if (!store.state.loggedIn) store.dispatch("checklogin");
+    if (!store.state.loggedIn) store.dispatch("checklogin","/welcome");
   }
 };
 </script>

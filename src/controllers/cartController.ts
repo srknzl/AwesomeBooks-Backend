@@ -31,9 +31,10 @@ export const getCart: RequestHandler = async (req: Request, res: Response, next:
 export const addToCart: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.session) throw "No session";
-
+    console.log("Add cart", req.body.id);
     await req.session.user.addToCart(req.body.id);
-    res.redirect("/user/cart");
+    
+    res.redirect("/cart");
   } catch (err) {
     next(new Error(err));
   }

@@ -16,6 +16,7 @@ import authRouter from "./routes/auth";
 import cartRouter from "./routes/cart";
 import orderRouter from "./routes/order";
 import productRouter from "./routes/product";
+import { MongoError, MongoClient } from "mongodb";
 
 const app = express();
 if(process.env.NODE_ENV === "production"){
@@ -144,7 +145,7 @@ connect(
     useNewUrlParser: true,
     useUnifiedTopology: true
   },
-  async err => {
+  async (err: MongoError) => {
     if (err) console.error(err);
     app.listen(port);
   }
