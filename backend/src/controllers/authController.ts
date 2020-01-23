@@ -49,7 +49,7 @@ export const postLogin: RequestHandler = async (req: Request, res: Response, nex
       delete err.value;  // Do not return value for security.
     });
     err.problems = valErrors.array();
-    next(err);
+    return next(err);
   }
   let user;
   try {
@@ -57,7 +57,7 @@ export const postLogin: RequestHandler = async (req: Request, res: Response, nex
       email: email
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 
   if (user) {
@@ -65,12 +65,12 @@ export const postLogin: RequestHandler = async (req: Request, res: Response, nex
     try {
       match = await compare(password, user.password);
     } catch (error) {
-      next(error);
+      return next(error);
     }
     if (!match) {
       const err: any = new Error("Email or password was wrong");
       err.statusCode = 401;
-      next(err);
+      return next(err);
     }
     const token = jwt.sign({
       email: email,
@@ -110,7 +110,6 @@ export const postSignup: RequestHandler = async (req: Request, res: Response, ne
   const email = req.body.email;
   const password = req.body.password;
   const name = req.body.name;
-  const confirmPassword = req.body.confirmPassword;
 
   const valErrors = validationResult(req);
 
@@ -121,7 +120,7 @@ export const postSignup: RequestHandler = async (req: Request, res: Response, ne
       delete err.value;  // Do not return value for security.
     });
     err.problems = valErrors.array();
-    next(err);
+    return next(err);
   }
 
   const foundUser = await User.findOne({
@@ -131,7 +130,7 @@ export const postSignup: RequestHandler = async (req: Request, res: Response, ne
   if (foundUser) {
     const err : any = new Error("User already exists");
     err.statusCode = 401;
-    next(err);
+    return next(err);
   }
 
   const hashPass = await hash(password, 12);
