@@ -1,5 +1,9 @@
 <template>
   <div id="home">
+     <b-card text-variant="success" v-if="message&&!isError">
+      <b-card-text>{{message}}</b-card-text>
+    </b-card>
+
     <b-card
       title="Welcome to awesome book store!"
       class="mb-2 homeCard"
@@ -67,7 +71,7 @@ export default {
   components: {},
   data() {
     return {
-      
+      message: router.currentRoute.params.message,
     };
   }
 };
