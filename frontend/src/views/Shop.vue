@@ -1,9 +1,19 @@
 <template>
-  <div
-    class="shop"
-  >
+  <div class="shop">
     <h2 class="text-center">Available books:</h2>
     <hr>
+    <div
+      v-if="loading"
+      class="loading"
+    >
+      Loading...
+    </div>
+    <div
+      v-if="error"
+      class="error"
+    >
+      {{this.error}}
+    </div>
     <b-container>
       <b-row>
         <b-col
@@ -11,7 +21,7 @@
           :key="book.id"
         >
           <Book
-            :id="book.id"
+            :id="book._id"
             :csrfToken="csrfToken"
             :title="book.title"
             :price="book.price"
@@ -26,52 +36,42 @@
 
 <script>
 import Book from "../components/Book";
+import axios from "axios";
+import domain from "../utils/host";
 
 export default {
   name: "shop",
   data: function() {
     return {
-      books: [
-        {
-          id: "1",
-          title: "Selam",
-          price: 21,
-          description: "Selam bro",
-          imageUrl:
-            "https://www.mycommercespot.com/wp-content/uploads/2019/06/books-521812297.jpg"
-        },
-        {
-          id: "2",
-          title: "Selam",
-          price: 21,
-          description: "Selam bro",
-          imageUrl:
-            "https://www.mycommercespot.com/wp-content/uploads/2019/06/books-521812297.jpg"
-        },
-        {
-          id: "3",
-          title: "Selam",
-          price: 21,
-          description: "Selam bro",
-          imageUrl:
-            "https://www.mycommercespot.com/wp-content/uploads/2019/06/books-521812297.jpg"
-        },
-        {
-          id: "4",
-          title: "Selam",
-          price: 21,
-          description: "Selam bro",
-          imageUrl:
-            "https://www.mycommercespot.com/wp-content/uploads/2019/06/books-521812297.jpg"
-        }
-      ],
+      loading: true,
+      error: null,
+      books: [],
       csrfToken: ""
     };
+  },
+  created() {
+    this.fetchProducts();
   },
   components: {
     Book
   },
   methods: {
+    fetchProducts() {
+      axios
+        .get(domain + "products", {
+          params: {
+            page: 1
+          }
+        })
+        .then(res => {
+          this.loading = false;
+          this.books = res.data.products;
+        })
+        .catch(error => {
+          this.loading = false;
+          this.error = error;
+        });
+    }
   },
   props: {
     collapsed: Boolean
@@ -80,4 +80,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.loading {
+  font-size: 3rem;
+}
+.error {
+  font-size: 3rem;
+  color: red;
+}
 </style>

@@ -12,7 +12,7 @@
     </div>
     <div class="actions">
       <a class="btn" :href="'/detail/' + id">View product</a>
-      <button class="btn" >Add to Cart</button>
+      <button class="btn" @click="onAddCart($event, id)" >Add to Cart</button>
     </div>
   </div>
 </template>
@@ -34,7 +34,13 @@ export default {
       return store.state.domain;
     }
   },
-  methods: {}
+  methods: {
+    onAddCart: function(event, id){
+      store.dispatch("addCart",{
+        id: id
+      });
+    }
+  }
 };
 </script>
 

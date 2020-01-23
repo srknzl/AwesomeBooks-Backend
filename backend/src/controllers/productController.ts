@@ -21,22 +21,16 @@ export const getProducts: RequestHandler = async (req: Request, res: Response, n
     const page = +req.query.page || 1;
     const count = await Product.find().countDocuments();
     const numberOfPages = Math.ceil(1.0 * count / PRODUCTS_PER_PAGE);
-    const products = await Product.find({
-      user: (req as any).session.admin._id
-    }).limit(PRODUCTS_PER_PAGE).skip((page - 1) * PRODUCTS_PER_PAGE);
+    const products = await Product.find().limit(PRODUCTS_PER_PAGE).skip((page - 1) * PRODUCTS_PER_PAGE);
 
     const pages: number[] = []
     takeFive(numberOfPages, page, pages);
     pages.sort();
 
 
-    res.render("admin/products", {
-      pageTitle: "Products",
-      active: "admin-products",
-      prods: products,
-      pages: pages,
-      currentPage: page,
-      lastPage: numberOfPages
+    res.status(200).json({
+      products: products,
+      numOfPages: numberOfPages
     });
   } catch (err) {
     next(new Error(err));

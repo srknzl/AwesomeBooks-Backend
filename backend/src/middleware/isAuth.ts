@@ -1,16 +1,27 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
+import jwt from "jsonwebtoken";
 
-export const isAuth : RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
-  if (req.session && req.session.userLoggedIn) {
+export const isAuth: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
+  const token = req.cookies["token"];
+  try {
+    const decoded : any = jwt.verify(token, "somesupersecretsecret");
+    (req as any).userId = decoded.userid;
     next();
-  } else {
-    res.redirect("/login");
+  } catch (error) {
+    error.statusCode = 401;
+    error.message = "Not logged in";
+    next(error);
   }
 };
-export const isAdminAuth : RequestHandler = (req: Request, res: Response, next:NextFunction) : any => {
-  if (req.session && req.session.adminLoggedIn) {
+export const isAdminAuth: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
+  const token = req.cookies["token"];
+  try {
+    const decoded : any = jwt.verify(token, "somesupersecretsecret");
+    (req as any).userId = decoded.userid;
     next();
-  } else {
-    res.redirect("/admin-login");
+  } catch (error) {
+    error.statusCode = 401;
+    error.message = "Not logged in";
+    next(error);
   }
 };

@@ -1,4 +1,6 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
+import { ObjectId } from "mongodb";
+import User from "../models/user";
 
 export const getCart: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -25,18 +27,18 @@ export const getCart: RequestHandler = async (req: Request, res: Response, next:
       return res.redirect("/user/welcome");
     }
   } catch (err) {
-    next(new Error(err));
+    next(err);
   }
 };
 export const addToCart: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("User ",(req as any).userId," adds product", req.body.id, " to the cart");
   try {
-    if (!req.session) throw "No session";
-    console.log("Add cart", req.body.id);
-    await req.session.user.addToCart(req.body.id);
-    
-    res.redirect("/cart");
-  } catch (err) {
-    next(new Error(err));
+    const user: any = await User.findById((req as any).userId);
+    await user.addToCart(new ObjectId(req.body.id));
+    res.status(200).json({ message: "Successfully added to the cart!" });
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
 export const removeFromCart: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
@@ -46,7 +48,7 @@ export const removeFromCart: RequestHandler = async (req: Request, res: Response
     await req.session.user.removeOneFromCart(req.body.id);
     res.redirect("/user/cart");
   } catch (err) {
-    next(new Error(err));
+    next(err);
   }
 };
 export const removeAllFromCart: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
@@ -56,6 +58,6 @@ export const removeAllFromCart: RequestHandler = async (req: Request, res: Respo
     await req.session.user.removeAllFromCart(req.body.id);
     res.redirect("/user/cart");
   } catch (err) {
-    next(new Error(err));
+    next(err);
   }
 };
