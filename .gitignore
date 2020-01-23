@@ -68,28 +68,6 @@ credentials/
 data/
 # -----------------
 
-# Frontend
-
-frontend/.DS_Store
-frontend/node_modules
-
-# local env files
-frontend/.env.local
-frontend/.env.*.local
-
-# Log files
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
-
-# Editor directories and files
-frontend/.idea
-frontend/.vscode
-frontend/*.suo
-frontend/*.ntvs*
-frontend/*.njsproj
-frontend/*.sln
-frontend/*.sw?
-
-
 node_modules/
+
+dist/
