@@ -51,6 +51,7 @@
       <b-button
         type="submit"
         variant="success"
+        :disabled="!emailValidation || !passwordValidation"
       >Login</b-button>
     </b-form>
     <hr>
@@ -74,7 +75,7 @@ export default {
     };
   },
   methods: {
-    async onSubmit(event) {
+    onSubmit(event) {
       event.preventDefault();
       store.dispatch("login",{
         form : this.form,

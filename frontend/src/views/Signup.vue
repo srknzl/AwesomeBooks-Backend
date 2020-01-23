@@ -21,7 +21,7 @@
           :state="nameValidation"
         ></b-form-input>
         <b-form-invalid-feedback :state="nameValidation">
-          Your username should be at least 5 characters.
+          Your username should be at least 3 characters.
         </b-form-invalid-feedback>
         <b-form-valid-feedback :state="nameValidation">
           Looks good.
@@ -96,6 +96,7 @@
       <b-button
         type="submit"
         variant="success"
+        :disabled="!emailValidation || !nameValidation || !passwordValidation || !confirmPasswordValidation"
       >Signup</b-button>
     </b-form>
   </div>
@@ -109,9 +110,9 @@ export default {
     return {
       form: {
         email: "",
+        name: "",
         password: "",
         confirmPassword: "",
-        nassa: ""
       }
     };
   },
