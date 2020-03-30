@@ -1,0 +1,11 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <url><loc>https://awesomebook.store/</loc></url>
+<url><loc>https://awesomebook.store/shop</loc></url>
+<url><loc>https://awesomebook.store/detail/:id</loc></url>
+<url><loc>https://awesomebook.store/login</loc></url>
+<url><loc>https://awesomebook.store/signup</loc></url>
+<url><loc>https://awesomebook.store/resetPassword</loc></url>
+<url><loc>https://awesomebook.store/welcome</loc></url>
+<url><loc>https://awesomebook.store/logout</loc></url>
+<url><loc>https://awesomebook.store/cart</loc></url>
+</urlset>

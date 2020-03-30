@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.a151563f27d8677ba1738ce72217d00b.js"
+  "/precache-manifest.ff5a49b2a0d2de72fc4a5488ede0d191.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "awesomebookstore"});
