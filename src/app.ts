@@ -10,7 +10,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import history from "connect-history-api-fallback";
-import expressSSL from "express-sslify";
+// import expressSSL from "express-sslify";
 
 import authRouter from "./routes/auth";
 import cartRouter from "./routes/cart";
@@ -19,11 +19,11 @@ import productRouter from "./routes/product";
 import { MongoError, MongoClient } from "mongodb";
 
 const app = express();
-if(process.env.NODE_ENV === "production"){
-  app.use(expressSSL.HTTPS({
-    trustProtoHeader: true
-  }));
-}
+// if(process.env.NODE_ENV === "production"){
+//   app.use(expressSSL.HTTPS({
+//     trustProtoHeader: true
+//   }));
+// }
 app.use(history());
 
 let MONGODB_URI;
